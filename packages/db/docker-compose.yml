@@ -1,0 +1,23 @@
+name: mediwise-monorepo
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mediwise-monorepo-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: mediwise-monorepo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mediwise-monorepo_mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  mediwise-monorepo_mongodb_data:

@@ -1,0 +1,3 @@
+{
+  "extends": "@mediwise-monorepo/config/tsconfig.base.json"
+}
