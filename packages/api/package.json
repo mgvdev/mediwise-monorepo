@@ -1,27 +1,27 @@
 {
-  "name": "@mediwise-monorepo/api",
-  "type": "module",
-  "exports": {
-    ".": {
-      "default": "./src/index.ts"
-    },
-    "./*": {
-      "default": "./src/*.ts"
-    }
-  },
-  "scripts": {},
-  "devDependencies": {
-    "typescript": "catalog:",
-    "@mediwise-monorepo/config": "workspace:*"
-  },
-  "dependencies": {
-    "@trpc/server": "catalog:",
-    "@trpc/client": "catalog:",
-    "hono": "catalog:",
-    "dotenv": "catalog:",
-    "zod": "catalog:",
-    "@mediwise-monorepo/env": "workspace:*",
-    "@mediwise-monorepo/auth": "workspace:*",
-    "@mediwise-monorepo/db": "workspace:*"
-  }
+	"name": "@mediwise-monorepo/api",
+	"type": "module",
+	"exports": {
+		".": {
+			"default": "./src/index.ts"
+		},
+		"./*": {
+			"default": "./src/*.ts"
+		}
+	},
+	"scripts": {},
+	"devDependencies": {
+		"typescript": "catalog:",
+		"@mediwise-monorepo/config": "workspace:*"
+	},
+	"dependencies": {
+		"@trpc/server": "catalog:",
+		"@trpc/client": "catalog:",
+		"hono": "catalog:",
+		"dotenv": "catalog:",
+		"zod": "catalog:",
+		"@mediwise-monorepo/env": "workspace:*",
+		"@mediwise-monorepo/auth": "workspace:*",
+		"@mediwise-monorepo/db": "workspace:*"
+	}
 }

@@ -1,28 +1,28 @@
 {
-  "name": "@mediwise-monorepo/db",
-  "type": "module",
-  "exports": {
-    ".": {
-      "default": "./src/index.ts"
-    },
-    "./*": {
-      "default": "./src/*.ts"
-    }
-  },
-  "scripts": {
-    "db:start": "docker compose up -d",
-    "db:watch": "docker compose up",
-    "db:stop": "docker compose stop",
-    "db:down": "docker compose down"
-  },
-  "devDependencies": {
-    "typescript": "catalog:",
-    "@mediwise-monorepo/config": "workspace:*"
-  },
-  "dependencies": {
-    "mongoose": "^8.14.0",
-    "dotenv": "catalog:",
-    "zod": "catalog:",
-    "@mediwise-monorepo/env": "workspace:*"
-  }
+	"name": "@mediwise-monorepo/db",
+	"type": "module",
+	"exports": {
+		".": {
+			"default": "./src/index.ts"
+		},
+		"./*": {
+			"default": "./src/*.ts"
+		}
+	},
+	"scripts": {
+		"db:start": "docker compose up -d",
+		"db:watch": "docker compose up",
+		"db:stop": "docker compose stop",
+		"db:down": "docker compose down"
+	},
+	"devDependencies": {
+		"typescript": "catalog:",
+		"@mediwise-monorepo/config": "workspace:*"
+	},
+	"dependencies": {
+		"mongoose": "^8.14.0",
+		"dotenv": "catalog:",
+		"zod": "catalog:",
+		"@mediwise-monorepo/env": "workspace:*"
+	}
 }

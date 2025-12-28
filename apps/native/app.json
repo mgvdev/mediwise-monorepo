@@ -1,17 +1,17 @@
 {
-  "expo": {
-    "scheme": "mediwise-monorepo",
-    "userInterfaceStyle": "automatic",
-    "orientation": "default",
-    "web": {
-      "bundler": "metro"
-    },
-    "name": "mediwise-monorepo",
-    "slug": "mediwise-monorepo",
-    "plugins": ["expo-font"],
-    "experiments": {
-      "typedRoutes": true,
-      "reactCompiler": true
-    }
-  }
+	"expo": {
+		"scheme": "mediwise-monorepo",
+		"userInterfaceStyle": "automatic",
+		"orientation": "default",
+		"web": {
+			"bundler": "metro"
+		},
+		"name": "mediwise-monorepo",
+		"slug": "mediwise-monorepo",
+		"plugins": ["expo-font"],
+		"experiments": {
+			"typedRoutes": true,
+			"reactCompiler": true
+		}
+	}
 }
