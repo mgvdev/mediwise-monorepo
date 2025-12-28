@@ -170,6 +170,7 @@
       "dependencies": {
         "@better-auth/expo": "catalog:",
         "@mediwise-monorepo/db": "workspace:*",
+        "@mediwise-monorepo/domain": "workspace:*",
         "@mediwise-monorepo/env": "workspace:*",
         "better-auth": "catalog:",
         "dotenv": "catalog:",
@@ -192,6 +193,13 @@
         "mongoose": "^8.14.0",
         "zod": "catalog:",
       },
+      "devDependencies": {
+        "@mediwise-monorepo/config": "workspace:*",
+        "typescript": "catalog:",
+      },
+    },
+    "packages/domain": {
+      "name": "@mediwise-monorepo/domain",
       "devDependencies": {
         "@mediwise-monorepo/config": "workspace:*",
         "typescript": "catalog:",
@@ -689,6 +697,8 @@
     "@mediwise-monorepo/config": ["@mediwise-monorepo/config@workspace:packages/config"],
 
     "@mediwise-monorepo/db": ["@mediwise-monorepo/db@workspace:packages/db"],
+
+    "@mediwise-monorepo/domain": ["@mediwise-monorepo/domain@workspace:packages/domain"],
 
     "@mediwise-monorepo/env": ["@mediwise-monorepo/env@workspace:packages/env"],
 

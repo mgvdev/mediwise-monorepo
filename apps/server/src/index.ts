@@ -54,4 +54,6 @@ app.get("/", (c) => {
 	return c.text("OK");
 });
 
+console.info(`[server] Mediwise API initialized (${env.NODE_ENV}).`);
+
 export default app;

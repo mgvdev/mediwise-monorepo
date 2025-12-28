@@ -19,6 +19,7 @@
 		"@better-auth/expo": "catalog:",
 		"dotenv": "catalog:",
 		"zod": "catalog:",
+		"@mediwise-monorepo/domain": "workspace:*",
 		"@mediwise-monorepo/env": "workspace:*",
 		"@mediwise-monorepo/db": "workspace:*"
 	}

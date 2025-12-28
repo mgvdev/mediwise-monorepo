@@ -30,10 +30,12 @@ export default function UserMenu() {
 		);
 	}
 
+	const displayName = session.user.name || session.user.email;
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger render={<Button variant="outline" />}>
-				{session.user.name}
+				{displayName}
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="bg-card">
 				<DropdownMenuGroup>

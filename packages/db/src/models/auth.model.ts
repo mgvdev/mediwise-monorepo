@@ -8,6 +8,7 @@ const userSchema = new Schema(
 		name: { type: String, required: true },
 		email: { type: String, required: true, unique: true },
 		emailVerified: { type: Boolean, required: true },
+		tenantId: { type: String },
 		image: { type: String },
 		createdAt: { type: Date, required: true },
 		updatedAt: { type: Date, required: true },

@@ -4,8 +4,7 @@ import { Card, Chip, useThemeColor } from "heroui-native";
 import { Pressable, Text, View } from "react-native";
 
 import { Container } from "@/components/container";
-import { SignIn } from "@/components/sign-in";
-import { SignUp } from "@/components/sign-up";
+import { OtpSignIn } from "@/components/otp-sign-in";
 import { authClient } from "@/lib/auth-client";
 import { queryClient, trpc } from "@/utils/trpc";
 
@@ -20,31 +19,44 @@ export default function Home() {
 	const successColor = useThemeColor("success");
 	const dangerColor = useThemeColor("danger");
 
+	if (!session?.user) {
+		return (
+			<Container className="p-6">
+				<View className="mb-6 py-4">
+					<Text className="mb-2 font-bold text-4xl text-foreground">
+						Mediwise
+					</Text>
+					<Text className="text-muted text-sm">
+						Invite-only access for insurer teams and pre-registered members.
+					</Text>
+				</View>
+				<OtpSignIn />
+			</Container>
+		);
+	}
+
 	return (
 		<Container className="p-6">
 			<View className="mb-6 py-4">
 				<Text className="mb-2 font-bold text-4xl text-foreground">
-					BETTER T STACK
+					Mediwise
 				</Text>
 			</View>
 
-			{session?.user ? (
-				<Card variant="secondary" className="mb-6 p-4">
-					<Text className="mb-2 text-base text-foreground">
-						Welcome, <Text className="font-medium">{session.user.name}</Text>
-					</Text>
-					<Text className="mb-4 text-muted text-sm">{session.user.email}</Text>
-					<Pressable
-						className="self-start rounded-lg bg-danger px-4 py-3 active:opacity-70"
-						onPress={() => {
-							authClient.signOut();
-							queryClient.invalidateQueries();
-						}}
-					>
-						<Text className="font-medium text-foreground">Sign Out</Text>
-					</Pressable>
-				</Card>
-			) : null}
+			<Card variant="secondary" className="mb-6 p-4">
+				<Text className="mb-2 text-base text-foreground">
+					Welcome, <Text className="font-medium">{session.user.email}</Text>
+				</Text>
+				<Pressable
+					className="self-start rounded-lg bg-danger px-4 py-3 active:opacity-70"
+					onPress={() => {
+						authClient.signOut();
+						queryClient.invalidateQueries();
+					}}
+				>
+					<Text className="font-medium text-foreground">Sign Out</Text>
+				</Pressable>
+			</Card>
 
 			<Card variant="secondary" className="p-6">
 				<View className="mb-4 flex-row items-center justify-between">
@@ -98,13 +110,6 @@ export default function Home() {
 					<Card.Description>{privateData.data?.message}</Card.Description>
 				)}
 			</Card>
-
-			{!session?.user && (
-				<>
-					<SignIn />
-					<SignUp />
-				</>
-			)}
 		</Container>
 	);
 }
