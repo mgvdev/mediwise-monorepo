@@ -2,12 +2,36 @@ import "dotenv/config";
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
 
+const corsOriginSchema = z
+	.string()
+	.min(1)
+	.refine((value) => {
+		return value
+			.split(",")
+			.map((origin) => origin.trim())
+			.filter(Boolean)
+			.every((origin) => z.string().url().safeParse(origin).success);
+	}, "CORS_ORIGIN must be a comma-separated list of URLs");
+
+const parseCorsOrigins = (value: string) =>
+	value
+		.split(",")
+		.map((origin) => origin.trim())
+		.filter(Boolean);
+
+const parseDomainList = (value: string | undefined) =>
+	(value ?? "")
+		.split(",")
+		.map((domain) => domain.trim().toLowerCase())
+		.filter(Boolean);
+
 export const env = createEnv({
 	server: {
 		DATABASE_URL: z.string().min(1),
 		BETTER_AUTH_SECRET: z.string().min(32),
 		BETTER_AUTH_URL: z.url(),
-		CORS_ORIGIN: z.url(),
+		CORS_ORIGIN: corsOriginSchema,
+		ADMIN_DOMAINS: z.string().optional(),
 		UPLOAD_DIR: z.string().default("uploads"),
 		STORAGE_DRIVER: z.enum(["local", "s3"]).default("local"),
 		S3_BUCKET: z.string().optional(),
@@ -30,3 +54,6 @@ export const env = createEnv({
 	runtimeEnv: process.env,
 	emptyStringAsUndefined: true,
 });
+
+export const corsOrigins = parseCorsOrigins(env.CORS_ORIGIN);
+export const adminDomains = parseDomainList(env.ADMIN_DOMAINS);

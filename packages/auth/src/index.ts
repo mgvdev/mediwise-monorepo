@@ -1,12 +1,19 @@
 import { expo } from "@better-auth/expo";
-import { mongoose, TenantMember, User } from "@mediwise-monorepo/db";
+import {
+	mongoose,
+	TenantDomain,
+	TenantMember,
+	User,
+} from "@mediwise-monorepo/db";
 import {
 	buildOtpEmail,
+	extractEmailDomain,
 	isEnrollmentActive,
+	isTenantDomainActive,
 	normalizeEmail,
 	resolveDisplayName,
 } from "@mediwise-monorepo/domain";
-import { env } from "@mediwise-monorepo/env/server";
+import { adminDomains, corsOrigins, env } from "@mediwise-monorepo/env/server";
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { APIError } from "better-auth/api";
@@ -24,6 +31,18 @@ type UserDoc = {
 	tenantId?: string | null;
 };
 
+type TenantDomainDoc = {
+	domain: string;
+	tenantId: string;
+	status?: "active" | "disabled";
+};
+
+type AuthFlow = "member" | "backoffice" | "admin";
+
+const BACKOFFICE_HEADER = "x-mediwise-app";
+const BACKOFFICE_APP = "backoffice";
+const ADMIN_APP = "admin";
+
 async function getEnrollmentByEmail(email: string) {
 	const normalizedEmail = normalizeEmail(email);
 	const enrollment = await TenantMember.findOne({
@@ -34,6 +53,31 @@ async function getEnrollmentByEmail(email: string) {
 		...enrollment,
 		status: enrollment.status ?? "active",
 	};
+}
+
+async function getTenantDomainByEmail(email: string) {
+	const domain = extractEmailDomain(email);
+	if (!domain) return null;
+	const tenantDomain = await TenantDomain.findOne({
+		domain,
+	}).lean<TenantDomainDoc | null>();
+	if (!tenantDomain) return null;
+	return {
+		...tenantDomain,
+		status: tenantDomain.status ?? "active",
+	};
+}
+
+function resolveAuthFlow(ctx?: { request?: Request | undefined }): AuthFlow {
+	const appHeader = ctx?.request?.headers.get(BACKOFFICE_HEADER);
+	if (appHeader === ADMIN_APP) return "admin";
+	return appHeader === BACKOFFICE_APP ? "backoffice" : "member";
+}
+
+function isAdminDomain(email: string) {
+	const domain = extractEmailDomain(email);
+	if (!domain) return false;
+	return adminDomains.includes(domain);
 }
 
 async function ensureEmailIsPreRegistered(email: string) {
@@ -65,6 +109,72 @@ async function ensureEmailIsPreRegistered(email: string) {
 	});
 }
 
+async function ensureBackofficeDomainAccess(email: string) {
+	const normalizedEmail = normalizeEmail(email);
+	const domainEntry = await getTenantDomainByEmail(normalizedEmail);
+	if (isTenantDomainActive(domainEntry)) return domainEntry;
+
+	const domain = extractEmailDomain(normalizedEmail);
+	if (env.NODE_ENV !== "production" && domain) {
+		const created = await TenantDomain.findOneAndUpdate(
+			{ domain },
+			{
+				$setOnInsert: {
+					domain,
+					tenantId: "demo-tenant",
+					status: "active",
+				},
+			},
+			{ upsert: true, new: true },
+		).lean<TenantDomainDoc | null>();
+
+		if (created) {
+			return {
+				...created,
+				status: created.status ?? "active",
+			};
+		}
+	}
+
+	throw new APIError("BAD_REQUEST", {
+		message: "Use your corporate email address to access the backoffice.",
+	});
+}
+
+async function ensureAdminDomainAccess(email: string) {
+	if (isAdminDomain(email)) return;
+
+	if (env.NODE_ENV !== "production" && adminDomains.length === 0) {
+		return;
+	}
+
+	throw new APIError("BAD_REQUEST", {
+		message: "Use your Mediwise corporate email to access the admin console.",
+	});
+}
+
+async function resolveTenantForUser(email: string) {
+	const normalizedEmail = normalizeEmail(email);
+	if (isAdminDomain(normalizedEmail)) return null;
+	const enrollment = await getEnrollmentByEmail(normalizedEmail);
+	if (isEnrollmentActive(enrollment)) {
+		return {
+			tenantId: enrollment.tenantId,
+			name: enrollment.name ?? null,
+		};
+	}
+
+	const domainEntry = await getTenantDomainByEmail(normalizedEmail);
+	if (isTenantDomainActive(domainEntry)) {
+		return {
+			tenantId: domainEntry.tenantId,
+			name: null,
+		};
+	}
+
+	return null;
+}
+
 async function sendOtpEmail({
 	email,
 	otp,
@@ -91,7 +201,7 @@ async function sendOtpEmail({
 
 export const auth = betterAuth({
 	database: mongodbAdapter(mongoose.connection.getClient().db()),
-	trustedOrigins: [env.CORS_ORIGIN, "mybettertapp://", "exp://"],
+	trustedOrigins: [...corsOrigins, "mybettertapp://", "exp://"],
 	emailAndPassword: {
 		enabled: false,
 	},
@@ -107,8 +217,17 @@ export const auth = betterAuth({
 		emailOTP({
 			otpLength: 6,
 			expiresIn: 60 * 10,
-			async sendVerificationOTP({ email, otp, type }) {
-				await ensureEmailIsPreRegistered(email);
+			async sendVerificationOTP({ email, otp, type }, ctx) {
+				if (type === "sign-in") {
+					const flow = resolveAuthFlow(ctx);
+					if (flow === "backoffice") {
+						await ensureBackofficeDomainAccess(email);
+					} else if (flow === "admin") {
+						await ensureAdminDomainAccess(email);
+					} else {
+						await ensureEmailIsPreRegistered(email);
+					}
+				}
 				await sendOtpEmail({ email, otp, type });
 			},
 		}),
@@ -118,10 +237,10 @@ export const auth = betterAuth({
 		user: {
 			create: {
 				before: async (user) => {
-					const { enrollment } = await ensureEmailIsPreRegistered(user.email);
+					const tenantInfo = await resolveTenantForUser(user.email);
 					const displayName = resolveDisplayName({
 						primaryName: user.name,
-						fallbackName: enrollment?.name ?? null,
+						fallbackName: tenantInfo?.name ?? null,
 						fallbackEmail: user.email,
 					});
 
@@ -129,7 +248,7 @@ export const auth = betterAuth({
 						data: {
 							...user,
 							name: displayName,
-							tenantId: enrollment?.tenantId ?? null,
+							tenantId: tenantInfo?.tenantId ?? null,
 						},
 					};
 				},

@@ -34,6 +34,7 @@
 		"dev:web": "turbo -F web dev",
 		"dev:server": "turbo -F server dev",
 		"dev:queue": "turbo -F queue dev",
+		"dev:admin": "turbo -F admin-dashboard dev",
 		"db:start": "turbo -F @mediwise-monorepo/db db:start",
 		"db:watch": "turbo -F @mediwise-monorepo/db db:watch",
 		"db:stop": "turbo -F @mediwise-monorepo/db db:stop",

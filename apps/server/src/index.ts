@@ -4,7 +4,7 @@ import { trpcServer } from "@hono/trpc-server";
 import { createContext } from "@mediwise-monorepo/api/context";
 import { appRouter } from "@mediwise-monorepo/api/routers/index";
 import { auth } from "@mediwise-monorepo/auth";
-import { env } from "@mediwise-monorepo/env/server";
+import { corsOrigins, env } from "@mediwise-monorepo/env/server";
 import {
 	createJob,
 	createRawPrescription,
@@ -21,9 +21,14 @@ app.use(logger());
 app.use(
 	"/*",
 	cors({
-		origin: env.CORS_ORIGIN,
+		origin: (origin) => {
+			if (!origin) {
+				return "";
+			}
+			return corsOrigins.includes(origin) ? origin : "";
+		},
 		allowMethods: ["GET", "POST", "OPTIONS"],
-		allowHeaders: ["Content-Type", "Authorization"],
+		allowHeaders: ["Content-Type", "Authorization", "X-Mediwise-App"],
 		credentials: true,
 	}),
 );

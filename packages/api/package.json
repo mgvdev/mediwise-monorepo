@@ -23,6 +23,7 @@
 		"@mediwise-monorepo/infrastructure": "workspace:*",
 		"@mediwise-monorepo/env": "workspace:*",
 		"@mediwise-monorepo/auth": "workspace:*",
-		"@mediwise-monorepo/db": "workspace:*"
+		"@mediwise-monorepo/db": "workspace:*",
+		"@mediwise-monorepo/domain": "workspace:*"
 	}
 }

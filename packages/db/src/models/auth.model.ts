@@ -71,10 +71,22 @@ const tenantMemberSchema = new Schema(
 	{ collection: "tenant_members" },
 );
 
+const tenantDomainSchema = new Schema(
+	{
+		domain: { type: String, required: true, unique: true },
+		tenantId: { type: String, required: true },
+		status: { type: String },
+		createdAt: { type: Date },
+		updatedAt: { type: Date },
+	},
+	{ collection: "tenant_domains" },
+);
+
 const User = model("User", userSchema);
 const Session = model("Session", sessionSchema);
 const Account = model("Account", accountSchema);
 const Verification = model("Verification", verificationSchema);
 const TenantMember = model("TenantMember", tenantMemberSchema);
+const TenantDomain = model("TenantDomain", tenantDomainSchema);
 
-export { User, Session, Account, Verification, TenantMember };
+export { User, Session, Account, Verification, TenantMember, TenantDomain };
