@@ -22,7 +22,8 @@
 		"@mediwise-monorepo/env": "workspace:*",
 		"@mediwise-monorepo/api": "workspace:*",
 		"@mediwise-monorepo/auth": "workspace:*",
-		"@mediwise-monorepo/db": "workspace:*"
+		"@mediwise-monorepo/db": "workspace:*",
+		"@mediwise-monorepo/infrastructure": "workspace:*"
 	},
 	"devDependencies": {
 		"@types/bun": "catalog:",

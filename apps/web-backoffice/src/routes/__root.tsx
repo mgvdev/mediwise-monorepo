@@ -8,7 +8,7 @@ import {
 	useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import Header from "@/components/header";
+import TabBar from "@/components/tab-bar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import type { trpc } from "@/utils/trpc";
@@ -45,7 +45,7 @@ function RootComponent() {
 	const pathname = useRouterState({
 		select: (state) => state.location.pathname,
 	});
-	const showHeader = pathname !== "/login";
+	const showTabs = pathname !== "/login";
 
 	return (
 		<>
@@ -56,13 +56,17 @@ function RootComponent() {
 				disableTransitionOnChange
 				storageKey="vite-ui-theme"
 			>
-				<div
-					className={
-						showHeader ? "grid min-h-svh grid-rows-[auto_1fr]" : "min-h-svh"
-					}
-				>
-					{showHeader ? <Header /> : null}
-					<Outlet />
+				<div className="min-h-svh">
+					{showTabs ? (
+						<div className="flex min-h-svh flex-col">
+							<main className="flex-1 px-4 pt-6 pb-24">
+								<Outlet />
+							</main>
+							<TabBar />
+						</div>
+					) : (
+						<Outlet />
+					)}
 				</div>
 				<Toaster richColors />
 			</ThemeProvider>

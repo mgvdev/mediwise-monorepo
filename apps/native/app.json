@@ -9,6 +9,15 @@
 		"name": "mediwise-monorepo",
 		"slug": "mediwise-monorepo",
 		"plugins": ["expo-font"],
+		"ios": {
+			"infoPlist": {
+				"NSCameraUsageDescription": "Allow Mediwise to take prescription photos.",
+				"NSPhotoLibraryUsageDescription": "Allow Mediwise to upload prescription photos."
+			}
+		},
+		"android": {
+			"permissions": ["CAMERA", "READ_MEDIA_IMAGES", "READ_EXTERNAL_STORAGE"]
+		},
 		"experiments": {
 			"typedRoutes": true,
 			"reactCompiler": true

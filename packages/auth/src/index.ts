@@ -1,5 +1,5 @@
 import { expo } from "@better-auth/expo";
-import { client } from "@mediwise-monorepo/db";
+import { mongoose, TenantMember, User } from "@mediwise-monorepo/db";
 import {
 	buildOtpEmail,
 	isEnrollmentActive,
@@ -24,12 +24,11 @@ type UserDoc = {
 	tenantId?: string | null;
 };
 
-const tenantMembers = client.collection<TenantEnrollmentDoc>("tenant_members");
-const users = client.collection<UserDoc>("user");
-
 async function getEnrollmentByEmail(email: string) {
 	const normalizedEmail = normalizeEmail(email);
-	const enrollment = await tenantMembers.findOne({ email: normalizedEmail });
+	const enrollment = await TenantMember.findOne({
+		email: normalizedEmail,
+	}).lean<TenantEnrollmentDoc | null>();
 	if (!enrollment) return null;
 	return {
 		...enrollment,
@@ -39,7 +38,9 @@ async function getEnrollmentByEmail(email: string) {
 
 async function ensureEmailIsPreRegistered(email: string) {
 	const normalizedEmail = normalizeEmail(email);
-	const existingUser = await users.findOne({ email: normalizedEmail });
+	const existingUser = await User.findOne({
+		email: normalizedEmail,
+	}).lean<UserDoc | null>();
 	if (existingUser) return { enrollment: null, user: existingUser };
 
 	const enrollment = await getEnrollmentByEmail(normalizedEmail);
@@ -55,7 +56,7 @@ async function ensureEmailIsPreRegistered(email: string) {
 			status: "active" as const,
 			name: null,
 		};
-		await tenantMembers.insertOne(demoEnrollment);
+		await TenantMember.create(demoEnrollment);
 		return { enrollment: demoEnrollment, user: null };
 	}
 
@@ -89,7 +90,7 @@ async function sendOtpEmail({
 }
 
 export const auth = betterAuth({
-	database: mongodbAdapter(client),
+	database: mongodbAdapter(mongoose.connection.getClient().db()),
 	trustedOrigins: [env.CORS_ORIGIN, "mybettertapp://", "exp://"],
 	emailAndPassword: {
 		enabled: false,

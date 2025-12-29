@@ -61,9 +61,20 @@ const verificationSchema = new Schema(
 	{ collection: "verification" },
 );
 
+const tenantMemberSchema = new Schema(
+	{
+		email: { type: String, required: true, unique: true },
+		tenantId: { type: String, required: true },
+		status: { type: String },
+		name: { type: String },
+	},
+	{ collection: "tenant_members" },
+);
+
 const User = model("User", userSchema);
 const Session = model("Session", sessionSchema);
 const Account = model("Account", accountSchema);
 const Verification = model("Verification", verificationSchema);
+const TenantMember = model("TenantMember", tenantMemberSchema);
 
-export { User, Session, Account, Verification };
+export { User, Session, Account, Verification, TenantMember };

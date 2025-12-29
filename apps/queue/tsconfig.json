@@ -1,0 +1,8 @@
+{
+	"extends": "@mediwise-monorepo/config/tsconfig.base.json",
+	"compilerOptions": {
+		"composite": true,
+		"outDir": "dist",
+		"baseUrl": "."
+	}
+}

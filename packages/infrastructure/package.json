@@ -1,0 +1,27 @@
+{
+	"name": "@mediwise-monorepo/infrastructure",
+	"type": "module",
+	"exports": {
+		".": {
+			"default": "./src/index.ts"
+		},
+		"./prescriptions": {
+			"default": "./src/prescriptions/index.ts"
+		},
+		"./prescriptions/*": {
+			"default": "./src/prescriptions/*.ts"
+		}
+	},
+	"scripts": {},
+	"devDependencies": {
+		"typescript": "catalog:",
+		"@mediwise-monorepo/config": "workspace:*"
+	},
+	"dependencies": {
+		"@mediwise-monorepo/db": "workspace:*",
+		"@mediwise-monorepo/domain": "workspace:*",
+		"@mediwise-monorepo/env": "workspace:*",
+		"@aws-sdk/client-s3": "^3.699.0",
+		"zod": "catalog:"
+	}
+}
