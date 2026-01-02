@@ -6,6 +6,11 @@ export type PrescriptionStatus =
 
 export type PrescriptionSource = "upload" | "camera";
 
+export type PrescriptionEntrySource = PrescriptionSource | "manual";
+
+export type FrequencyUnit = "day" | "week" | "month";
+export type DurationUnit = "day" | "week" | "month";
+
 export type PrescriptionRawDoc = {
 	_id: string;
 	userId: string;
@@ -21,28 +26,17 @@ export type PrescriptionRawDoc = {
 	updatedAt: Date;
 };
 
-export type PrescriptionJobDoc = {
-	_id: string;
-	rawId: string;
-	status: PrescriptionStatus;
-	attempts: number;
-	lockedAt?: Date | null;
-	lockedBy?: string | null;
-	startedAt?: Date | null;
-	finishedAt?: Date | null;
-	provider?: string | null;
-	model?: string | null;
-	error?: string | null;
-	createdAt: Date;
-	updatedAt: Date;
-};
-
 export type UnifiedMedication = {
 	name: string;
 	dosage?: string | null;
+	type?: string | null;
 	frequency?: string | null;
+	frequencyCount?: number | null;
+	frequencyUnit?: FrequencyUnit | null;
 	route?: string | null;
 	duration?: string | null;
+	durationValue?: number | null;
+	durationUnit?: DurationUnit | null;
 	quantity?: string | null;
 	refills?: string | null;
 	instructions?: string | null;
@@ -52,23 +46,28 @@ export type UnifiedPrescriptionData = {
 	patientName?: string | null;
 	prescriberName?: string | null;
 	issuedDate?: string | null;
+	validUntil?: string | null;
 	medications: UnifiedMedication[];
 	notes?: string | null;
 };
 
 export type PrescriptionUnifiedDoc = {
 	_id: string;
-	rawId: string;
+	rawId?: string | null;
 	userId: string;
 	tenantId: string | null;
 	provider: string;
 	model: string;
+	source: PrescriptionEntrySource;
 	data: UnifiedPrescriptionData;
 	createdAt: Date;
+	updatedAt?: Date | null;
 };
 
 export type PrescriptionSummary = {
-	rawId: string;
+	id: string;
+	rawId?: string | null;
+	source: PrescriptionEntrySource;
 	status: PrescriptionStatus;
 	createdAt: Date;
 	filename: string;

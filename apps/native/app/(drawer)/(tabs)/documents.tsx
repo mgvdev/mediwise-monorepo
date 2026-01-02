@@ -1,15 +1,28 @@
 import { Ionicons } from "@expo/vector-icons";
 import { env } from "@mediwise-monorepo/env/native";
+import { useFocusEffect } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import * as ImagePicker from "expo-image-picker";
+import { router } from "expo-router";
 import { Button, Spinner, Surface, useThemeColor } from "heroui-native";
-import { useMemo, useState } from "react";
-import { Image, Linking, Pressable, Text, View } from "react-native";
+import { useCallback, useMemo, useState } from "react";
+import {
+	Image,
+	Linking,
+	Pressable,
+	RefreshControl,
+	Text,
+	View,
+} from "react-native";
 
 import { applyOpacity } from "@/components/color-utils";
 import { Container } from "@/components/container";
 import { DocumentsHeader } from "@/components/documents-header";
 import { OtpSignIn } from "@/components/otp-sign-in";
+import {
+	ManualPrescriptionDialog,
+	PrescriptionDetailDialog,
+} from "@/components/prescription-dialogs";
 import { authClient } from "@/lib/auth-client";
 import { queryClient, trpc } from "@/utils/trpc";
 
@@ -54,6 +67,12 @@ export default function DocumentsScreen() {
 	const [permissionError, setPermissionError] = useState<
 		"camera" | "library" | null
 	>(null);
+	const [manualOpen, setManualOpen] = useState(false);
+	const [detailOpen, setDetailOpen] = useState(false);
+	const [selectedPrescriptionId, setSelectedPrescriptionId] = useState<
+		string | null
+	>(null);
+	const [isRefreshing, setIsRefreshing] = useState(false);
 
 	const prescriptions = useQuery({
 		...trpc.prescriptions.list.queryOptions(),
@@ -166,9 +185,13 @@ export default function DocumentsScreen() {
 				return;
 			}
 
+			const data = (await response.json()) as { id?: string };
 			setAsset(null);
 			setUploadSource(null);
 			queryClient.invalidateQueries();
+			if (data.id) {
+				openPrescription(data.id);
+			}
 		} catch (uploadError) {
 			console.error(uploadError);
 			setError("Upload failed. Please try again.");
@@ -185,6 +208,33 @@ export default function DocumentsScreen() {
 			await requestLibraryPermission();
 		}
 	};
+
+	const openPrescription = (id: string) => {
+		setSelectedPrescriptionId(id);
+		setDetailOpen(true);
+	};
+
+	const handleManualSaved = (_id: string) => {
+		queryClient.invalidateQueries();
+		prescriptions.refetch();
+		setManualOpen(false);
+	};
+
+	const handleRefresh = async () => {
+		setIsRefreshing(true);
+		try {
+			await prescriptions.refetch();
+		} finally {
+			setIsRefreshing(false);
+		}
+	};
+
+	useFocusEffect(
+		useCallback(() => {
+			if (!session?.user) return;
+			prescriptions.refetch();
+		}, [prescriptions, session?.user]),
+	);
 
 	if (!session?.user) {
 		return (
@@ -203,12 +253,20 @@ export default function DocumentsScreen() {
 	}
 
 	return (
-		<Container className="gap-4 pb-6">
+		<Container
+			className="gap-4 pb-6"
+			scrollProps={{
+				refreshControl: (
+					<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
+				),
+			}}
+		>
 			<DocumentsHeader
 				searchQuery={searchQuery}
 				onSearchQueryChange={setSearchQuery}
 				onPickFromLibrary={handlePickFromLibrary}
 				onTakePhoto={handleTakePhoto}
+				onAddManual={() => setManualOpen(true)}
 			/>
 			{error && !asset ? (
 				<View className="px-6">
@@ -275,7 +333,7 @@ export default function DocumentsScreen() {
 				<SectionHeader
 					title="Prescription unifie"
 					actionLabel="See All"
-					onAction={() => prescriptions.refetch()}
+					onAction={() => router.push("/prescriptions")}
 				/>
 				<Surface variant="secondary" className="rounded-2xl p-4">
 					<View className="flex-row items-center justify-between">
@@ -315,7 +373,10 @@ export default function DocumentsScreen() {
 							<Text className="text-muted text-xs">In progress</Text>
 						</View>
 					</View>
-					<Pressable className="mt-4 items-center rounded-full border border-border/60 py-2">
+					<Pressable
+						onPress={() => router.push("/prescriptions")}
+						className="mt-4 items-center rounded-full border border-border/60 py-2"
+					>
 						<Text className="font-semibold text-primary text-sm">
 							See unified prescriptions
 						</Text>
@@ -338,29 +399,33 @@ export default function DocumentsScreen() {
 						{prescriptions.isLoading ? (
 							<Text className="text-muted text-xs">Loading...</Text>
 						) : filteredPrescriptions.length ? (
-							filteredPrescriptions.map((item) => (
-								<View
-									key={item.rawId}
-									className="rounded-xl border border-border/60 bg-surface/40 p-3"
-								>
-									<Text className="font-medium text-foreground text-sm">
-										{item.filename}
-									</Text>
-									<Text className="text-[11px] text-muted">
-										{new Date(item.createdAt).toLocaleString()}
-									</Text>
-									<View className="mt-2 flex-row items-center justify-between">
+							filteredPrescriptions.map((item) => {
+								const targetId = item.rawId ?? item.id;
+								return (
+									<Pressable
+										key={item.id}
+										onPress={() => openPrescription(targetId)}
+										className="rounded-xl border border-border/60 bg-surface/40 p-3"
+									>
+										<Text className="font-medium text-foreground text-sm">
+											{item.filename}
+										</Text>
 										<Text className="text-[11px] text-muted">
-											{item.medicationSummary
-												? `First med: ${item.medicationSummary}`
-												: "Processing"}
+											{new Date(item.createdAt).toLocaleString()}
 										</Text>
-										<Text className="font-semibold text-[11px] text-muted">
-											{item.status.toUpperCase()}
-										</Text>
-									</View>
-								</View>
-							))
+										<View className="mt-2 flex-row items-center justify-between">
+											<Text className="text-[11px] text-muted">
+												{item.medicationSummary
+													? `First med: ${item.medicationSummary}`
+													: "Processing"}
+											</Text>
+											<Text className="font-semibold text-[11px] text-muted">
+												{item.status.toUpperCase()}
+											</Text>
+										</View>
+									</Pressable>
+								);
+							})
 						) : (
 							<Text className="text-muted text-xs">
 								{searchQuery.trim()
@@ -371,6 +436,24 @@ export default function DocumentsScreen() {
 					</View>
 				</Surface>
 			</View>
+
+			<ManualPrescriptionDialog
+				isOpen={manualOpen}
+				onOpenChange={setManualOpen}
+				onSaved={handleManualSaved}
+			/>
+			<PrescriptionDetailDialog
+				isOpen={detailOpen}
+				onOpenChange={(open) => {
+					setDetailOpen(open);
+					if (!open) setSelectedPrescriptionId(null);
+				}}
+				prescriptionId={selectedPrescriptionId}
+				onSaved={() => {
+					queryClient.invalidateQueries();
+					prescriptions.refetch();
+				}}
+			/>
 		</Container>
 	);
 }

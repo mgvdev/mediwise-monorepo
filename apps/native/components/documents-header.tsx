@@ -11,6 +11,7 @@ type DocumentsHeaderProps = {
 	onSearchQueryChange: (value: string) => void;
 	onPickFromLibrary: () => void;
 	onTakePhoto: () => void;
+	onAddManual: () => void;
 };
 
 type ActionTileProps = {
@@ -55,6 +56,7 @@ export function DocumentsHeader({
 	onSearchQueryChange,
 	onPickFromLibrary,
 	onTakePhoto,
+	onAddManual,
 }: DocumentsHeaderProps) {
 	const insets = useSafeAreaInsets();
 	const baseBackground = useThemeColor("background");
@@ -120,6 +122,15 @@ export function DocumentsHeader({
 					<Text className="mt-3 text-xs" style={{ color: headerMuted }}>
 						Upload or scan prescriptions to build the unified record.
 					</Text>
+					<Pressable
+						onPress={onAddManual}
+						className="mt-3 flex-row items-center gap-1 self-start"
+					>
+						<Ionicons name="add" size={16} color={headerMuted} />
+						<Text className="text-xs" style={{ color: headerMuted }}>
+							Add a prescription manually
+						</Text>
+					</Pressable>
 				</View>
 			</Surface>
 		</>

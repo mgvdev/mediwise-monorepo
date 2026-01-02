@@ -1,6 +1,8 @@
 import { Card } from "@heroui/react";
 import type { ReactNode } from "react";
 
+import { cardVariants } from "@/components/ui/card";
+
 type MetricCardProps = {
 	label: string;
 	value: ReactNode;
@@ -9,7 +11,7 @@ type MetricCardProps = {
 
 export function MetricCard({ label, value, description }: MetricCardProps) {
 	return (
-		<Card className="rounded-3xl border border-border/60 bg-card/70 p-5 shadow-sm">
+		<Card className={cardVariants()}>
 			<p className="text-muted-foreground text-xs uppercase tracking-[0.2em]">
 				{label}
 			</p>

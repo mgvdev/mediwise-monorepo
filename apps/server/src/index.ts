@@ -55,6 +55,8 @@ app.post("/api/prescriptions/upload", async (c) => {
 	const stored = await storage.saveFile(file, { prefix: session.user.id });
 	const sourceValue = formData.get("source");
 	const source = sourceValue === "camera" ? "camera" : "upload";
+	const intentValue = formData.get("intent");
+	const isManual = intentValue === "manual";
 	const tenantId =
 		"tenantId" in session.user ? (session.user.tenantId ?? null) : null;
 
@@ -66,13 +68,16 @@ app.post("/api/prescriptions/upload", async (c) => {
 		originalFilename: file.name,
 		contentType: file.type,
 		size: file.size,
+		status: isManual ? "completed" : undefined,
 	});
 
-	await createJob({
-		rawId: raw._id,
-		provider: env.AI_PROVIDER,
-		model: env.AI_PROVIDER === "openai" ? env.OPENAI_MODEL : env.OLLAMA_MODEL,
-	});
+	if (!isManual) {
+		await createJob({
+			rawId: raw._id,
+			provider: env.AI_PROVIDER,
+			model: env.AI_PROVIDER === "openai" ? env.OPENAI_MODEL : env.OLLAMA_MODEL,
+		});
+	}
 
 	return c.json({ id: raw._id, status: raw.status });
 });

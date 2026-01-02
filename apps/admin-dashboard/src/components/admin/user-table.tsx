@@ -1,6 +1,8 @@
 import { Button, Card, Chip } from "@heroui/react";
 import { useEffect, useState } from "react";
 
+import { cardVariants } from "@/components/ui/card";
+
 type TenantOption = {
 	id: string;
 	name: string;
@@ -39,7 +41,7 @@ export function UserTable({
 	}, [users]);
 
 	return (
-		<Card className="rounded-3xl border border-border/60 bg-card/70 p-5 shadow-sm">
+		<Card className={cardVariants()}>
 			<div className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-4 text-muted-foreground text-xs uppercase tracking-[0.2em]">
 				<span>Member</span>
 				<span>Insurer</span>

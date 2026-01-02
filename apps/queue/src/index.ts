@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { PrescriptionJob } from "@mediwise-monorepo/db";
+import { Job } from "@mediwise-monorepo/db";
 import { env } from "@mediwise-monorepo/env/server";
 import {
 	createAiProvider,
@@ -7,18 +7,19 @@ import {
 } from "@mediwise-monorepo/infrastructure/prescriptions";
 
 import { startJobChangeStream } from "./change-stream";
+import { createHandlers } from "./handlers";
 import { createPolling } from "./polling";
 import { createQueueWorker } from "./worker";
 
 const workerId = `queue-${process.pid}`;
 const storage = createStorageProvider();
 const aiProvider = createAiProvider();
+const handlers = createHandlers({ storage, aiProvider });
 const worker = createQueueWorker({
 	workerId,
 	lockTimeoutMs: env.JOB_LOCK_TIMEOUT_MS,
 	maxAttempts: env.JOB_MAX_ATTEMPTS,
-	storage,
-	aiProvider,
+	handlers,
 });
 
 const startPolling = createPolling({
@@ -34,7 +35,7 @@ async function runLoop() {
 	);
 	await worker.drainQueue();
 	startJobChangeStream({
-		collection: PrescriptionJob,
+		collection: Job,
 		onQueued: () => {
 			void worker.drainQueue();
 		},

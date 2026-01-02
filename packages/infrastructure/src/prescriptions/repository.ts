@@ -1,12 +1,8 @@
 import { randomUUID } from "node:crypto";
-import {
-	PrescriptionJob,
-	PrescriptionRaw,
-	PrescriptionUnified,
-} from "@mediwise-monorepo/db";
+import { PrescriptionRaw, PrescriptionUnified } from "@mediwise-monorepo/db";
+import { createJob as createQueueJob, JobTypes } from "../jobs";
 
 import type {
-	PrescriptionJobDoc,
 	PrescriptionRawDoc,
 	PrescriptionStatus,
 	PrescriptionSummary,
@@ -22,6 +18,7 @@ export async function createRawPrescription(input: {
 	originalFilename: string;
 	contentType: string;
 	size: number;
+	status?: PrescriptionStatus;
 }) {
 	const now = new Date();
 	const doc: PrescriptionRawDoc = {
@@ -33,7 +30,7 @@ export async function createRawPrescription(input: {
 		originalFilename: input.originalFilename,
 		contentType: input.contentType,
 		size: input.size,
-		status: "queued",
+		status: input.status ?? "queued",
 		createdAt: now,
 		updatedAt: now,
 	};
@@ -47,31 +44,28 @@ export async function createJob(input: {
 	provider?: string;
 	model?: string;
 }) {
-	const now = new Date();
-	const doc: PrescriptionJobDoc = {
-		_id: randomUUID(),
-		rawId: input.rawId,
-		status: "queued",
-		attempts: 0,
-		provider: input.provider ?? null,
-		model: input.model ?? null,
-		createdAt: now,
-		updatedAt: now,
-	};
-
-	await PrescriptionJob.create(doc);
-	return doc;
+	return createQueueJob({
+		type: JobTypes.prescriptionExtract,
+		payload: {
+			rawId: input.rawId,
+			provider: input.provider ?? null,
+			model: input.model ?? null,
+		},
+	});
 }
 
 export async function listPrescriptionsByUser(input: {
 	userId: string;
 	limit?: number;
 }) {
-	const limit = input.limit ?? 20;
-	const raws = await PrescriptionRaw.find({ userId: input.userId })
-		.sort({ createdAt: -1 })
-		.limit(limit)
-		.lean<PrescriptionRawDoc[]>();
+	const limit = input.limit;
+	const rawQuery = PrescriptionRaw.find({ userId: input.userId }).sort({
+		createdAt: -1,
+	});
+	if (typeof limit === "number") {
+		rawQuery.limit(limit);
+	}
+	const raws = await rawQuery.lean<PrescriptionRawDoc[]>();
 
 	const unifiedByRaw = raws.length
 		? await PrescriptionUnified.find({
@@ -80,11 +74,13 @@ export async function listPrescriptionsByUser(input: {
 		: [];
 	const unifiedMap = new Map(unifiedByRaw.map((doc) => [doc.rawId, doc]));
 
-	const summaries: PrescriptionSummary[] = raws.map((raw) => {
+	const rawSummaries: PrescriptionSummary[] = raws.map((raw) => {
 		const unified = unifiedMap.get(raw._id);
 		const medicationName = unified?.data.medications?.[0]?.name || null;
 		return {
+			id: raw._id,
 			rawId: raw._id,
+			source: raw.source,
 			status: raw.status,
 			createdAt: raw.createdAt,
 			filename: raw.originalFilename,
@@ -92,7 +88,36 @@ export async function listPrescriptionsByUser(input: {
 		};
 	});
 
-	return summaries;
+	const rawIds = new Set(raws.map((raw) => raw._id));
+	const manualQuery = PrescriptionUnified.find({
+		userId: input.userId,
+		source: "manual",
+	}).sort({ createdAt: -1 });
+	if (typeof limit === "number") {
+		manualQuery.limit(limit);
+	}
+	const manualUnified = await manualQuery.lean<PrescriptionUnifiedDoc[]>();
+
+	const manualSummaries = manualUnified
+		.filter((doc) => !doc.rawId || !rawIds.has(doc.rawId))
+		.map((doc) => {
+			const medicationName = doc.data.medications?.[0]?.name || null;
+			return {
+				id: doc._id,
+				rawId: doc.rawId ?? null,
+				source: doc.source ?? "manual",
+				status: "completed" as PrescriptionStatus,
+				createdAt: doc.createdAt,
+				filename: "Manual prescription",
+				medicationSummary: medicationName,
+			};
+		});
+
+	const combined = [...rawSummaries, ...manualSummaries].sort(
+		(a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+	);
+
+	return typeof limit === "number" ? combined.slice(0, limit) : combined;
 }
 
 export async function findRawById(rawId: string) {
@@ -122,6 +147,14 @@ export async function createUnified(input: {
 	model: string;
 	data: UnifiedPrescriptionData;
 }) {
+	const existing = await PrescriptionUnified.findOne({
+		rawId: input.raw._id,
+	}).lean<PrescriptionUnifiedDoc | null>();
+
+	if (existing?.source === "manual") {
+		return existing;
+	}
+
 	await PrescriptionUnified.deleteMany({ rawId: input.raw._id });
 	const doc: PrescriptionUnifiedDoc = {
 		_id: randomUUID(),
@@ -130,77 +163,101 @@ export async function createUnified(input: {
 		tenantId: input.raw.tenantId,
 		provider: input.provider,
 		model: input.model,
+		source: input.raw.source,
 		data: input.data,
 		createdAt: new Date(),
+		updatedAt: new Date(),
 	};
 	await PrescriptionUnified.create(doc);
 	return doc;
 }
 
-export async function lockNextJob(input: {
-	workerId: string;
-	lockTimeoutMs: number;
+export async function findUnifiedByRawId(input: {
+	rawId: string;
+	userId: string;
+}) {
+	return PrescriptionUnified.findOne({
+		rawId: input.rawId,
+		userId: input.userId,
+	}).lean<PrescriptionUnifiedDoc | null>();
+}
+
+export async function findUnifiedById(input: { id: string; userId: string }) {
+	return PrescriptionUnified.findOne({
+		_id: input.id,
+		userId: input.userId,
+	}).lean<PrescriptionUnifiedDoc | null>();
+}
+
+export async function upsertUnifiedPrescription(input: {
+	id?: string;
+	rawId?: string | null;
+	userId: string;
+	tenantId: string | null;
+	source: "upload" | "camera" | "manual";
+	provider: string;
+	model: string;
+	data: UnifiedPrescriptionData;
 }) {
 	const now = new Date();
-	const staleLock = new Date(Date.now() - input.lockTimeoutMs);
 
-	const result = await PrescriptionJob.findOneAndUpdate(
-		{
-			$or: [
-				{ status: "queued" },
-				{ status: "processing", lockedAt: { $lte: staleLock } },
-			],
-		},
-		{
-			$set: {
-				status: "processing",
-				lockedAt: now,
-				lockedBy: input.workerId,
-				startedAt: now,
-				updatedAt: now,
+	if (input.id) {
+		const updated = await PrescriptionUnified.findOneAndUpdate(
+			{ _id: input.id, userId: input.userId },
+			{
+				$set: {
+					tenantId: input.tenantId,
+					source: input.source,
+					provider: input.provider,
+					model: input.model,
+					data: input.data,
+					updatedAt: now,
+				},
 			},
-			$inc: { attempts: 1 },
-		},
-		{ sort: { createdAt: 1 }, new: true },
-	).lean<PrescriptionJobDoc | null>();
+			{ new: true },
+		).lean<PrescriptionUnifiedDoc | null>();
 
-	return result ?? null;
-}
+		if (updated) return updated;
+	}
 
-export async function markJobCompleted(jobId: string) {
-	await PrescriptionJob.updateOne(
-		{ _id: jobId },
-		{
-			$set: {
-				status: "completed",
-				finishedAt: new Date(),
-				updatedAt: new Date(),
+	if (input.rawId) {
+		const updated = await PrescriptionUnified.findOneAndUpdate(
+			{ rawId: input.rawId, userId: input.userId },
+			{
+				$set: {
+					tenantId: input.tenantId,
+					source: input.source,
+					provider: input.provider,
+					model: input.model,
+					data: input.data,
+					updatedAt: now,
+				},
+				$setOnInsert: {
+					_id: randomUUID(),
+					rawId: input.rawId,
+					userId: input.userId,
+					createdAt: now,
+				},
 			},
-		},
-	);
-}
+			{ upsert: true, new: true },
+		).lean<PrescriptionUnifiedDoc | null>();
 
-export async function markJobFailed(input: {
-	jobId: string;
-	error: string;
-	shouldRetry: boolean;
-}) {
-	await PrescriptionJob.updateOne(
-		{ _id: input.jobId },
-		{
-			$set: {
-				status: input.shouldRetry ? "queued" : "failed",
-				error: input.error,
-				finishedAt: input.shouldRetry ? null : new Date(),
-				updatedAt: new Date(),
-			},
-		},
-	);
-}
+		if (updated) return updated;
+	}
 
-export async function getJobAttempts(jobId: string) {
-	const job = await PrescriptionJob.findById(
-		jobId,
-	).lean<PrescriptionJobDoc | null>();
-	return job?.attempts ?? 0;
+	const doc: PrescriptionUnifiedDoc = {
+		_id: randomUUID(),
+		rawId: input.rawId ?? null,
+		userId: input.userId,
+		tenantId: input.tenantId,
+		provider: input.provider,
+		model: input.model,
+		source: input.source,
+		data: input.data,
+		createdAt: now,
+		updatedAt: now,
+	};
+
+	await PrescriptionUnified.create(doc);
+	return doc;
 }

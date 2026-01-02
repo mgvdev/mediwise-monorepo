@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { UserTable } from "@/components/admin/user-table";
 import { PageHeader } from "@/components/backoffice/page-header";
+import { cardVariants } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
 import { queryClient, trpc } from "@/utils/trpc";
 
@@ -69,7 +70,7 @@ function RouteComponent() {
 				}
 			/>
 
-			<Card className="rounded-3xl border border-border/60 bg-card/70 p-5 shadow-sm">
+			<Card className={cardVariants()}>
 				<form
 					className="flex flex-wrap items-end gap-3"
 					onSubmit={handleSearch}

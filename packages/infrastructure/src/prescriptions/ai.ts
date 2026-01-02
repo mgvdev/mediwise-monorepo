@@ -13,7 +13,7 @@ export type AiProvider = {
 
 const SYSTEM_PROMPT =
 	"You are extracting data from a prescription image. Return valid JSON only. " +
-	"Schema: { patientName: string|null, prescriberName: string|null, issuedDate: string|null, medications: [{ name: string, dosage?: string|null, frequency?: string|null, route?: string|null, duration?: string|null, quantity?: string|null, refills?: string|null, instructions?: string|null }], notes?: string|null }. " +
+	'Schema: { patientName: string|null, prescriberName: string|null, issuedDate: string|null, validUntil: string|null, medications: [{ name: string, dosage?: string|null, type?: string|null, frequency?: string|null, frequencyCount?: number|null, frequencyUnit?: "day"|"week"|"month"|null, route?: string|null, duration?: string|null, durationValue?: number|null, durationUnit?: "day"|"week"|"month"|null, quantity?: string|null, refills?: string|null, instructions?: string|null }], notes?: string|null }. ' +
 	"If a field is unknown, use null or an empty string. Do not wrap the JSON in markdown.";
 
 export function createAiProvider(): AiProvider {

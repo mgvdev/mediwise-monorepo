@@ -5,6 +5,12 @@
 		".": {
 			"default": "./src/index.ts"
 		},
+		"./jobs": {
+			"default": "./src/jobs/index.ts"
+		},
+		"./jobs/*": {
+			"default": "./src/jobs/*.ts"
+		},
 		"./prescriptions": {
 			"default": "./src/prescriptions/index.ts"
 		},

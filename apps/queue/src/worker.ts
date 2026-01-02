@@ -1,30 +1,23 @@
-import type {
-	AiProvider,
-	StorageProvider,
-} from "@mediwise-monorepo/infrastructure/prescriptions";
 import {
-	createUnified,
-	findRawById,
 	lockNextJob,
 	markJobCompleted,
 	markJobFailed,
-	updateRawStatus,
-} from "@mediwise-monorepo/infrastructure/prescriptions";
+} from "@mediwise-monorepo/infrastructure/jobs";
+import type { JobHandlerMap } from "./handlers/types";
+import { JobHandlerError } from "./handlers/types";
 
 type WorkerConfig = {
 	workerId: string;
 	lockTimeoutMs: number;
 	maxAttempts: number;
-	storage: StorageProvider;
-	aiProvider: AiProvider;
+	handlers: JobHandlerMap;
 };
 
 export function createQueueWorker({
 	workerId,
 	lockTimeoutMs,
 	maxAttempts,
-	storage,
-	aiProvider,
+	handlers,
 }: WorkerConfig) {
 	let isDraining = false;
 
@@ -34,42 +27,34 @@ export function createQueueWorker({
 			return false;
 		}
 
-		const raw = await findRawById(job.rawId);
-		if (!raw) {
+		const handler = handlers[job.type];
+		if (!handler) {
 			await markJobFailed({
 				jobId: job._id,
-				error: "Raw prescription not found.",
+				error: `No handler registered for job type "${job.type}".`,
 				shouldRetry: false,
 			});
 			return true;
 		}
 
 		try {
-			await updateRawStatus({ rawId: raw._id, status: "processing" });
-			const buffer = await storage.getFileBuffer(raw.storageKey);
-			const data = await aiProvider.extractPrescription({
-				image: buffer,
-				mimeType: raw.contentType,
-			});
-
-			await createUnified({
-				raw,
-				provider: aiProvider.provider,
-				model: aiProvider.model,
-				data,
-			});
-
-			await updateRawStatus({ rawId: raw._id, status: "completed" });
+			await handler.handle(job);
 			await markJobCompleted(job._id);
 			return true;
 		} catch (error) {
 			const message = error instanceof Error ? error.message : "Unknown error";
-			const shouldRetry = job.attempts < maxAttempts;
-			await updateRawStatus({
-				rawId: raw._id,
-				status: shouldRetry ? "queued" : "failed",
-				error: message,
-			});
+			const retryable =
+				error instanceof JobHandlerError ? error.retryable : true;
+			const shouldRetry = retryable && job.attempts < maxAttempts;
+			if (handler.onFailure) {
+				try {
+					const handlerError =
+						error instanceof Error ? error : new Error(message);
+					await handler.onFailure(job, handlerError, shouldRetry);
+				} catch (handlerError) {
+					console.error("[queue] Job failure hook error", handlerError);
+				}
+			}
 			await markJobFailed({ jobId: job._id, error: message, shouldRetry });
 			return true;
 		}

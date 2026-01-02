@@ -1,6 +1,8 @@
 import { Avatar, Button, Card, Chip, Input, Label } from "@heroui/react";
 import { useEffect, useMemo, useState } from "react";
 
+import { cardVariants } from "@/components/ui/card";
+
 type TenantDomain = {
 	id: string;
 	domain: string;
@@ -71,7 +73,7 @@ export function TenantCard({
 	};
 
 	return (
-		<Card className="rounded-3xl border border-border/60 bg-card/70 p-5 shadow-sm">
+		<Card className={cardVariants()}>
 			<Card.Header className="flex flex-wrap items-start justify-between gap-3">
 				<div className="flex items-center gap-3">
 					<Avatar

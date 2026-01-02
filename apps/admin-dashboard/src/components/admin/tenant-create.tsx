@@ -1,6 +1,8 @@
 import { Button, Card, Input, Label } from "@heroui/react";
 import { useEffect, useMemo, useState } from "react";
 
+import { cardVariants } from "@/components/ui/card";
+
 type TenantCreateProps = {
 	onCreate: (input: {
 		name: string;
@@ -54,7 +56,7 @@ export function TenantCreate({ onCreate, isSubmitting }: TenantCreateProps) {
 	};
 
 	return (
-		<Card className="rounded-3xl border border-border/60 bg-card/70 p-5 shadow-sm">
+		<Card className={cardVariants()}>
 			<Card.Header>
 				<div>
 					<p className="font-semibold text-sm">Create insurance plan</p>

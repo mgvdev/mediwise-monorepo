@@ -9,8 +9,8 @@ import {
 	User,
 	Verification,
 } from "./models/auth.model";
+import { Job } from "./models/job.model";
 import {
-	PrescriptionJob,
 	PrescriptionRaw,
 	PrescriptionUnified,
 } from "./models/prescriptions.model";
@@ -23,7 +23,7 @@ await mongoose.connect(env.DATABASE_URL).catch((error) => {
 
 export {
 	Account,
-	PrescriptionJob,
+	Job,
 	PrescriptionRaw,
 	PrescriptionUnified,
 	Questionnaire,
