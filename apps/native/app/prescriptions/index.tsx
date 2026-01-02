@@ -1,56 +1,23 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useFocusEffect } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
-import { router } from "expo-router";
 import { Surface, useThemeColor } from "heroui-native";
-import { useCallback, useMemo, useState } from "react";
 import { Pressable, RefreshControl, Text, TextInput, View } from "react-native";
 
 import { applyOpacity } from "@/components/color-utils";
 import { Container } from "@/components/container";
 import { OtpSignIn } from "@/components/otp-sign-in";
-import { authClient } from "@/lib/auth-client";
-import { trpc } from "@/utils/trpc";
+import { usePrescriptionsList } from "@/features/prescriptions/use-prescriptions-list";
 
 export default function PrescriptionsListScreen() {
-	const { data: session } = authClient.useSession();
-	const [searchQuery, setSearchQuery] = useState("");
-	const [isRefreshing, setIsRefreshing] = useState(false);
-
-	const prescriptions = useQuery({
-		...trpc.prescriptions.listAll.queryOptions(),
-		enabled: !!session?.user,
-		refetchInterval: session?.user ? 5000 : false,
-	});
-
-	const filteredPrescriptions = useMemo(() => {
-		if (!prescriptions.data) return [];
-		const query = searchQuery.trim().toLowerCase();
-		if (!query) return prescriptions.data;
-		return prescriptions.data.filter((item) =>
-			item.filename.toLowerCase().includes(query),
-		);
-	}, [prescriptions.data, searchQuery]);
-
-	const handleRefresh = async () => {
-		setIsRefreshing(true);
-		try {
-			await prescriptions.refetch();
-		} finally {
-			setIsRefreshing(false);
-		}
-	};
-
-	const openPrescription = (id: string) => {
-		router.push(`/prescriptions/${id}`);
-	};
-
-	useFocusEffect(
-		useCallback(() => {
-			if (!session?.user) return;
-			prescriptions.refetch();
-		}, [prescriptions, session?.user]),
-	);
+	const {
+		session,
+		searchQuery,
+		setSearchQuery,
+		isRefreshing,
+		handleRefresh,
+		openPrescription,
+		prescriptions,
+		filteredPrescriptions,
+	} = usePrescriptionsList();
 
 	const baseBackground = useThemeColor("background");
 	const baseForeground = useThemeColor("foreground");

@@ -1,84 +1,25 @@
 import { Button, ErrorView, Spinner, Surface, TextField } from "heroui-native";
-import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 
-import { authClient } from "@/lib/auth-client";
-import { queryClient } from "@/utils/trpc";
-
-type Step = "request" | "verify";
-
-const RESEND_DELAY_SECONDS = 30;
+import { useOtpSignIn } from "@/features/auth/use-otp-sign-in";
 
 export function OtpSignIn() {
-	const [step, setStep] = useState<Step>("request");
-	const [email, setEmail] = useState("");
-	const [otp, setOtp] = useState("");
-	const [isSending, setIsSending] = useState(false);
-	const [isVerifying, setIsVerifying] = useState(false);
-	const [resendSeconds, setResendSeconds] = useState(0);
-	const [error, setError] = useState<string | null>(null);
-
-	const otpComplete = otp.trim().length === 6;
-	const canResend = resendSeconds === 0 && !isSending;
-
-	useEffect(() => {
-		if (resendSeconds <= 0) return;
-		const timer = setTimeout(() => {
-			setResendSeconds((previous) => Math.max(0, previous - 1));
-		}, 1000);
-		return () => clearTimeout(timer);
-	}, [resendSeconds]);
-
-	async function handleSendCode() {
-		const trimmedEmail = email.trim();
-		if (!trimmedEmail) {
-			setError("Please enter your email.");
-			return;
-		}
-
-		// Step 1: ask the server to send a one-time code to the user's email.
-		setIsSending(true);
-		setError(null);
-		const result = await authClient.emailOtp.sendVerificationOtp({
-			email: trimmedEmail,
-			type: "sign-in",
-		});
-		setIsSending(false);
-
-		if (result?.error) {
-			setError(result.error.message || "Unable to send the code.");
-			return;
-		}
-
-		setStep("verify");
-		setResendSeconds(RESEND_DELAY_SECONDS);
-		setOtp("");
-	}
-
-	async function handleVerify() {
-		const trimmedEmail = email.trim();
-		const trimmedOtp = otp.trim();
-		if (!trimmedOtp || trimmedOtp.length !== 6) {
-			setError("Enter the 6-digit code you received.");
-			return;
-		}
-
-		// Step 2: verify the OTP; the Expo plugin persists the session securely.
-		setIsVerifying(true);
-		setError(null);
-		const result = await authClient.signIn.emailOtp({
-			email: trimmedEmail,
-			otp: trimmedOtp,
-		});
-		setIsVerifying(false);
-
-		if (result?.error) {
-			setError(result.error.message || "Invalid or expired code.");
-			return;
-		}
-
-		queryClient.refetchQueries();
-	}
+	const {
+		step,
+		email,
+		otp,
+		isSending,
+		isVerifying,
+		resendSeconds,
+		error,
+		otpComplete,
+		canResend,
+		setEmail,
+		setOtp,
+		handleSendCode,
+		handleVerify,
+		handleUseDifferentEmail,
+	} = useOtpSignIn();
 
 	return (
 		<Surface variant="secondary" className="rounded-2xl p-5">
@@ -169,14 +110,7 @@ export function OtpSignIn() {
 								{canResend ? "Resend code" : `Resend in ${resendSeconds}s`}
 							</Button.Label>
 						</Button>
-						<Button
-							variant="ghost"
-							onPress={() => {
-								setStep("request");
-								setResendSeconds(0);
-								setOtp("");
-							}}
-						>
+						<Button variant="ghost" onPress={handleUseDifferentEmail}>
 							<Button.Label>Use a different email</Button.Label>
 						</Button>
 					</View>

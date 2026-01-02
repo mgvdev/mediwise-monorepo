@@ -4,30 +4,57 @@ import { useThemeColor } from "heroui-native";
 import { Pressable } from "react-native";
 
 export default function PrescriptionsLayout() {
-	const background = useThemeColor("background");
 	const foreground = useThemeColor("foreground");
 
 	return (
-		<Stack
-			screenOptions={{
-				headerStyle: { backgroundColor: background },
-				headerTintColor: foreground,
-				headerTitleStyle: { color: foreground, fontWeight: "600" },
-				headerBackTitleVisible: false,
-			}}
-		>
+		<Stack screenOptions={{ headerShown: false }}>
 			<Stack.Screen
-				name="index"
+				name="new"
 				options={{
-					title: "Prescriptions",
+					headerShown: true,
+					title: "Manual prescription",
 					headerLeft: () => (
-						<Pressable onPress={() => router.back()}>
-							<Ionicons name="chevron-back" size={22} color={foreground} />
+						<Pressable
+							onPress={() => router.back()}
+							style={{ paddingHorizontal: 12 }}
+						>
+							<Ionicons name="chevron-back" size={24} color={foreground} />
 						</Pressable>
 					),
 				}}
 			/>
-			<Stack.Screen name="[id]" options={{ title: "Prescription" }} />
+			<Stack.Screen
+				name="index"
+				title="Prescriptions"
+				options={{
+					headerShown: true,
+					title: "Prescriptions",
+					headerLeft: () => (
+						<Pressable
+							onPress={() => router.back()}
+							style={{ paddingHorizontal: 12 }}
+						>
+							<Ionicons name="chevron-back" size={24} color={foreground} />
+						</Pressable>
+					),
+				}}
+			/>
+			<Stack.Screen
+				name="[id]"
+				title="Prescription"
+				options={{
+					headerShown: true,
+					title: "Prescription",
+					headerLeft: () => (
+						<Pressable
+							onPress={() => router.back()}
+							style={{ paddingHorizontal: 12 }}
+						>
+							<Ionicons name="chevron-back" size={24} color={foreground} />
+						</Pressable>
+					),
+				}}
+			/>
 		</Stack>
 	);
 }

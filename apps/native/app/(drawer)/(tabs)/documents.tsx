@@ -1,11 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
-import { env } from "@mediwise-monorepo/env/native";
-import { useFocusEffect } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
-import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import { Button, Spinner, Surface, useThemeColor } from "heroui-native";
-import { useCallback, useMemo, useState } from "react";
 import {
 	Image,
 	Linking,
@@ -19,32 +14,14 @@ import { applyOpacity } from "@/components/color-utils";
 import { Container } from "@/components/container";
 import { DocumentsHeader } from "@/components/documents-header";
 import { OtpSignIn } from "@/components/otp-sign-in";
-import {
-	ManualPrescriptionDialog,
-	PrescriptionDetailDialog,
-} from "@/components/prescription-dialogs";
-import { authClient } from "@/lib/auth-client";
-import { queryClient, trpc } from "@/utils/trpc";
-
-type SelectedAsset = ImagePicker.ImagePickerAsset;
-
-type UploadSource = "camera" | "upload";
+import { PrescriptionDetailDialog } from "@/components/prescription-dialogs";
+import { useDocumentsScreen } from "@/features/documents/use-documents-screen";
 
 type SectionHeaderProps = {
 	title: string;
 	actionLabel: string;
 	onAction?: () => void;
 };
-
-function resolveFilename(asset: SelectedAsset) {
-	if (asset.fileName) return asset.fileName;
-	const uriParts = asset.uri.split("/");
-	return uriParts[uriParts.length - 1] || `prescription-${Date.now()}.jpg`;
-}
-
-function resolveMimeType(asset: SelectedAsset) {
-	return asset.mimeType || "image/jpeg";
-}
 
 function SectionHeader({ title, actionLabel, onAction }: SectionHeaderProps) {
 	return (
@@ -58,183 +35,34 @@ function SectionHeader({ title, actionLabel, onAction }: SectionHeaderProps) {
 }
 
 export default function DocumentsScreen() {
-	const { data: session } = authClient.useSession();
-	const [asset, setAsset] = useState<SelectedAsset | null>(null);
-	const [uploadSource, setUploadSource] = useState<UploadSource | null>(null);
-	const [isUploading, setIsUploading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
-	const [searchQuery, setSearchQuery] = useState("");
-	const [permissionError, setPermissionError] = useState<
-		"camera" | "library" | null
-	>(null);
-	const [manualOpen, setManualOpen] = useState(false);
-	const [detailOpen, setDetailOpen] = useState(false);
-	const [selectedPrescriptionId, setSelectedPrescriptionId] = useState<
-		string | null
-	>(null);
-	const [isRefreshing, setIsRefreshing] = useState(false);
-
-	const prescriptions = useQuery({
-		...trpc.prescriptions.list.queryOptions(),
-		enabled: !!session?.user,
-		refetchInterval: session?.user ? 5000 : false,
-	});
+	const {
+		session,
+		searchQuery,
+		setSearchQuery,
+		detailOpen,
+		setDetailOpen,
+		selectedPrescriptionId,
+		setSelectedPrescriptionId,
+		isRefreshing,
+		error,
+		permissionError,
+		asset,
+		uploadSource,
+		handlePickFromLibrary,
+		handleTakePhoto,
+		handlePermissionRetry,
+		handleUpload,
+		openPrescription,
+		handleRefresh,
+		prescriptions,
+		filteredPrescriptions,
+		processedCount,
+		pendingCount,
+		isUploading,
+	} = useDocumentsScreen();
 
 	const accentUpload = useThemeColor("success");
 	const accentScan = useThemeColor("warning");
-
-	const filteredPrescriptions = useMemo(() => {
-		if (!prescriptions.data) return [];
-		const query = searchQuery.trim().toLowerCase();
-		if (!query) return prescriptions.data;
-		return prescriptions.data.filter((item) =>
-			item.filename.toLowerCase().includes(query),
-		);
-	}, [prescriptions.data, searchQuery]);
-
-	const processedCount =
-		prescriptions.data?.filter((item) => item.status === "completed").length ??
-		0;
-	const pendingCount = (prescriptions.data?.length ?? 0) - processedCount;
-
-	const requestCameraPermission = async () => {
-		const { status } = await ImagePicker.requestCameraPermissionsAsync();
-		const allowed = status === ImagePicker.PermissionStatus.GRANTED;
-		setPermissionError(allowed ? null : "camera");
-		return allowed;
-	};
-
-	const requestLibraryPermission = async () => {
-		const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-		const allowed = status === ImagePicker.PermissionStatus.GRANTED;
-		setPermissionError(allowed ? null : "library");
-		return allowed;
-	};
-
-	const handlePickFromLibrary = async () => {
-		setError(null);
-		const allowed = await requestLibraryPermission();
-		if (!allowed) {
-			setError("Photo library permission is required.");
-			return;
-		}
-
-		const result = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.Images,
-			quality: 0.8,
-		});
-
-		if (!result.canceled) {
-			setAsset(result.assets[0]);
-			setUploadSource("upload");
-		}
-	};
-
-	const handleTakePhoto = async () => {
-		setError(null);
-		const allowed = await requestCameraPermission();
-		if (!allowed) {
-			setError("Camera permission is required.");
-			return;
-		}
-
-		const result = await ImagePicker.launchCameraAsync({
-			quality: 0.8,
-		});
-
-		if (!result.canceled) {
-			setAsset(result.assets[0]);
-			setUploadSource("camera");
-		}
-	};
-
-	const handleUpload = async (source: UploadSource) => {
-		if (!asset) {
-			setError("Select or capture a prescription image first.");
-			return;
-		}
-
-		setError(null);
-		setIsUploading(true);
-		try {
-			const formData = new FormData();
-			formData.append("file", {
-				uri: asset.uri,
-				name: resolveFilename(asset),
-				type: resolveMimeType(asset),
-			} as never);
-			formData.append("source", source);
-
-			const headers: Record<string, string> = {};
-			const cookies = authClient.getCookie();
-			if (cookies) {
-				headers.Cookie = cookies;
-			}
-
-			const response = await fetch(
-				`${env.EXPO_PUBLIC_SERVER_URL}/api/prescriptions/upload`,
-				{
-					method: "POST",
-					body: formData,
-					headers,
-				},
-			);
-
-			if (!response.ok) {
-				setError("Upload failed. Please try again.");
-				return;
-			}
-
-			const data = (await response.json()) as { id?: string };
-			setAsset(null);
-			setUploadSource(null);
-			queryClient.invalidateQueries();
-			if (data.id) {
-				openPrescription(data.id);
-			}
-		} catch (uploadError) {
-			console.error(uploadError);
-			setError("Upload failed. Please try again.");
-		} finally {
-			setIsUploading(false);
-		}
-	};
-
-	const handlePermissionRetry = async () => {
-		if (permissionError === "camera") {
-			await requestCameraPermission();
-		}
-		if (permissionError === "library") {
-			await requestLibraryPermission();
-		}
-	};
-
-	const openPrescription = (id: string) => {
-		setSelectedPrescriptionId(id);
-		setDetailOpen(true);
-	};
-
-	const handleManualSaved = (_id: string) => {
-		queryClient.invalidateQueries();
-		prescriptions.refetch();
-		setManualOpen(false);
-	};
-
-	const handleRefresh = async () => {
-		setIsRefreshing(true);
-		try {
-			await prescriptions.refetch();
-		} finally {
-			setIsRefreshing(false);
-		}
-	};
-
-	useFocusEffect(
-		useCallback(() => {
-			if (!session?.user) return;
-			prescriptions.refetch();
-		}, [prescriptions, session?.user]),
-	);
 
 	if (!session?.user) {
 		return (
@@ -266,7 +94,7 @@ export default function DocumentsScreen() {
 				onSearchQueryChange={setSearchQuery}
 				onPickFromLibrary={handlePickFromLibrary}
 				onTakePhoto={handleTakePhoto}
-				onAddManual={() => setManualOpen(true)}
+				onAddManual={() => router.push("/prescriptions/new")}
 			/>
 			{error && !asset ? (
 				<View className="px-6">
@@ -437,11 +265,6 @@ export default function DocumentsScreen() {
 				</Surface>
 			</View>
 
-			<ManualPrescriptionDialog
-				isOpen={manualOpen}
-				onOpenChange={setManualOpen}
-				onSaved={handleManualSaved}
-			/>
 			<PrescriptionDetailDialog
 				isOpen={detailOpen}
 				onOpenChange={(open) => {
@@ -450,7 +273,6 @@ export default function DocumentsScreen() {
 				}}
 				prescriptionId={selectedPrescriptionId}
 				onSaved={() => {
-					queryClient.invalidateQueries();
 					prescriptions.refetch();
 				}}
 			/>

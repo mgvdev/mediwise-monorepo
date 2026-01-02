@@ -1,8 +1,4 @@
-import { useChat } from "@ai-sdk/react";
 import { Ionicons } from "@expo/vector-icons";
-import { env } from "@mediwise-monorepo/env/native";
-import { DefaultChatTransport } from "ai";
-import { fetch as expoFetch } from "expo/fetch";
 import {
 	Button,
 	Divider,
@@ -11,7 +7,6 @@ import {
 	TextField,
 	useThemeColor,
 } from "heroui-native";
-import { useEffect, useRef, useState } from "react";
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -21,44 +16,13 @@ import {
 } from "react-native";
 
 import { Container } from "@/components/container";
-
-const generateAPIUrl = (relativePath: string) => {
-	const serverUrl = env.EXPO_PUBLIC_SERVER_URL;
-	if (!serverUrl) {
-		throw new Error(
-			"EXPO_PUBLIC_SERVER_URL environment variable is not defined",
-		);
-	}
-	const path = relativePath.startsWith("/") ? relativePath : `/${relativePath}`;
-	return serverUrl.concat(path);
-};
+import { useAiChat } from "@/features/ai/use-ai-chat";
 
 export default function AIScreen() {
-	const [input, setInput] = useState("");
-	const { messages, error, sendMessage } = useChat({
-		transport: new DefaultChatTransport({
-			fetch: expoFetch as unknown as typeof globalThis.fetch,
-			api: generateAPIUrl("/ai"),
-		}),
-		onError: (error) => console.error(error, "AI Chat Error"),
-	});
-	const scrollViewRef = useRef<ScrollView>(null);
+	const { input, setInput, messages, error, onSubmit, scrollViewRef } =
+		useAiChat();
 	const foregroundColor = useThemeColor("foreground");
 	const mutedColor = useThemeColor("muted");
-	const messageCount = messages.length;
-
-	useEffect(() => {
-		if (messageCount === 0) return;
-		scrollViewRef.current?.scrollToEnd({ animated: true });
-	}, [messageCount]);
-
-	const onSubmit = () => {
-		const value = input.trim();
-		if (value) {
-			sendMessage({ text: value });
-			setInput("");
-		}
-	};
 
 	if (error) {
 		return (
