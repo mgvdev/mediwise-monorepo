@@ -1,6 +1,6 @@
-import { Button, Card, Chip, Input } from "@heroui/react";
+import { Button, Card, Input } from "@heroui/react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { FileText, Home, LifeBuoy, Sparkles, User, Users } from "lucide-react";
+import { FileText, Home, LifeBuoy, Sparkles, Users } from "lucide-react";
 import { toast } from "sonner";
 
 import { authClient } from "@/lib/auth-client";

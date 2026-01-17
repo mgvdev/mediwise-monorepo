@@ -75,3 +75,24 @@ export const Dense = () => (
 		</Card>
 	</View>
 );
+
+export const AiBorder = () => (
+	<View className="flex-1 bg-background p-6">
+		<Card variant="ai">
+			<CardHeader>
+				<CardTitle>AI Summary</CardTitle>
+				<CardAction onPress={() => undefined} className="px-2">
+					<Ionicons name="sparkles" size={16} className="text-foreground" />
+				</CardAction>
+			</CardHeader>
+			<CardBody>
+				<Text className="text-muted text-xs">
+					This report highlights anomalies detected in the last scan.
+				</Text>
+			</CardBody>
+			<CardFooter>
+				<Text className="text-muted text-xs">Updated 2 minutes ago</Text>
+			</CardFooter>
+		</Card>
+	</View>
+);
