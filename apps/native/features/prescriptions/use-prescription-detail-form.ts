@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
-import { createPrescriptionDraft } from "@/components/prescription-types";
+import { createPrescriptionDraft } from "@/components/features/prescription/prescription-types";
 import { authClient } from "@/lib/auth-client";
 import { queryClient, trpc } from "@/utils/trpc";
 

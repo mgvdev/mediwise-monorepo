@@ -31,7 +31,7 @@ export function TenantCreate({ onCreate, isSubmitting }: TenantCreateProps) {
 		if (error) {
 			setError(null);
 		}
-	}, [name, domainInput, logoUrl, error]);
+	}, [error]);
 
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();

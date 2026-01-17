@@ -1,10 +1,27 @@
-import { env } from "@mediwise-monorepo/env/web";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
-import { queryClient, trpc } from "@/utils/trpc";
+import { queryClient, trpc, trpcClient } from "@/utils/trpc";
+
+function readFileAsBase64(file: File) {
+	return new Promise<string>((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = () => {
+			const result = typeof reader.result === "string" ? reader.result : "";
+			const base64 = result.includes(",") ? result.split(",")[1] : result;
+			if (!base64) {
+				reject(new Error("Missing file data."));
+				return;
+			}
+			resolve(base64);
+		};
+		reader.onerror = () =>
+			reject(reader.error ?? new Error("File read failed."));
+		reader.readAsDataURL(file);
+	});
+}
 
 export const Route = createFileRoute("/documents")({
 	beforeLoad: async () => {
@@ -48,24 +65,21 @@ function RouteComponent() {
 			return;
 		}
 
-		const formData = new FormData();
-		formData.append("file", file);
-		formData.append("source", "upload");
-
 		setIsUploading(true);
-		const response = await fetch(
-			`${env.VITE_SERVER_URL}/api/prescriptions/upload`,
-			{
-				method: "POST",
-				body: formData,
-				credentials: "include",
-			},
-		);
-		setIsUploading(false);
-
-		if (!response.ok) {
+		try {
+			const base64 = await readFileAsBase64(file);
+			await trpcClient.mutation("prescriptions.upload", {
+				filename: file.name,
+				contentType: file.type || "image/jpeg",
+				base64,
+				source: "upload",
+			});
+		} catch (error) {
+			console.error(error);
 			toast.error("Upload failed. Please try again.");
 			return;
+		} finally {
+			setIsUploading(false);
 		}
 
 		setFile(null);

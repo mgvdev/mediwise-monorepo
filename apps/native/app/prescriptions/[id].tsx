@@ -1,9 +1,7 @@
 import { router, useLocalSearchParams } from "expo-router";
-import { Text, View } from "react-native";
-
-import { Container } from "@/components/container";
-import { OtpSignIn } from "@/components/otp-sign-in";
-import { PrescriptionDetailForm } from "@/components/prescription-forms";
+import { View } from "react-native";
+import { PrescriptionDetailForm } from "@/components/features/prescription/prescription-forms";
+import { Container } from "@/components/layout/container";
 import { authClient } from "@/lib/auth-client";
 
 export default function PrescriptionDetailScreen() {
@@ -12,19 +10,7 @@ export default function PrescriptionDetailScreen() {
 	const id = String(params.id ?? "");
 
 	if (!session?.user) {
-		return (
-			<Container className="p-6">
-				<View className="mb-6 py-4">
-					<Text className="mb-2 font-bold text-3xl text-foreground">
-						Prescriptions
-					</Text>
-					<Text className="text-muted text-sm">
-						Sign in to manage prescriptions.
-					</Text>
-				</View>
-				<OtpSignIn />
-			</Container>
-		);
+		return null;
 	}
 
 	return (

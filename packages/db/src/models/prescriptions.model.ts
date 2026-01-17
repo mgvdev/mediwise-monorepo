@@ -36,10 +36,27 @@ const prescriptionUnifiedSchema = new Schema(
 	{ collection: "prescription_unified" },
 );
 
+const prescriptionUnifiedViewSchema = new Schema(
+	{
+		_id: { type: String },
+		userId: { type: String, required: true },
+		tenantId: { type: String },
+		updatedAt: { type: Date, required: true },
+		prescriptions: { type: Array, required: true },
+		medications: { type: Array, required: true },
+		profile: { type: Schema.Types.Mixed, required: true },
+	},
+	{ collection: "prescription_unified_view" },
+);
+
 const PrescriptionRaw = model("PrescriptionRaw", prescriptionRawSchema);
 const PrescriptionUnified = model(
 	"PrescriptionUnified",
 	prescriptionUnifiedSchema,
 );
+const PrescriptionUnifiedView = model(
+	"PrescriptionUnifiedView",
+	prescriptionUnifiedViewSchema,
+);
 
-export { PrescriptionRaw, PrescriptionUnified };
+export { PrescriptionRaw, PrescriptionUnified, PrescriptionUnifiedView };

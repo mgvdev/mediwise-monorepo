@@ -1,0 +1,131 @@
+import { Ionicons } from "@expo/vector-icons";
+import { Button, ErrorView, Spinner, useThemeColor } from "heroui-native";
+import { useState } from "react";
+import { Text, TextInput, View } from "react-native";
+
+import { useOtpSignIn } from "@/features/auth/use-otp-sign-in";
+
+export function OtpSignIn() {
+	const [keepSignedIn, setKeepSignedIn] = useState(true);
+	const {
+		step,
+		email,
+		otp,
+		isSending,
+		isVerifying,
+		resendSeconds,
+		error,
+		otpComplete,
+		canResend,
+		setEmail,
+		setOtp,
+		handleSendCode,
+		handleVerify,
+		handleUseDifferentEmail,
+	} = useOtpSignIn();
+
+	const placeholderColor = useThemeColor("muted");
+
+	return (
+		<View className="gap-4">
+			<Text className="font-semibold text-foreground text-xs uppercase tracking-widest">
+				Email Address
+			</Text>
+
+			<View className="flex-row items-center gap-2 rounded-2xl border border-border/60 px-4 py-3">
+				<Ionicons name="mail-outline" size={18} className="text-muted" />
+				<TextInput
+					value={email}
+					onChangeText={setEmail}
+					placeholder="Enter your email address..."
+					placeholderTextColor={placeholderColor}
+					keyboardType="email-address"
+					autoCapitalize="none"
+					editable={step === "request"}
+					className="flex-1 text-foreground text-sm"
+				/>
+			</View>
+
+			{step === "verify" && (
+				<View className="gap-2">
+					<Text className="text-muted text-xs">
+						Code sent to <Text className="text-foreground">{email}</Text>
+					</Text>
+					<Text className="font-semibold text-foreground text-xs uppercase tracking-widest">
+						One-time code
+					</Text>
+					<View className="flex-row items-center gap-2 rounded-2xl border border-border/60 px-4 py-3">
+						<Ionicons name="key-outline" size={18} className="text-muted" />
+						<TextInput
+							value={otp}
+							onChangeText={setOtp}
+							placeholder="123456"
+							placeholderTextColor={placeholderColor}
+							keyboardType="number-pad"
+							maxLength={6}
+							autoCapitalize="none"
+							autoFocus
+							className="flex-1 text-foreground text-sm"
+						/>
+					</View>
+				</View>
+			)}
+
+			<View className="flex-row items-center justify-between">
+				<View className="flex-row items-center gap-2">
+					<Button
+						variant="ghost"
+						isIconOnly
+						onPress={() => setKeepSignedIn((value) => !value)}
+						size="sm"
+					>
+						<Ionicons
+							name={keepSignedIn ? "checkmark-circle" : "ellipse-outline"}
+							size={18}
+							className={keepSignedIn ? "text-foreground" : "text-muted"}
+						/>
+					</Button>
+					<Text className="text-muted text-xs">Keep me signed in</Text>
+				</View>
+				<Text className="font-medium text-primary text-xs">Need help?</Text>
+			</View>
+
+			<ErrorView isInvalid={!!error}>{error}</ErrorView>
+
+			{step === "request" ? (
+				<Button onPress={handleSendCode} isDisabled={isSending}>
+					{isSending ? (
+						<Spinner size="sm" color="default" />
+					) : (
+						<Button.Label>Sign In</Button.Label>
+					)}
+				</Button>
+			) : (
+				<View className="gap-2">
+					<Button
+						onPress={handleVerify}
+						isDisabled={isVerifying || !otpComplete}
+					>
+						{isVerifying ? (
+							<Spinner size="sm" color="default" />
+						) : (
+							<Button.Label>Verify and sign in</Button.Label>
+						)}
+					</Button>
+					<Button
+						variant="ghost"
+						onPress={handleSendCode}
+						isDisabled={!canResend}
+					>
+						<Button.Label>
+							{canResend ? "Resend code" : `Resend in ${resendSeconds}s`}
+						</Button.Label>
+					</Button>
+					<Button variant="ghost" onPress={handleUseDifferentEmail}>
+						<Button.Label>Use a different email</Button.Label>
+					</Button>
+				</View>
+			)}
+		</View>
+	);
+}

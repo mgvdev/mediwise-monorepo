@@ -10,20 +10,21 @@
 		"start": "bun run dist/index.js"
 	},
 	"dependencies": {
-		"hono": "catalog:",
-		"@trpc/server": "catalog:",
-		"@hono/trpc-server": "^0.4.0",
-		"better-auth": "catalog:",
-		"ai": "catalog:",
-		"@ai-sdk/google": "^3.0.1",
 		"@ai-sdk/devtools": "^0.0.2",
-		"dotenv": "catalog:",
-		"zod": "catalog:",
-		"@mediwise-monorepo/env": "workspace:*",
+		"@ai-sdk/google": "^3.0.1",
+		"@hono/trpc-server": "^0.4.0",
 		"@mediwise-monorepo/api": "workspace:*",
 		"@mediwise-monorepo/auth": "workspace:*",
 		"@mediwise-monorepo/db": "workspace:*",
-		"@mediwise-monorepo/infrastructure": "workspace:*"
+		"@mediwise-monorepo/env": "workspace:*",
+		"@mediwise-monorepo/infrastructure": "workspace:*",
+		"@trpc/server": "catalog:",
+		"ai": "catalog:",
+		"ai-sdk-ollama": "^3.0.1",
+		"better-auth": "catalog:",
+		"dotenv": "catalog:",
+		"hono": "catalog:",
+		"zod": "catalog:"
 	},
 	"devDependencies": {
 		"@types/bun": "catalog:",

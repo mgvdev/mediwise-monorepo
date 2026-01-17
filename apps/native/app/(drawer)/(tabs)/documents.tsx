@@ -9,12 +9,10 @@ import {
 	Text,
 	View,
 } from "react-native";
-
-import { applyOpacity } from "@/components/color-utils";
-import { Container } from "@/components/container";
-import { DocumentsHeader } from "@/components/documents-header";
-import { OtpSignIn } from "@/components/otp-sign-in";
-import { PrescriptionDetailDialog } from "@/components/prescription-dialogs";
+import { DocumentsHeader } from "@/components/features/prescription/documents-header";
+import { PrescriptionDetailDialog } from "@/components/features/prescription/prescription-dialogs";
+import { Container } from "@/components/layout/container";
+import { applyOpacity } from "@/components/utils";
 import { useDocumentsScreen } from "@/features/documents/use-documents-screen";
 
 type SectionHeaderProps = {
@@ -65,19 +63,7 @@ export default function DocumentsScreen() {
 	const accentScan = useThemeColor("warning");
 
 	if (!session?.user) {
-		return (
-			<Container className="p-6">
-				<View className="mb-6 py-4">
-					<Text className="mb-2 font-bold text-3xl text-foreground">
-						Documents
-					</Text>
-					<Text className="text-muted text-sm">
-						Sign in to upload and track prescriptions.
-					</Text>
-				</View>
-				<OtpSignIn />
-			</Container>
-		);
+		return null;
 	}
 
 	return (

@@ -1,10 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Surface, useThemeColor } from "heroui-native";
 import { Pressable, RefreshControl, Text, TextInput, View } from "react-native";
-
-import { applyOpacity } from "@/components/color-utils";
-import { Container } from "@/components/container";
-import { OtpSignIn } from "@/components/otp-sign-in";
+import { Container } from "@/components/layout/container";
+import { applyOpacity } from "@/components/utils";
 import { usePrescriptionsList } from "@/features/prescriptions/use-prescriptions-list";
 
 export default function PrescriptionsListScreen() {
@@ -21,23 +19,10 @@ export default function PrescriptionsListScreen() {
 
 	const baseBackground = useThemeColor("background");
 	const baseForeground = useThemeColor("foreground");
-	const muted = useThemeColor("muted");
-	const searchPlaceholder = applyOpacity(baseForeground, 0.4) ?? muted;
+	const searchPlaceholder = applyOpacity(baseForeground, 0.4) ?? baseForeground;
 
 	if (!session?.user) {
-		return (
-			<Container className="p-6">
-				<View className="mb-6 py-4">
-					<Text className="mb-2 font-bold text-3xl text-foreground">
-						Prescriptions
-					</Text>
-					<Text className="text-muted text-sm">
-						Sign in to view prescription history.
-					</Text>
-				</View>
-				<OtpSignIn />
-			</Container>
-		);
+		return null;
 	}
 
 	return (

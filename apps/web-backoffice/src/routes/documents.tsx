@@ -1,10 +1,36 @@
-import { env } from "@mediwise-monorepo/env/web";
+import {
+	List,
+	ListAction,
+	ListActions,
+	ListContent,
+	ListDescription,
+	ListItem,
+	ListTitle,
+} from "@mediwise-monorepo/medi-ui";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
-import { queryClient, trpc } from "@/utils/trpc";
+import { queryClient, trpc, trpcClient } from "@/utils/trpc";
+
+function readFileAsBase64(file: File) {
+	return new Promise<string>((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = () => {
+			const result = typeof reader.result === "string" ? reader.result : "";
+			const base64 = result.includes(",") ? result.split(",")[1] : result;
+			if (!base64) {
+				reject(new Error("Missing file data."));
+				return;
+			}
+			resolve(base64);
+		};
+		reader.onerror = () =>
+			reject(reader.error ?? new Error("File read failed."));
+		reader.readAsDataURL(file);
+	});
+}
 
 export const Route = createFileRoute("/documents")({
 	beforeLoad: async () => {
@@ -48,24 +74,21 @@ function RouteComponent() {
 			return;
 		}
 
-		const formData = new FormData();
-		formData.append("file", file);
-		formData.append("source", "upload");
-
 		setIsUploading(true);
-		const response = await fetch(
-			`${env.VITE_SERVER_URL}/api/prescriptions/upload`,
-			{
-				method: "POST",
-				body: formData,
-				credentials: "include",
-			},
-		);
-		setIsUploading(false);
-
-		if (!response.ok) {
+		try {
+			const base64 = await readFileAsBase64(file);
+			await trpcClient.mutation("prescriptions.upload", {
+				filename: file.name,
+				contentType: file.type || "image/jpeg",
+				base64,
+				source: "upload",
+			});
+		} catch (error) {
+			console.error(error);
 			toast.error("Upload failed. Please try again.");
 			return;
+		} finally {
+			setIsUploading(false);
 		}
 
 		setFile(null);
@@ -118,41 +141,34 @@ function RouteComponent() {
 					</button>
 				</div>
 
-				<div className="mt-4 space-y-3">
+				<List className="mt-4">
 					{prescriptions.data?.length ? (
 						prescriptions.data.map((item) => (
-							<div
-								key={item.rawId}
-								className="flex flex-col gap-3 rounded-2xl border border-border/60 bg-background/60 p-4 md:flex-row md:items-center md:justify-between"
-							>
-								<div>
-									<p className="font-medium text-foreground text-sm">
-										{item.filename}
-									</p>
-									<p className="text-muted-foreground text-xs">
+							<ListItem key={item.rawId}>
+								<ListContent>
+									<ListTitle>{item.filename}</ListTitle>
+									<ListDescription>
 										{new Date(item.createdAt).toLocaleString()}
-									</p>
-								</div>
-								<div className="flex items-center gap-3">
+									</ListDescription>
+								</ListContent>
+								<ListActions>
 									{item.medicationSummary ? (
-										<p className="text-muted-foreground text-xs">
-											First med: {item.medicationSummary}
-										</p>
+										<ListAction>First med: {item.medicationSummary}</ListAction>
 									) : null}
 									<span
 										className={`rounded-full px-3 py-1 font-semibold text-[11px] uppercase tracking-wide ${statusStyles(item.status)}`}
 									>
 										{item.status}
 									</span>
-								</div>
-							</div>
+								</ListActions>
+							</ListItem>
 						))
 					) : (
 						<p className="text-muted-foreground text-sm">
 							No prescriptions yet.
 						</p>
 					)}
-				</div>
+				</List>
 			</div>
 		</div>
 	);

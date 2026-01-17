@@ -1,12 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import {
-	Button,
-	Divider,
-	ErrorView,
-	Surface,
-	TextField,
-	useThemeColor,
-} from "heroui-native";
+import { Button, Divider, ErrorView, Surface, TextField } from "heroui-native";
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -15,14 +8,12 @@ import {
 	View,
 } from "react-native";
 
-import { Container } from "@/components/container";
+import { Container } from "@/components/layout/container";
 import { useAiChat } from "@/features/ai/use-ai-chat";
 
 export default function AIScreen() {
 	const { input, setInput, messages, error, onSubmit, scrollViewRef } =
 		useAiChat();
-	const foregroundColor = useThemeColor("foreground");
-	const mutedColor = useThemeColor("muted");
 
 	if (error) {
 		return (
@@ -69,7 +60,7 @@ export default function AIScreen() {
 								<Ionicons
 									name="chatbubble-ellipses-outline"
 									size={32}
-									color={mutedColor}
+									className="text-muted"
 								/>
 								<Text className="mt-3 text-muted text-sm">
 									Ask me anything to get started
@@ -135,7 +126,7 @@ export default function AIScreen() {
 							<Ionicons
 								name="arrow-up"
 								size={18}
-								color={input.trim() ? foregroundColor : mutedColor}
+								className={input.trim() ? "text-foreground" : "text-muted"}
 							/>
 						</Button>
 					</View>

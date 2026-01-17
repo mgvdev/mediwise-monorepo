@@ -1,22 +1,25 @@
-import { Avatar, Button, Card, Chip, Input } from "@heroui/react";
+import { Button, Card, Chip, Input } from "@heroui/react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { FileText, Home, LifeBuoy, Sparkles, User } from "lucide-react";
+import { FileText, Home, LifeBuoy, Sparkles, User, Users } from "lucide-react";
 import { toast } from "sonner";
 
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
+import { LogoutSection } from "./logout-section";
 
 const navItems = [
 	{ to: "/dashboard", label: "Home", icon: Home, badge: "10" },
 	{ to: "/documents", label: "Documents", icon: FileText },
+	{ to: "/my-insured", label: "My insureds", icon: Users },
 	{ to: "/ai", label: "AI Assistant", icon: Sparkles, badge: "2" },
-	{ to: "/profile", label: "Profile", icon: User },
 	{ to: "/support", label: "Help & Support", icon: LifeBuoy },
 ] as const;
 
 export function Sidebar() {
 	const { data: session } = authClient.useSession();
 	const navigate = useNavigate();
+	const email = session?.user.email ?? null;
+	const isSignedIn = Boolean(session?.user);
 
 	return (
 		<aside className="flex h-full flex-col border-border/60 border-r bg-background px-5 py-6 lg:sticky lg:top-0 lg:min-h-svh">
@@ -51,20 +54,21 @@ export function Sidebar() {
 						to={item.to}
 						className={({ isActive }) =>
 							cn(
-								"flex items-center justify-between rounded-xl px-3 py-2 text-sm transition hover:bg-foreground/5",
-								isActive && "bg-primary/10 text-primary",
+								"flex items-center justify-between rounded-xl px-3 py-2 text-foreground/80 text-sm transition hover:bg-foreground/5 hover:text-foreground",
+								isActive &&
+									"bg-primary/15 text-primary shadow-[0_0_0_1px_hsl(var(--primary)/0.1)]",
 							)
 						}
 					>
 						<span className="flex items-center gap-3">
 							<item.icon className="h-4 w-4" />
 							{item.label}
+							{/*{item.badge ? (
+                                <Chip size="sm" variant="soft" color="success">
+                                    {item.badge}
+                                </Chip>
+                            ) : null}*/}
 						</span>
-						{item.badge ? (
-							<Chip size="sm" variant="soft" color="success">
-								{item.badge}
-							</Chip>
-						) : null}
 					</Link>
 				))}
 			</nav>
@@ -79,29 +83,15 @@ export function Sidebar() {
 				</Button>
 			</Card>
 
-			<div className="mt-6 flex items-center justify-between rounded-2xl border border-border/60 bg-card/50 p-3">
-				<div className="flex items-center gap-3">
-					<Avatar size="sm" name={session?.user.email ?? "Backoffice"} />
-					<div>
-						<p className="font-medium text-sm">
-							{session?.user.email ?? "Signed out"}
-						</p>
-						<p className="text-muted-foreground text-xs">Admin</p>
-					</div>
-				</div>
-				<Button
-					variant="ghost"
-					size="sm"
-					isDisabled={!session?.user}
-					onPress={async () => {
-						await authClient.signOut();
-						toast.success("Signed out.");
-						navigate({ to: "/login" });
-					}}
-				>
-					Log out
-				</Button>
-			</div>
+			<LogoutSection
+				email={email}
+				isSignedIn={isSignedIn}
+				onLogout={async () => {
+					await authClient.signOut();
+					toast.success("Signed out.");
+					navigate({ to: "/login" });
+				}}
+			/>
 		</aside>
 	);
 }

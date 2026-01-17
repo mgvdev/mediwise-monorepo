@@ -1,7 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { PrescriptionRaw, PrescriptionUnified } from "@mediwise-monorepo/db";
 import { createJob as createQueueJob, JobTypes } from "../jobs";
-
 import type {
 	PrescriptionRawDoc,
 	PrescriptionStatus,
@@ -9,6 +8,7 @@ import type {
 	PrescriptionUnifiedDoc,
 	UnifiedPrescriptionData,
 } from "./types";
+import { recomputeUnifiedView } from "./unified-view";
 
 export async function createRawPrescription(input: {
 	userId: string;
@@ -152,6 +152,7 @@ export async function createUnified(input: {
 	}).lean<PrescriptionUnifiedDoc | null>();
 
 	if (existing?.source === "manual") {
+		await recomputeUnifiedView(input.raw.userId);
 		return existing;
 	}
 
@@ -169,6 +170,7 @@ export async function createUnified(input: {
 		updatedAt: new Date(),
 	};
 	await PrescriptionUnified.create(doc);
+	await recomputeUnifiedView(input.raw.userId);
 	return doc;
 }
 
@@ -217,7 +219,10 @@ export async function upsertUnifiedPrescription(input: {
 			{ new: true },
 		).lean<PrescriptionUnifiedDoc | null>();
 
-		if (updated) return updated;
+		if (updated) {
+			await recomputeUnifiedView(input.userId);
+			return updated;
+		}
 	}
 
 	if (input.rawId) {
@@ -242,7 +247,10 @@ export async function upsertUnifiedPrescription(input: {
 			{ upsert: true, new: true },
 		).lean<PrescriptionUnifiedDoc | null>();
 
-		if (updated) return updated;
+		if (updated) {
+			await recomputeUnifiedView(input.userId);
+			return updated;
+		}
 	}
 
 	const doc: PrescriptionUnifiedDoc = {
@@ -259,5 +267,6 @@ export async function upsertUnifiedPrescription(input: {
 	};
 
 	await PrescriptionUnified.create(doc);
+	await recomputeUnifiedView(input.userId);
 	return doc;
 }

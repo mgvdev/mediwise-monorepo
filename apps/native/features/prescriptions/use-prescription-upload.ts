@@ -1,7 +1,6 @@
-import { env } from "@mediwise-monorepo/env/native";
 import { useState } from "react";
 
-import { authClient } from "@/lib/auth-client";
+import { trpcClient } from "@/utils/trpc";
 
 import type { SelectedAsset, UploadSource } from "./types";
 
@@ -12,7 +11,7 @@ type UploadOptions = {
 	failureMessage?: string;
 };
 
-type UploadResult = { id?: string };
+type UploadResult = { id: string; status: string };
 
 function resolveFilename(asset: SelectedAsset) {
 	if (asset.fileName) return asset.fileName;
@@ -43,43 +42,24 @@ export function usePrescriptionUpload(options: UploadOptions = {}) {
 		setError(null);
 		setIsUploading(true);
 		try {
-			const formData = new FormData();
-			formData.append("file", {
-				uri: asset.uri,
-				name: resolveFilename(asset),
-				type: resolveMimeType(asset),
-			} as never);
-			formData.append("source", source);
-			if (options.intent) {
-				formData.append("intent", options.intent);
-			}
-
-			const headers: Record<string, string> = {};
-			const cookies = authClient.getCookie();
-			if (cookies) {
-				headers.Cookie = cookies;
-			}
-
-			const response = await fetch(
-				`${env.EXPO_PUBLIC_SERVER_URL}/api/prescriptions/upload`,
-				{
-					method: "POST",
-					body: formData,
-					headers,
-				},
-			);
-
-			if (!response.ok) {
-				setError(options.failureMessage ?? "Upload failed. Please try again.");
+			if (!asset.base64) {
+				setError(
+					options.failureMessage ??
+						"Upload failed. Please select the image again.",
+				);
 				return null;
 			}
 
-			const data = (await response.json()) as UploadResult;
-			if (data.id) {
-				options.onSuccess?.(data.id);
-				return data.id;
-			}
-			return null;
+			const data = (await trpcClient.mutation("prescriptions.upload", {
+				filename: resolveFilename(asset),
+				contentType: resolveMimeType(asset),
+				base64: asset.base64,
+				source,
+				intent: options.intent,
+			})) as UploadResult;
+
+			options.onSuccess?.(data.id);
+			return data.id;
 		} catch (uploadError) {
 			console.error(uploadError);
 			setError(options.failureMessage ?? "Upload failed. Please try again.");

@@ -5,7 +5,7 @@ import {
 	createPrescriptionDraft,
 	type MedicationDraft,
 	type PrescriptionDraft,
-} from "@/components/prescription-types";
+} from "@/components/features/prescription/prescription-types";
 
 import { computeValidUntil, mapUnifiedToDraft } from "./utils";
 

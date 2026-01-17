@@ -54,7 +54,7 @@ function RootComponent() {
 				attribute="class"
 				defaultTheme="dark"
 				disableTransitionOnChange
-				storageKey="vite-ui-theme"
+				storageKey="ui-theme"
 			>
 				{showTabs ? (
 					<BackofficeShell>

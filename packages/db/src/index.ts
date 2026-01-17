@@ -13,6 +13,7 @@ import { Job } from "./models/job.model";
 import {
 	PrescriptionRaw,
 	PrescriptionUnified,
+	PrescriptionUnifiedView,
 } from "./models/prescriptions.model";
 import { Questionnaire } from "./models/questionnaire.model";
 import { Tenant } from "./models/tenant.model";
@@ -26,6 +27,7 @@ export {
 	Job,
 	PrescriptionRaw,
 	PrescriptionUnified,
+	PrescriptionUnifiedView,
 	Questionnaire,
 	Session,
 	TenantDomain,

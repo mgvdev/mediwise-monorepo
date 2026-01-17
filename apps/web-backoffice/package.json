@@ -19,6 +19,7 @@
 		"@mediwise-monorepo/api": "workspace:*",
 		"@mediwise-monorepo/auth": "workspace:*",
 		"@mediwise-monorepo/env": "workspace:*",
+		"@mediwise-monorepo/medi-ui": "workspace:*",
 		"@tailwindcss/vite": "^4.0.15",
 		"@tanstack/react-form": "^1.12.3",
 		"@tanstack/react-query": "catalog:",

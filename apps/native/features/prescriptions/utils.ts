@@ -2,7 +2,7 @@ import {
 	createMedicationDraft,
 	type MedicationDraft,
 	type PrescriptionDraft,
-} from "@/components/prescription-types";
+} from "@/components/features/prescription/prescription-types";
 
 type UnifiedPrescriptionData = {
 	issuedDate?: string | null;

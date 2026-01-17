@@ -1,5 +1,5 @@
-import "dotenv/config";
 import { createEnv } from "@t3-oss/env-core";
+import "dotenv/config";
 import { z } from "zod";
 
 const corsOriginSchema = z
@@ -41,7 +41,7 @@ export const env = createEnv({
 		S3_PUBLIC_URL: z.string().optional(),
 		AI_PROVIDER: z.enum(["ollama", "openai"]).default("ollama"),
 		OLLAMA_BASE_URL: z.string().default("http://localhost:11434"),
-		OLLAMA_MODEL: z.string().default("llava"),
+		OLLAMA_MODEL: z.string().default("gemma3:4b"),
 		OPENAI_API_KEY: z.string().optional(),
 		OPENAI_MODEL: z.string().default("gpt-4o-mini"),
 		JOB_POLL_INTERVAL_MS: z.coerce.number().default(2000),

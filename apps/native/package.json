@@ -6,6 +6,7 @@
 	"scripts": {
 		"start": "expo start",
 		"dev": "expo start --clear",
+		"storybook": "EXPO_PUBLIC_STORYBOOK=1 expo start --clear",
 		"android": "expo run:android",
 		"ios": "expo run:ios",
 		"prebuild": "expo prebuild",
@@ -14,6 +15,7 @@
 	"dependencies": {
 		"@ai-sdk/react": "catalog:",
 		"@better-auth/expo": "catalog:",
+		"@react-native-async-storage/async-storage": "^2.2.0",
 		"@expo/metro-runtime": "~6.1.2",
 		"@expo/vector-icons": "^15.0.3",
 		"@gorhom/bottom-sheet": "^5",
@@ -21,6 +23,7 @@
 		"@mediwise-monorepo/env": "workspace:*",
 		"@react-navigation/drawer": "^7.3.9",
 		"@react-navigation/elements": "^2.8.1",
+		"@react-native-community/datetimepicker": "^8.2.0",
 		"@stardazed/streams-text-encoding": "^1.0.2",
 		"@tanstack/react-query": "catalog:",
 		"@trpc/client": "catalog:",
@@ -59,6 +62,11 @@
 		"zod": "catalog:"
 	},
 	"devDependencies": {
+		"@storybook/react": "^7.6.21",
+		"@storybook/addon-actions": "^7.6.20",
+		"@storybook/addon-ondevice-actions": "^7.6.20",
+		"@storybook/addon-ondevice-controls": "^7.6.20",
+		"@storybook/react-native": "^7.6.20",
 		"@types/node": "^24.10.0",
 		"@types/react": "~19.1.0",
 		"typescript": "catalog:",

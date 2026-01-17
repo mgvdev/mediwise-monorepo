@@ -1,8 +1,7 @@
 import { router } from "expo-router";
-import { Text, View } from "react-native";
-
-import { Container } from "@/components/container";
-import { ManualPrescriptionForm } from "@/components/prescription-forms";
+import { View } from "react-native";
+import { ManualPrescriptionForm } from "@/components/features/prescription/prescription-forms";
+import { Container } from "@/components/layout/container";
 
 export default function NewPrescriptionScreen() {
 	return (

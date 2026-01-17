@@ -111,14 +111,14 @@ export function BackofficeLoginForm() {
 
 	if (isPending) {
 		return (
-			<Card className="w-full max-w-md rounded-3xl border border-border/60 bg-card/80 p-6 shadow-lg">
+			<Card className="w-full max-w-md rounded-3xl border border-border/60 bg-card p-6 shadow-lg">
 				<p className="text-muted-foreground text-sm">Checking session...</p>
 			</Card>
 		);
 	}
 
 	return (
-		<Card className="w-full max-w-md rounded-3xl border border-border/60 bg-card/80 p-6 shadow-lg">
+		<Card className="w-full max-w-md rounded-3xl border border-border/60 bg-card p-6 shadow-lg">
 			<Card.Header className="flex flex-col items-start gap-2">
 				<p className="text-muted-foreground text-xs uppercase tracking-[0.3em]">
 					Backoffice Access
@@ -127,7 +127,7 @@ export function BackofficeLoginForm() {
 				<p className="text-muted-foreground text-sm">
 					Use your corporate email to receive a one-time login code.
 				</p>
-				<Chip size="sm" variant="soft" color="accent">
+				<Chip size="sm" variant="soft" color="default">
 					Step {step === "request" ? "1" : "2"} of 2
 				</Chip>
 			</Card.Header>
