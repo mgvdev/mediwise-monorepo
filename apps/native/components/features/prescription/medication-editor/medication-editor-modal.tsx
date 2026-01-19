@@ -9,6 +9,7 @@ type MedicationEditorModalProps = {
 	onChange: (next: MedicationDraft) => void;
 	onClose: () => void;
 	onSave: () => void;
+	isEditable?: boolean;
 };
 
 export function MedicationEditorModal({
@@ -17,6 +18,7 @@ export function MedicationEditorModal({
 	onChange,
 	onClose,
 	onSave,
+	isEditable = true,
 }: MedicationEditorModalProps) {
 	return (
 		<Modal
@@ -26,7 +28,17 @@ export function MedicationEditorModal({
 			onRequestClose={onClose}
 		>
 			<View className="flex-1 justify-end bg-black/40">
-				<MedicationEditor value={value} onChange={onChange} onSave={onSave} />
+				<View className="flex-1" style={{ maxHeight: "90%" }}>
+					<MedicationEditor
+						value={value}
+						onChange={onChange}
+						onSave={onSave}
+						isEditable={isEditable}
+						showClose
+						onClose={onClose}
+						layout="sheet"
+					/>
+				</View>
 			</View>
 		</Modal>
 	);

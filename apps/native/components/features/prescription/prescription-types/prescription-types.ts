@@ -1,3 +1,5 @@
+import type { MedicationShapeId } from "@/components/features/prescription/medication-shape";
+
 export type FrequencyUnit = "day" | "week" | "month";
 export type DurationUnit = "day" | "week" | "month";
 
@@ -15,6 +17,8 @@ export type MedicationDraft = {
 	durationText?: string;
 	route?: string | null;
 	instructions?: string | null;
+	comment?: string | null;
+	shape?: MedicationShapeId;
 };
 
 export type PrescriptionDraft = {
@@ -38,6 +42,8 @@ export function createMedicationDraft(
 		frequencyUnit: "day",
 		durationValue: "",
 		durationUnit: "day",
+		comment: "",
+		shape: "capsule",
 		...overrides,
 	};
 }

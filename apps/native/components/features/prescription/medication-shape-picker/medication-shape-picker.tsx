@@ -5,7 +5,6 @@ import { Modal, Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
-	MEDICATION_SHAPE_GROUPS,
 	MedicationShape,
 	type MedicationShapeId,
 } from "@/components/features/prescription/medication-shape";
@@ -25,7 +24,6 @@ type MedicationShapePickerProps = {
 export function MedicationShapePicker({
 	value,
 	onChange,
-	label = "Medication shape",
 	showValueLabel = true,
 	className,
 }: MedicationShapePickerProps) {
