@@ -5,30 +5,40 @@
 @source "./node_modules/heroui-native/lib";
 
 @layer theme {
-	@variant light {
-		--color-primary: oklch(0.7038 0.123 182.5);
-		--accent: var(--color-primary);
-		--accent-foreground: oklch(1 0 0);
-		--color-muted-foreground: oklch(0.9276 0.0058 264.53);
+    @variant light {
+        /* TODO: Replace with product tokens (HeroUI defaults). */
+        --color-background: oklch(0.9702 0 0);
+        /* TODO: Replace with product tokens (HeroUI defaults). */
+        --color-foreground: oklch(0.2103 0.0059 285.89);
 
-		--color-muted: oklch(0.4461 0.0263 256.8);
+        --color-primary: oklch(0.7038 0.123 182.5);
+        --accent: var(--color-primary);
+        --accent-foreground: oklch(1 0 0);
+        --color-muted-foreground: oklch(0.9276 0.0058 264.53);
 
-		--color-panel-border: var(--color-muted-foreground);
-		--color-panel-separator: var(--color-muted-foreground);
-		--color-panel-background: oklch(0.9846 0.0017 247.84);
-	}
+        --color-muted: oklch(0.4461 0.0263 256.8);
 
-	@variant dark {
-		--color-primary: oklch(0.7038 0.123 182.5);
+        --color-panel-border: var(--color-muted-foreground);
+        --color-panel-separator: var(--color-muted-foreground);
+        --color-panel-background: oklch(0.9846 0.0017 247.84);
+    }
 
-		--color-muted-foreground: oklch(0.3729 0.0306 259.73);
-		--accent: var(--color-primary);
-		--accent-foreground: oklch(1 0 0);
+    @variant dark {
+        /* TODO: Replace with product tokens (HeroUI defaults). */
+        --color-background: oklch(0% 0 0);
+        /* TODO: Replace with product tokens (HeroUI defaults). */
+        --color-foreground: oklch(0.9911 0 0);
 
-		--color-muted: oklch(0.4461 0.0263 256.8);
+        --color-primary: oklch(0.7038 0.123 182.5);
 
-		--color-panel-border: var(--color-muted-foreground);
-		--color-panel-separator: var(--color-muted-foreground);
-		--color-panel-background: oklch(0.2101 0.0318 264.66);
-	}
+        --color-muted-foreground: oklch(0.3729 0.0306 259.73);
+        --accent: var(--color-primary);
+        --accent-foreground: oklch(1 0 0);
+
+        --color-muted: oklch(0.4461 0.0263 256.8);
+
+        --color-panel-border: var(--color-muted-foreground);
+        --color-panel-separator: var(--color-muted-foreground);
+        --color-panel-background: oklch(0.2101 0.0318 264.66);
+    }
 }
