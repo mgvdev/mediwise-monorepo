@@ -10,25 +10,19 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import { queryClient } from "@/utils/trpc";
 
 export const unstable_settings = {
-	initialRouteName: "(drawer)",
+	initialRouteName: "(tabs)",
 };
 
 const isStorybookEnabled = process.env.EXPO_PUBLIC_STORYBOOK === "1";
 
 function StackLayout() {
 	return (
-		<Stack screenOptions={{}}>
-			<Stack.Screen name="(auth)" options={{ headerShown: false }} />
-			<Stack.Screen name="(drawer)" options={{ headerShown: false }} />
-			<Stack.Screen name="prescriptions" options={{ headerShown: false }} />
-			<Stack.Screen
-				name="(modals)"
-				options={{ presentation: "modal", headerShown: false }}
-			/>
-			<Stack.Screen
-				name="modal"
-				options={{ title: "Modal", presentation: "modal" }}
-			/>
+		<Stack screenOptions={{ headerShown: false }}>
+			<Stack.Screen name="(auth)" />
+			<Stack.Screen name="(tabs)" />
+			<Stack.Screen name="health" />
+			<Stack.Screen name="prescriptions" />
+			<Stack.Screen name="modal" options={{ presentation: "modal" }} />
 		</Stack>
 	);
 }
