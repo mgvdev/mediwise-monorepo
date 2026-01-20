@@ -1,12 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Button, cn, Surface, TextField } from "heroui-native";
 import { Pressable, ScrollView, Text, View } from "react-native";
+import { DurationPicker } from "@/components/base/duration-picker";
+import { FrequencyPicker } from "@/components/base/frequency-picker";
 import { MedicationShapePicker } from "@/components/features/prescription/medication-shape-picker";
-import type {
-	DurationUnit,
-	FrequencyUnit,
-	MedicationDraft,
-} from "@/components/features/prescription/prescription-types";
+import type { MedicationDraft } from "@/components/features/prescription/prescription-types";
 
 type MedicationEditorProps = {
 	value: MedicationDraft;
@@ -18,52 +16,6 @@ type MedicationEditorProps = {
 	layout?: "inline" | "sheet";
 };
 
-type UnitToggleProps<T extends string> = {
-	label: string;
-	value: T;
-	options: T[];
-	onChange: (value: T) => void;
-	isEditable: boolean;
-};
-
-function UnitToggle<T extends string>({
-	label,
-	value,
-	options,
-	onChange,
-	isEditable,
-}: UnitToggleProps<T>) {
-	return (
-		<View className="gap-2">
-			<Text className="text-muted text-xs">{label}</Text>
-			<View className="flex-row flex-wrap gap-2">
-				{options.map((option) => {
-					const active = option === value;
-					return (
-						<Pressable
-							key={option}
-							onPress={() => {
-								if (isEditable) onChange(option);
-							}}
-							className={cn(
-								"rounded-full px-3 py-1",
-								active ? "bg-primary" : "bg-surface/60",
-								!isEditable && "opacity-60",
-							)}
-						>
-							<Text
-								className={active ? "text-primary-foreground" : "text-muted"}
-							>
-								{option}
-							</Text>
-						</Pressable>
-					);
-				})}
-			</View>
-		</View>
-	);
-}
-
 export function MedicationEditor({
 	value,
 	onChange,
@@ -74,6 +26,8 @@ export function MedicationEditor({
 	layout = "inline",
 }: MedicationEditorProps) {
 	const isSheet = layout === "sheet";
+	const frequencyCount = Number.parseInt(value.frequencyCount ?? "", 10);
+	const durationCount = Number.parseInt(value.durationValue ?? "", 10);
 
 	return (
 		<Surface
@@ -165,63 +119,35 @@ export function MedicationEditor({
 						/>
 					</TextField>
 
-					<View className="flex-row gap-3">
-						<View className="flex-1">
-							<TextField>
-								<TextField.Label>Frequency</TextField.Label>
-								<TextField.Input
-									value={value.frequencyCount}
-									onChangeText={(text) =>
-										onChange({
-											...value,
-											frequencyCount: text,
-										})
-									}
-									placeholder="3"
-									keyboardType="number-pad"
-									editable={isEditable}
-								/>
-							</TextField>
-						</View>
-						<View className="flex-1">
-							<UnitToggle<FrequencyUnit>
-								label="Per"
-								value={value.frequencyUnit}
-								options={["day", "week", "month"]}
-								onChange={(next) => onChange({ ...value, frequencyUnit: next })}
-								isEditable={isEditable}
-							/>
-						</View>
-					</View>
+					<FrequencyPicker
+						value={{
+							frequency: Number.isNaN(frequencyCount) ? 0 : frequencyCount,
+							frequencyUnit: value.frequencyUnit,
+						}}
+						onChange={(next) =>
+							onChange({
+								...value,
+								frequencyCount: String(next.frequency ?? 0),
+								frequencyUnit: next.frequencyUnit,
+							})
+						}
+						isEditable={isEditable}
+					/>
 
-					<View className="flex-row gap-3">
-						<View className="flex-1">
-							<TextField>
-								<TextField.Label>Duration</TextField.Label>
-								<TextField.Input
-									value={value.durationValue}
-									onChangeText={(text) =>
-										onChange({
-											...value,
-											durationValue: text,
-										})
-									}
-									placeholder="4"
-									keyboardType="number-pad"
-									editable={isEditable}
-								/>
-							</TextField>
-						</View>
-						<View className="flex-1">
-							<UnitToggle<DurationUnit>
-								label="Unit"
-								value={value.durationUnit}
-								options={["day", "week", "month"]}
-								onChange={(next) => onChange({ ...value, durationUnit: next })}
-								isEditable={isEditable}
-							/>
-						</View>
-					</View>
+					<DurationPicker
+						value={{
+							duration: Number.isNaN(durationCount) ? 0 : durationCount,
+							durationUnit: value.durationUnit,
+						}}
+						onChange={(next) =>
+							onChange({
+								...value,
+								durationValue: String(next.duration ?? 0),
+								durationUnit: next.durationUnit,
+							})
+						}
+						isEditable={isEditable}
+					/>
 				</View>
 			</ScrollView>
 

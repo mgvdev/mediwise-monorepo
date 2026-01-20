@@ -30,6 +30,8 @@ type MedicationPrescriptionBaseProps = {
 	display?: MedicationPrescriptionDisplay;
 	editable?: boolean;
 	onSubmit?: (next: MedicationDraft) => void;
+	onPress?: () => void;
+	enableEditor?: boolean;
 	footer?: ReactNode;
 	className?: string;
 };
@@ -126,6 +128,8 @@ export function MedicationPrescriptionCard({
 	display,
 	editable = false,
 	onSubmit,
+	onPress,
+	enableEditor = true,
 	footer,
 	className,
 }: MedicationPrescriptionBaseProps) {
@@ -155,7 +159,15 @@ export function MedicationPrescriptionCard({
 	return (
 		<View className={cn("gap-3", className)}>
 			<Pressable
-				onPress={() => editor.setOpen(true)}
+				onPress={() => {
+					if (onPress) {
+						onPress();
+						return;
+					}
+					if (enableEditor) {
+						editor.setOpen(true);
+					}
+				}}
 				className="items-center gap-4 rounded-3xl border border-panel-border bg-panel-background px-6 py-6"
 			>
 				<MedicationShape
@@ -185,13 +197,15 @@ export function MedicationPrescriptionCard({
 				) : null}
 			</Pressable>
 			{footer ? <View>{footer}</View> : null}
-			<MedicationEditorSheet
-				open={editor.open}
-				onClose={() => editor.setOpen(false)}
-				draft={editor.draft}
-				onDraftChange={editor.setDraft}
-				onSave={editable ? editor.handleSave : undefined}
-			/>
+			{enableEditor ? (
+				<MedicationEditorSheet
+					open={editor.open}
+					onClose={() => editor.setOpen(false)}
+					draft={editor.draft}
+					onDraftChange={editor.setDraft}
+					onSave={editable ? editor.handleSave : undefined}
+				/>
+			) : null}
 		</View>
 	);
 }
@@ -205,6 +219,8 @@ export function MedicationPrescriptionListItem({
 	display,
 	editable = false,
 	onSubmit,
+	onPress,
+	enableEditor = true,
 	footer,
 	className,
 	listVariant = "plain",
@@ -241,7 +257,15 @@ export function MedicationPrescriptionListItem({
 	return (
 		<View className={cn("gap-3", className)}>
 			<Pressable
-				onPress={() => editor.setOpen(true)}
+				onPress={() => {
+					if (onPress) {
+						onPress();
+						return;
+					}
+					if (enableEditor) {
+						editor.setOpen(true);
+					}
+				}}
 				className={cn("flex-row items-start gap-4", listContainerClasses)}
 			>
 				<MedicationShape
@@ -270,13 +294,15 @@ export function MedicationPrescriptionListItem({
 				<Ionicons name="chevron-forward" size={18} className="text-muted" />
 			</Pressable>
 			{footer ? <View>{footer}</View> : null}
-			<MedicationEditorSheet
-				open={editor.open}
-				onClose={() => editor.setOpen(false)}
-				draft={editor.draft}
-				onDraftChange={editor.setDraft}
-				onSave={editable ? editor.handleSave : undefined}
-			/>
+			{enableEditor ? (
+				<MedicationEditorSheet
+					open={editor.open}
+					onClose={() => editor.setOpen(false)}
+					draft={editor.draft}
+					onDraftChange={editor.setDraft}
+					onSave={editable ? editor.handleSave : undefined}
+				/>
+			) : null}
 		</View>
 	);
 }

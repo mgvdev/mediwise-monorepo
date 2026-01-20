@@ -3,6 +3,7 @@ import { Button, Surface, TextField, useThemeColor } from "heroui-native";
 import type { ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 
+import { MedicationPrescriptionListItem } from "@/components/features/prescription/medication-prescription";
 import type {
 	MedicationDraft,
 	PrescriptionDraft,
@@ -32,6 +33,20 @@ function formatMedicationSummary(medication: MedicationDraft) {
 	if (medication.durationValue) {
 		parts.push(
 			`${medication.durationValue} ${medication.durationUnit}${medication.durationValue === "1" ? "" : "s"}`,
+		);
+	}
+	return parts.join(" • ");
+}
+
+function formatMedicationSchedule(medication: MedicationDraft) {
+	const parts = [];
+	if (medication.frequencyCount) {
+		parts.push(`${medication.frequencyCount}x/${medication.frequencyUnit}`);
+	}
+	if (medication.durationValue) {
+		const plural = medication.durationValue === "1" ? "" : "s";
+		parts.push(
+			`for ${medication.durationValue} ${medication.durationUnit}${plural}`,
 		);
 	}
 	return parts.join(" • ");
@@ -115,23 +130,17 @@ export function PrescriptionEditor({
 				<View className="mt-3 gap-3">
 					{value.medications.length ? (
 						value.medications.map((medication, index) => (
-							<Pressable
+							<MedicationPrescriptionListItem
 								key={medication.id}
+								medication={medication}
+								schedule={
+									formatMedicationSchedule(medication) || "Add schedule"
+								}
+								display={{ schedule: true, details: true }}
+								listVariant="card"
+								enableEditor={false}
 								onPress={() => onEditMedication(index)}
-								className="rounded-2xl border border-border/60 bg-surface/40 p-3"
-							>
-								<View className="flex-row items-center justify-between">
-									<View className="flex-1 pr-3">
-										<Text className="font-medium text-foreground text-sm">
-											{medication.name || "Untitled medication"}
-										</Text>
-										<Text className="text-muted text-xs">
-											{formatMedicationSummary(medication) || "Add details"}
-										</Text>
-									</View>
-									<Ionicons name="pencil" size={16} color="#94a3b8" />
-								</View>
-							</Pressable>
+							/>
 						))
 					) : (
 						<Text className="text-muted text-xs">

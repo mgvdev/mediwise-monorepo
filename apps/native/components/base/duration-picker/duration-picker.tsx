@@ -1,37 +1,37 @@
 import { cn } from "heroui-native";
 import { Pressable, Text, TextInput, View } from "react-native";
 
-export type FrequencyUnit = "day" | "week" | "month";
+export type DurationUnit = "day" | "week" | "month";
 
-export type FrequencyValue = {
-	frequency: number;
-	frequencyUnit: FrequencyUnit;
+export type DurationValue = {
+	duration: number;
+	durationUnit: DurationUnit;
 };
 
-type FrequencyPickerProps = {
-	value: FrequencyValue;
-	onChange: (next: FrequencyValue) => void;
+type DurationPickerProps = {
+	value: DurationValue;
+	onChange: (next: DurationValue) => void;
 	label?: string;
 	className?: string;
 	isEditable?: boolean;
 };
 
-const UNITS: FrequencyUnit[] = ["day", "week", "month"];
+const UNITS: DurationUnit[] = ["day", "week", "month"];
 
-export function FrequencyPicker({
+export function DurationPicker({
 	value,
 	onChange,
-	label = "Frequency",
+	label = "Duration",
 	className,
 	isEditable = true,
-}: FrequencyPickerProps) {
+}: DurationPickerProps) {
 	const handleChangeCount = (next: string) => {
 		const numeric = Number.parseInt(next, 10);
 		if (Number.isNaN(numeric)) {
-			onChange({ ...value, frequency: 0 });
+			onChange({ ...value, duration: 0 });
 			return;
 		}
-		onChange({ ...value, frequency: Math.max(0, numeric) });
+		onChange({ ...value, duration: Math.max(0, numeric) });
 	};
 
 	return (
@@ -41,27 +41,27 @@ export function FrequencyPicker({
 				<View className="flex-1">
 					<View className="relative rounded-2xl border border-panel-border bg-panel-background px-4 py-3">
 						<TextInput
-							value={String(value.frequency ?? 0)}
+							value={String(value.duration ?? 0)}
 							onChangeText={handleChangeCount}
 							keyboardType="number-pad"
-							className="pr-8 text-foreground"
+							className="pr-10 text-foreground"
 							placeholder="0"
 							editable={isEditable}
 						/>
 						<Text className="absolute top-3 right-4 text-muted text-xs">
-							per
+							for
 						</Text>
 					</View>
 				</View>
 				<View className="flex-1 gap-2">
 					{UNITS.map((unit) => {
-						const selected = unit === value.frequencyUnit;
+						const selected = unit === value.durationUnit;
 						return (
 							<Pressable
 								key={unit}
 								onPress={() => {
 									if (!isEditable) return;
-									onChange({ ...value, frequencyUnit: unit });
+									onChange({ ...value, durationUnit: unit });
 								}}
 								className={cn(
 									"items-center rounded-full border border-panel-border px-3 py-2",

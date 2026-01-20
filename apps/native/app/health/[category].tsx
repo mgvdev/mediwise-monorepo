@@ -1,11 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Redirect, router, useLocalSearchParams } from "expo-router";
-import { TextField, useThemeColor } from "heroui-native";
+import { Button, Surface, TextField, useThemeColor } from "heroui-native";
 import * as React from "react";
-import { Pressable, Text, View } from "react-native";
+import { Modal, Pressable, Text, View } from "react-native";
 
 import { ChoiceInput, type ChoiceValue } from "@/components/base/choice";
 import { Container } from "@/components/layout/container";
+import { HeightPicker } from "@/components/medical-pickers/height-picker";
+import { WeightPicker } from "@/components/medical-pickers/weight-picker";
 import { applyOpacity } from "@/components/utils";
 import { type HealthField, healthCategoryMap } from "./health-schema";
 
@@ -15,6 +17,9 @@ type FormState = Record<string, FormValue>;
 
 const buildFieldKey = (categoryKey: string, fieldKey: string) =>
 	`health.${categoryKey}.${fieldKey}`;
+
+const CM_TO_IN = 0.3937008;
+const KG_TO_LBS = 2.20462;
 
 const formatChoiceLabel = (value: string) => {
 	const cleaned = value.replace(/_/g, " ");
@@ -36,6 +41,13 @@ export default function HealthCategoryScreen() {
 		? healthCategoryMap.get(resolvedKey)
 		: undefined;
 	const [values, setValues] = React.useState<FormState>({});
+	const [activePicker, setActivePicker] = React.useState<
+		"height" | "weight" | null
+	>(null);
+	const [heightUnit, setHeightUnit] = React.useState<"cm" | "inch">("cm");
+	const [heightValue, setHeightValue] = React.useState(170);
+	const [weightUnit, setWeightUnit] = React.useState<"kg" | "lbs">("kg");
+	const [weightValue, setWeightValue] = React.useState(68);
 	const primary = useThemeColor("primary");
 
 	if (!resolvedCategory) {
@@ -44,6 +56,65 @@ export default function HealthCategoryScreen() {
 
 	const handleChange = (key: string, value: FormValue) => {
 		setValues((prev) => ({ ...prev, [key]: value }));
+	};
+
+	const openHeightPicker = () => {
+		const heightKey = buildFieldKey("personal_information", "height_cm");
+		const unitKey = buildFieldKey("personal_information", "height_unit");
+		const storedCm = Number.parseInt(values[heightKey] ?? "", 10);
+		const baseCm = Number.isNaN(storedCm) ? 170 : storedCm;
+		const unit = (values[unitKey] as "cm" | "inch" | null) ?? ("cm" as const);
+		const displayValue =
+			unit === "inch" ? Math.round(baseCm * CM_TO_IN) : baseCm;
+
+		setHeightUnit(unit);
+		setHeightValue(displayValue);
+		setActivePicker("height");
+	};
+
+	const openWeightPicker = () => {
+		const weightKey = buildFieldKey("personal_information", "weight_kg");
+		const unitKey = buildFieldKey("personal_information", "weight_unit");
+		const storedKg = Number.parseInt(values[weightKey] ?? "", 10);
+		const baseKg = Number.isNaN(storedKg) ? 68 : storedKg;
+		const unit = (values[unitKey] as "kg" | "lbs" | null) ?? ("kg" as const);
+		const displayValue =
+			unit === "lbs" ? Math.round(baseKg * KG_TO_LBS) : baseKg;
+
+		setWeightUnit(unit);
+		setWeightValue(displayValue);
+		setActivePicker("weight");
+	};
+
+	const confirmHeight = () => {
+		const heightKey = buildFieldKey("personal_information", "height_cm");
+		const unitKey = buildFieldKey("personal_information", "height_unit");
+		const heightCm =
+			heightUnit === "inch" ? Math.round(heightValue / CM_TO_IN) : heightValue;
+
+		// Store metric only; unit is kept just for display preferences.
+		// TODO: Persist these keys when wiring save/load.
+		handleChange(heightKey, String(heightCm));
+		handleChange(unitKey, heightUnit);
+		setActivePicker(null);
+	};
+
+	const confirmWeight = () => {
+		const weightKey = buildFieldKey("personal_information", "weight_kg");
+		const unitKey = buildFieldKey("personal_information", "weight_unit");
+		const weightKg =
+			weightUnit === "lbs" ? Math.round(weightValue / KG_TO_LBS) : weightValue;
+
+		// Store metric only; unit is kept just for display preferences.
+		// TODO: Persist these keys when wiring save/load.
+		handleChange(weightKey, String(weightKg));
+		handleChange(unitKey, weightUnit);
+		setActivePicker(null);
+	};
+
+	const formatPickerValue = (value: string | null, unit: string) => {
+		if (!value) return `Select ${unit}`;
+		return `${value} ${unit}`;
 	};
 
 	return (
@@ -89,6 +160,68 @@ export default function HealthCategoryScreen() {
 						);
 					}
 
+					if (
+						resolvedCategory.key === "personal_information" &&
+						fieldKey === "height_cm"
+					) {
+						const unitKey = buildFieldKey(
+							"personal_information",
+							"height_unit",
+						);
+						const unit = (values[unitKey] as "cm" | "inch" | null) ?? "cm";
+						const parsed = Number.parseInt(value ?? "", 10);
+						const displayValue = Number.isNaN(parsed)
+							? null
+							: unit === "inch"
+								? String(Math.round(parsed * CM_TO_IN))
+								: String(parsed);
+
+						return (
+							<View key={storageKey} className="gap-2">
+								<Text className="text-muted text-xs">{field.label}</Text>
+								<Pressable
+									onPress={openHeightPicker}
+									className="rounded-2xl border border-panel-border bg-panel-background px-4 py-3"
+								>
+									<Text className="text-foreground text-sm">
+										{formatPickerValue(displayValue, unit)}
+									</Text>
+								</Pressable>
+							</View>
+						);
+					}
+
+					if (
+						resolvedCategory.key === "personal_information" &&
+						fieldKey === "weight_kg"
+					) {
+						const unitKey = buildFieldKey(
+							"personal_information",
+							"weight_unit",
+						);
+						const unit = (values[unitKey] as "kg" | "lbs" | null) ?? "kg";
+						const parsed = Number.parseInt(value ?? "", 10);
+						const displayValue = Number.isNaN(parsed)
+							? null
+							: unit === "lbs"
+								? String(Math.round(parsed * KG_TO_LBS))
+								: String(parsed);
+
+						return (
+							<View key={storageKey} className="gap-2">
+								<Text className="text-muted text-xs">{field.label}</Text>
+								<Pressable
+									onPress={openWeightPicker}
+									className="rounded-2xl border border-panel-border bg-panel-background px-4 py-3"
+								>
+									<Text className="text-foreground text-sm">
+										{formatPickerValue(displayValue, unit)}
+									</Text>
+								</Pressable>
+							</View>
+						);
+					}
+
 					return (
 						<View key={storageKey} className="gap-2">
 							<TextField>
@@ -106,6 +239,75 @@ export default function HealthCategoryScreen() {
 					);
 				})}
 			</View>
+			<Modal
+				transparent
+				visible={activePicker !== null}
+				animationType="slide"
+				onRequestClose={() => setActivePicker(null)}
+			>
+				<Pressable
+					className="flex-1 bg-black/30"
+					onPress={() => setActivePicker(null)}
+				/>
+				<View className="px-6 pb-8">
+					<Surface variant="secondary" className="rounded-3xl p-5">
+						{activePicker === "height" ? (
+							<View className="gap-4">
+								<Text className="font-semibold text-foreground text-lg">
+									Select your height
+								</Text>
+								<HeightPicker
+									value={heightValue}
+									unit={heightUnit}
+									onChange={(nextValue, nextUnit) => {
+										setHeightUnit(nextUnit);
+										setHeightValue(nextValue);
+									}}
+								/>
+								<View className="flex-row gap-2">
+									<Button
+										variant="secondary"
+										className="flex-1"
+										onPress={() => setActivePicker(null)}
+									>
+										<Button.Label>Cancel</Button.Label>
+									</Button>
+									<Button className="flex-1" onPress={confirmHeight}>
+										<Button.Label>Save</Button.Label>
+									</Button>
+								</View>
+							</View>
+						) : null}
+						{activePicker === "weight" ? (
+							<View className="gap-4">
+								<Text className="font-semibold text-foreground text-lg">
+									Select your weight
+								</Text>
+								<WeightPicker
+									value={weightValue}
+									unit={weightUnit}
+									onChange={(nextValue, nextUnit) => {
+										setWeightUnit(nextUnit);
+										setWeightValue(nextValue);
+									}}
+								/>
+								<View className="flex-row gap-2">
+									<Button
+										variant="secondary"
+										className="flex-1"
+										onPress={() => setActivePicker(null)}
+									>
+										<Button.Label>Cancel</Button.Label>
+									</Button>
+									<Button className="flex-1" onPress={confirmWeight}>
+										<Button.Label>Save</Button.Label>
+									</Button>
+								</View>
+							</View>
+						) : null}
+					</Surface>
+				</View>
+			</Modal>
 		</Container>
 	);
 }
