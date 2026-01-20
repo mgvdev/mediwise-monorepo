@@ -1,8 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
-import { cn } from "heroui-native";
+import { cn, Dialog } from "heroui-native";
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
-import { Modal, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 import { MedicationEditor } from "@/components/features/prescription/medication-editor";
 import {
@@ -32,6 +32,8 @@ type MedicationPrescriptionBaseProps = {
 	onSubmit?: (next: MedicationDraft) => void;
 	onPress?: () => void;
 	enableEditor?: boolean;
+	onEditPage?: () => void;
+	showEditPageAction?: boolean;
 	footer?: ReactNode;
 	className?: string;
 };
@@ -88,7 +90,7 @@ function useMedicationEditorState(
 	};
 }
 
-function MedicationEditorSheet({
+function MedicationEditorDialog({
 	open,
 	onClose,
 	draft,
@@ -102,20 +104,32 @@ function MedicationEditorSheet({
 	onSave?: () => void;
 }) {
 	return (
-		<Modal visible={open} transparent animationType="slide">
-			<View className="flex-1 justify-end bg-black/30">
-				<View className="flex-1" style={{ maxHeight: "90%" }}>
-					<MedicationEditor
-						value={draft}
-						onChange={onDraftChange}
-						onSave={onSave}
-						showClose
-						onClose={onClose}
-						layout="sheet"
-					/>
-				</View>
-			</View>
-		</Modal>
+		<Dialog isOpen={open} onOpenChange={(next) => (!next ? onClose() : null)}>
+			<Dialog.Portal>
+				<Dialog.Overlay />
+				<Dialog.Content className="rounded-3xl border border-panel-border bg-panel-background px-5 pt-4 pb-6">
+					<View className="mb-3 flex-row items-center justify-between">
+						<Dialog.Title>Edit medication</Dialog.Title>
+						<Dialog.Close asChild>
+							<Pressable className="h-8 w-8 items-center justify-center rounded-full border border-panel-border">
+								<Ionicons name="close" size={16} className="text-muted" />
+							</Pressable>
+						</Dialog.Close>
+					</View>
+					<View className="max-h-[560px]">
+						<MedicationEditor
+							value={draft}
+							onChange={onDraftChange}
+							onSave={onSave}
+							showClose={false}
+							showHeader={false}
+							variant="plain"
+							layout="inline"
+						/>
+					</View>
+				</Dialog.Content>
+			</Dialog.Portal>
+		</Dialog>
 	);
 }
 
@@ -130,6 +144,8 @@ export function MedicationPrescriptionCard({
 	onSubmit,
 	onPress,
 	enableEditor = true,
+	onEditPage,
+	showEditPageAction = false,
 	footer,
 	className,
 }: MedicationPrescriptionBaseProps) {
@@ -158,47 +174,62 @@ export function MedicationPrescriptionCard({
 
 	return (
 		<View className={cn("gap-3", className)}>
-			<Pressable
-				onPress={() => {
-					if (onPress) {
-						onPress();
-						return;
-					}
-					if (enableEditor) {
-						editor.setOpen(true);
-					}
-				}}
-				className="items-center gap-4 rounded-3xl border border-panel-border bg-panel-background px-6 py-6"
-			>
-				<MedicationShape
-					shape={medication.shape ?? DEFAULT_SHAPE}
-					size={76}
-					iconSize={36}
-					showLabel={false}
-				/>
-				<View className="items-center gap-2">
-					<Text className="font-semibold text-foreground text-xl">
-						{medication.name}
-					</Text>
-					{showSubtitle ? (
-						<Text className="text-base text-muted">{subtitle}</Text>
+			<View className="flex-row items-start gap-3">
+				<Pressable
+					onPress={() => {
+						if (onPress) {
+							onPress();
+							return;
+						}
+						if (enableEditor) {
+							editor.setOpen(true);
+						}
+					}}
+					className="flex-1 items-center gap-4 rounded-3xl border border-panel-border bg-panel-background px-6 py-6"
+				>
+					<MedicationShape
+						shape={medication.shape ?? DEFAULT_SHAPE}
+						size={76}
+						iconSize={36}
+						showLabel={false}
+					/>
+					<View className="items-center gap-2">
+						<Text className="font-semibold text-foreground text-xl">
+							{medication.name}
+						</Text>
+						{showSubtitle ? (
+							<Text className="text-base text-muted">{subtitle}</Text>
+						) : null}
+						{showSchedule ? (
+							<Text className="text-primary text-sm">{schedule}</Text>
+						) : null}
+					</View>
+					{showDetails ? (
+						<Text className="text-muted text-sm">{detailsLine}</Text>
 					) : null}
-					{showSchedule ? (
-						<Text className="text-primary text-sm">{schedule}</Text>
+					{showComment && commentLine ? (
+						<Text className="text-muted text-sm">
+							{truncateText(commentLine, 72)}
+						</Text>
 					) : null}
-				</View>
-				{showDetails ? (
-					<Text className="text-muted text-sm">{detailsLine}</Text>
+				</Pressable>
+				{showEditPageAction && onEditPage ? (
+					<Pressable
+						onPress={(event) => {
+							event.stopPropagation();
+							onEditPage();
+						}}
+						className="mt-2 h-9 w-9 items-center justify-center rounded-full border border-panel-border bg-panel-background"
+						accessibilityRole="button"
+						accessibilityLabel="Edit medication in full page"
+					>
+						<Ionicons name="add" size={18} className="text-muted" />
+					</Pressable>
 				) : null}
-				{showComment && commentLine ? (
-					<Text className="text-muted text-sm">
-						{truncateText(commentLine, 72)}
-					</Text>
-				) : null}
-			</Pressable>
+			</View>
 			{footer ? <View>{footer}</View> : null}
 			{enableEditor ? (
-				<MedicationEditorSheet
+				<MedicationEditorDialog
 					open={editor.open}
 					onClose={() => editor.setOpen(false)}
 					draft={editor.draft}
@@ -221,6 +252,8 @@ export function MedicationPrescriptionListItem({
 	onSubmit,
 	onPress,
 	enableEditor = true,
+	onEditPage,
+	showEditPageAction = false,
 	footer,
 	className,
 	listVariant = "plain",
@@ -256,46 +289,64 @@ export function MedicationPrescriptionListItem({
 
 	return (
 		<View className={cn("gap-3", className)}>
-			<Pressable
-				onPress={() => {
-					if (onPress) {
-						onPress();
-						return;
-					}
-					if (enableEditor) {
-						editor.setOpen(true);
-					}
-				}}
-				className={cn("flex-row items-start gap-4", listContainerClasses)}
-			>
-				<MedicationShape
-					shape={medication.shape ?? DEFAULT_SHAPE}
-					size={58}
-					iconSize={28}
-					showLabel={false}
-				/>
-				<View className="flex-1 gap-1">
-					<Text className="font-semibold text-foreground text-lg">
-						{medication.name}
-					</Text>
-					{showSubtitle ? (
-						<Text className="text-muted text-sm">{subtitle}</Text>
-					) : null}
-					{showSchedule ? (
-						<Text className="text-primary text-sm">{schedule}</Text>
-					) : null}
-					{showDetails ? (
-						<Text className="text-muted text-sm">{detailsLine}</Text>
-					) : null}
-					{showComment && commentLine ? (
-						<Text className="text-muted text-sm">{commentLine}</Text>
-					) : null}
-				</View>
-				<Ionicons name="chevron-forward" size={18} className="text-muted" />
-			</Pressable>
+			<View className="flex-row items-start gap-3">
+				<Pressable
+					onPress={() => {
+						if (onPress) {
+							onPress();
+							return;
+						}
+						if (enableEditor) {
+							editor.setOpen(true);
+						}
+					}}
+					className={cn(
+						"flex-1 flex-row items-start gap-4",
+						listContainerClasses,
+					)}
+				>
+					<MedicationShape
+						shape={medication.shape ?? DEFAULT_SHAPE}
+						size={58}
+						iconSize={28}
+						showLabel={false}
+					/>
+					<View className="flex-1 gap-1">
+						<Text className="font-semibold text-foreground text-lg">
+							{medication.name}
+						</Text>
+						{showSubtitle ? (
+							<Text className="text-muted text-sm">{subtitle}</Text>
+						) : null}
+						{showSchedule ? (
+							<Text className="text-primary text-sm">{schedule}</Text>
+						) : null}
+						{showDetails ? (
+							<Text className="text-muted text-sm">{detailsLine}</Text>
+						) : null}
+						{showComment && commentLine ? (
+							<Text className="text-muted text-sm">{commentLine}</Text>
+						) : null}
+					</View>
+					<Ionicons name="chevron-forward" size={18} className="text-muted" />
+				</Pressable>
+				{showEditPageAction && onEditPage ? (
+					<Pressable
+						onPress={(event) => {
+							event.stopPropagation();
+							onEditPage();
+						}}
+						className="mt-1 h-9 w-9 items-center justify-center rounded-full border border-panel-border bg-panel-background"
+						accessibilityRole="button"
+						accessibilityLabel="Edit medication in full page"
+					>
+						<Ionicons name="add" size={18} className="text-muted" />
+					</Pressable>
+				) : null}
+			</View>
 			{footer ? <View>{footer}</View> : null}
 			{enableEditor ? (
-				<MedicationEditorSheet
+				<MedicationEditorDialog
 					open={editor.open}
 					onClose={() => editor.setOpen(false)}
 					draft={editor.draft}

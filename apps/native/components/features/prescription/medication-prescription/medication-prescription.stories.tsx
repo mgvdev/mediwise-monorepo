@@ -1,4 +1,5 @@
 import type { Meta } from "@storybook/react-native";
+import { Button } from "heroui-native";
 import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { createMedicationDraft } from "@/components/features/prescription/prescription-types";
@@ -123,3 +124,31 @@ export const ListItemStack = () => {
 		</ScrollView>
 	);
 };
+
+export const ListItemEditPageAction = () => (
+	<View className="flex-1 bg-background p-6">
+		<MedicationPrescriptionListItem
+			medication={baseMedication}
+			subtitle="Levothyroxine Sodium - Tablet"
+			schedule="1 tablet at 12:22 am"
+			display={{
+				subtitle: true,
+				schedule: true,
+				details: true,
+				instructions: true,
+				comment: true,
+			}}
+			listVariant="card"
+			showEditPageAction
+			onEditPage={() => console.log("[Storybook] edit page action clicked")}
+		/>
+		<View className="mt-4">
+			<Button
+				variant="secondary"
+				onPress={() => console.log("[Storybook] simulate edit page")}
+			>
+				<Button.Label>Simulate edit page</Button.Label>
+			</Button>
+		</View>
+	</View>
+);

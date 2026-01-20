@@ -2,7 +2,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { Button, Surface } from "heroui-native";
 import * as React from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
+import { Caption, H1 } from "@/components/base/typography";
 import { Container } from "@/components/layout/container";
 import { HeightPicker } from "@/components/medical-pickers/height-picker";
 import { authClient } from "@/lib/auth-client";
@@ -53,12 +54,10 @@ export default function EditHeightScreen() {
 	return (
 		<Container className="px-6 pt-12 pb-10" scroll={false}>
 			<View className="mb-6">
-				<Text className="font-semibold text-2xl text-foreground">
-					What is your height?
-				</Text>
-				<Text className="mt-1 text-muted text-xs">
+				<H1>What is your height?</H1>
+				<Caption className="mt-1">
 					We use this to tailor your health insights.
-				</Text>
+				</Caption>
 			</View>
 
 			<Surface variant="secondary" className="rounded-2xl p-4">

@@ -2,8 +2,8 @@ import { useRootNavigationState, useRouter, useSegments } from "expo-router";
 import { Spinner } from "heroui-native";
 import type { PropsWithChildren } from "react";
 import { useEffect } from "react";
-import { Text, View } from "react-native";
-
+import { View } from "react-native";
+import { Caption } from "@/components/base/typography";
 import { authClient } from "@/lib/auth-client";
 
 export function AuthGate({ children }: PropsWithChildren) {
@@ -38,13 +38,11 @@ export function AuthGate({ children }: PropsWithChildren) {
 		return children;
 	}
 
-	if (isPending) {
+	if (isPending && !inAuthGroup) {
 		return (
 			<View className="flex-1 items-center justify-center bg-background px-6">
 				<Spinner size="lg" color="default" />
-				<Text className="mt-3 text-muted text-xs">
-					Checking your session...
-				</Text>
+				<Caption className="mt-3">Checking your session...</Caption>
 			</View>
 		);
 	}

@@ -1,14 +1,14 @@
-import { Ionicons } from "@expo/vector-icons";
-import { Redirect, router, useLocalSearchParams } from "expo-router";
-import { Button, Surface, TextField, useThemeColor } from "heroui-native";
+import { Redirect, Stack, useLocalSearchParams } from "expo-router";
+import { Button, Surface, TextField } from "heroui-native";
 import * as React from "react";
-import { Modal, Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 
 import { ChoiceInput, type ChoiceValue } from "@/components/base/choice";
+import { SafeAreaSheet } from "@/components/base/safe-area-sheet";
+import { Body, Caption, H3 } from "@/components/base/typography";
 import { Container } from "@/components/layout/container";
 import { HeightPicker } from "@/components/medical-pickers/height-picker";
 import { WeightPicker } from "@/components/medical-pickers/weight-picker";
-import { applyOpacity } from "@/components/utils";
 import { type HealthField, healthCategoryMap } from "./health-schema";
 
 type FormValue = string | null;
@@ -48,8 +48,6 @@ export default function HealthCategoryScreen() {
 	const [heightValue, setHeightValue] = React.useState(170);
 	const [weightUnit, setWeightUnit] = React.useState<"kg" | "lbs">("kg");
 	const [weightValue, setWeightValue] = React.useState(68);
-	const primary = useThemeColor("primary");
-
 	if (!resolvedCategory) {
 		return <Redirect href="/" />;
 	}
@@ -118,25 +116,11 @@ export default function HealthCategoryScreen() {
 	};
 
 	return (
-		<Container className="px-6 pt-12 pb-12">
-			<View className="mb-6 flex-row items-center justify-between">
-				<View className="flex-1">
-					<Text className="text-muted text-xs">Health profile</Text>
-					<Text className="mt-1 font-semibold text-2xl text-foreground">
-						{resolvedCategory.label}
-					</Text>
-				</View>
-				<Pressable
-					onPress={() => router.back()}
-					className="h-9 w-9 items-center justify-center rounded-full"
-					style={{
-						backgroundColor: applyOpacity(primary, 0.12) ?? "transparent",
-					}}
-				>
-					<Ionicons name="close" size={18} color={primary} />
-				</Pressable>
+		<Container className="px-6 pt-4 pb-12">
+			<Stack.Screen options={{ title: resolvedCategory.label }} />
+			<View className="mb-4">
+				<Caption>Health profile</Caption>
 			</View>
-
 			<View className="gap-4">
 				{Object.entries(resolvedCategory.fields).map(([fieldKey, field]) => {
 					const storageKey = buildFieldKey(resolvedCategory.key, fieldKey);
@@ -178,14 +162,12 @@ export default function HealthCategoryScreen() {
 
 						return (
 							<View key={storageKey} className="gap-2">
-								<Text className="text-muted text-xs">{field.label}</Text>
+								<Caption>{field.label}</Caption>
 								<Pressable
 									onPress={openHeightPicker}
 									className="rounded-2xl border border-panel-border bg-panel-background px-4 py-3"
 								>
-									<Text className="text-foreground text-sm">
-										{formatPickerValue(displayValue, unit)}
-									</Text>
+									<Body>{formatPickerValue(displayValue, unit)}</Body>
 								</Pressable>
 							</View>
 						);
@@ -209,14 +191,12 @@ export default function HealthCategoryScreen() {
 
 						return (
 							<View key={storageKey} className="gap-2">
-								<Text className="text-muted text-xs">{field.label}</Text>
+								<Caption>{field.label}</Caption>
 								<Pressable
 									onPress={openWeightPicker}
 									className="rounded-2xl border border-panel-border bg-panel-background px-4 py-3"
 								>
-									<Text className="text-foreground text-sm">
-										{formatPickerValue(displayValue, unit)}
-									</Text>
+									<Body>{formatPickerValue(displayValue, unit)}</Body>
 								</Pressable>
 							</View>
 						);
@@ -239,75 +219,63 @@ export default function HealthCategoryScreen() {
 					);
 				})}
 			</View>
-			<Modal
-				transparent
+			<SafeAreaSheet
 				visible={activePicker !== null}
-				animationType="slide"
-				onRequestClose={() => setActivePicker(null)}
+				onClose={() => setActivePicker(null)}
 			>
-				<Pressable
-					className="flex-1 bg-black/30"
-					onPress={() => setActivePicker(null)}
-				/>
-				<View className="px-6 pb-8">
-					<Surface variant="secondary" className="rounded-3xl p-5">
-						{activePicker === "height" ? (
-							<View className="gap-4">
-								<Text className="font-semibold text-foreground text-lg">
-									Select your height
-								</Text>
-								<HeightPicker
-									value={heightValue}
-									unit={heightUnit}
-									onChange={(nextValue, nextUnit) => {
-										setHeightUnit(nextUnit);
-										setHeightValue(nextValue);
-									}}
-								/>
-								<View className="flex-row gap-2">
-									<Button
-										variant="secondary"
-										className="flex-1"
-										onPress={() => setActivePicker(null)}
-									>
-										<Button.Label>Cancel</Button.Label>
-									</Button>
-									<Button className="flex-1" onPress={confirmHeight}>
-										<Button.Label>Save</Button.Label>
-									</Button>
-								</View>
+				<Surface variant="secondary" className="rounded-3xl p-5">
+					{activePicker === "height" ? (
+						<View className="gap-4">
+							<H3>Select your height</H3>
+							<HeightPicker
+								value={heightValue}
+								unit={heightUnit}
+								onChange={(nextValue, nextUnit) => {
+									setHeightUnit(nextUnit);
+									setHeightValue(nextValue);
+								}}
+							/>
+							<View className="flex-row gap-2">
+								<Button
+									variant="secondary"
+									className="flex-1"
+									onPress={() => setActivePicker(null)}
+								>
+									<Button.Label>Cancel</Button.Label>
+								</Button>
+								<Button className="flex-1" onPress={confirmHeight}>
+									<Button.Label>Save</Button.Label>
+								</Button>
 							</View>
-						) : null}
-						{activePicker === "weight" ? (
-							<View className="gap-4">
-								<Text className="font-semibold text-foreground text-lg">
-									Select your weight
-								</Text>
-								<WeightPicker
-									value={weightValue}
-									unit={weightUnit}
-									onChange={(nextValue, nextUnit) => {
-										setWeightUnit(nextUnit);
-										setWeightValue(nextValue);
-									}}
-								/>
-								<View className="flex-row gap-2">
-									<Button
-										variant="secondary"
-										className="flex-1"
-										onPress={() => setActivePicker(null)}
-									>
-										<Button.Label>Cancel</Button.Label>
-									</Button>
-									<Button className="flex-1" onPress={confirmWeight}>
-										<Button.Label>Save</Button.Label>
-									</Button>
-								</View>
+						</View>
+					) : null}
+					{activePicker === "weight" ? (
+						<View className="gap-4">
+							<H3>Select your weight</H3>
+							<WeightPicker
+								value={weightValue}
+								unit={weightUnit}
+								onChange={(nextValue, nextUnit) => {
+									setWeightUnit(nextUnit);
+									setWeightValue(nextValue);
+								}}
+							/>
+							<View className="flex-row gap-2">
+								<Button
+									variant="secondary"
+									className="flex-1"
+									onPress={() => setActivePicker(null)}
+								>
+									<Button.Label>Cancel</Button.Label>
+								</Button>
+								<Button className="flex-1" onPress={confirmWeight}>
+									<Button.Label>Save</Button.Label>
+								</Button>
 							</View>
-						) : null}
-					</Surface>
-				</View>
-			</Modal>
+						</View>
+					) : null}
+				</Surface>
+			</SafeAreaSheet>
 		</Container>
 	);
 }

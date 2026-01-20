@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Button, cn, Surface, TextField } from "heroui-native";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { useEffect, useRef } from "react";
+import { Animated, Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { DurationPicker } from "@/components/base/duration-picker";
 import { FrequencyPicker } from "@/components/base/frequency-picker";
@@ -15,6 +16,9 @@ type MedicationEditorProps = {
 	showClose?: boolean;
 	onClose?: () => void;
 	layout?: "inline" | "sheet";
+	showHeader?: boolean;
+	variant?: "surface" | "plain";
+	animateIn?: boolean;
 };
 
 export function MedicationEditor({
@@ -25,40 +29,67 @@ export function MedicationEditor({
 	showClose = true,
 	onClose,
 	layout = "inline",
+	showHeader = true,
+	variant = "surface",
+	animateIn = false,
 }: MedicationEditorProps) {
 	const isSheet = layout === "sheet";
 	const insets = useSafeAreaInsets();
-	const safeBottom = Math.max(insets.bottom, 12) + 16;
+	const safeBottom = Math.max(insets.bottom, 12) + 32;
 	const frequencyCount = Number.parseInt(value.frequencyCount ?? "", 10);
 	const durationCount = Number.parseInt(value.durationValue ?? "", 10);
+	const Wrapper = variant === "surface" ? Surface : View;
+	const opacity = useRef(new Animated.Value(animateIn ? 0 : 1)).current;
+	const translateY = useRef(new Animated.Value(animateIn ? 12 : 0)).current;
 
-	return (
-		<Surface
+	useEffect(() => {
+		if (!animateIn) return;
+		Animated.parallel([
+			Animated.timing(opacity, {
+				toValue: 1,
+				duration: 220,
+				useNativeDriver: true,
+			}),
+			Animated.timing(translateY, {
+				toValue: 0,
+				duration: 220,
+				useNativeDriver: true,
+			}),
+		]).start();
+	}, [animateIn, opacity, translateY]);
+
+	const content = (
+		<Wrapper
 			className={cn(
-				"rounded-t-3xl bg-background px-6 pt-5",
+				variant === "surface"
+					? "rounded-t-3xl bg-background px-6 pt-5"
+					: "bg-transparent px-6 pt-5",
 				isSheet && "min-h-0 flex-1",
 			)}
-			style={isSheet ? undefined : { paddingBottom: safeBottom }}
+			style={{ paddingBottom: safeBottom }}
 		>
-			<View className="mb-4 flex-row items-center justify-between">
-				<Text className="font-semibold text-foreground text-lg">
-					Edit Medication
-				</Text>
-				{showClose ? (
-					<Pressable
-						className="h-9 w-9 items-center justify-center rounded-full bg-surface/60"
-						accessibilityRole="button"
-						accessibilityLabel="Close medication editor"
-						onPress={onClose}
-					>
-						<Ionicons name="close" size={20} className="text-foreground" />
-					</Pressable>
-				) : null}
-			</View>
+			{showHeader ? (
+				<View className="mb-4 flex-row items-center justify-between">
+					<Text className="font-semibold text-foreground text-lg">
+						Edit Medication
+					</Text>
+					{showClose ? (
+						<Pressable
+							className="h-9 w-9 items-center justify-center rounded-full bg-surface/60"
+							accessibilityRole="button"
+							accessibilityLabel="Close medication editor"
+							onPress={onClose}
+						>
+							<Ionicons name="close" size={20} className="text-foreground" />
+						</Pressable>
+					) : null}
+				</View>
+			) : null}
 
 			<ScrollView
 				showsVerticalScrollIndicator={false}
 				className={cn(isSheet && "min-h-0 flex-1")}
+				keyboardShouldPersistTaps="handled"
 				contentContainerStyle={{ paddingBottom: 32, flexGrow: 1 }}
 			>
 				<View className="gap-4">
@@ -162,6 +193,14 @@ export function MedicationEditor({
 			>
 				<Button.Label>Save Medication</Button.Label>
 			</Button>
-		</Surface>
+		</Wrapper>
+	);
+
+	if (!animateIn) return content;
+
+	return (
+		<Animated.View style={{ opacity, transform: [{ translateY }] }}>
+			{content}
+		</Animated.View>
 	);
 }

@@ -1,14 +1,16 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Button, Spinner, Surface, useThemeColor } from "heroui-native";
+import { Image, Linking, Pressable, RefreshControl, View } from "react-native";
 import {
-	Image,
-	Linking,
-	Pressable,
-	RefreshControl,
-	Text,
-	View,
-} from "react-native";
+	BodyMedium,
+	Caption,
+	H2,
+	H3,
+	Link,
+	Micro,
+	MicroStrong,
+} from "@/components/base/typography";
 import { DocumentsHeader } from "@/components/features/prescription/documents-header";
 import { PrescriptionDetailDialog } from "@/components/features/prescription/prescription-dialogs";
 import { Container } from "@/components/layout/container";
@@ -24,9 +26,9 @@ type SectionHeaderProps = {
 function SectionHeader({ title, actionLabel, onAction }: SectionHeaderProps) {
 	return (
 		<View className="flex-row items-center justify-between">
-			<Text className="font-semibold text-foreground text-lg">{title}</Text>
+			<H3>{title}</H3>
 			<Pressable onPress={onAction} className="px-2 py-1">
-				<Text className="font-medium text-primary text-sm">{actionLabel}</Text>
+				<Link>{actionLabel}</Link>
 			</Pressable>
 		</View>
 	);
@@ -84,20 +86,20 @@ export default function DocumentsScreen() {
 			/>
 			{error && !asset ? (
 				<View className="px-6">
-					<Text className="text-danger text-xs">{error}</Text>
+					<Caption className="text-danger">{error}</Caption>
 				</View>
 			) : null}
 			{permissionError ? (
 				<View className="px-6">
 					<Surface variant="secondary" className="rounded-2xl p-4">
-						<Text className="font-medium text-foreground text-sm">
+						<BodyMedium>
 							{permissionError === "camera"
 								? "Camera access needed"
 								: "Photo library access needed"}
-						</Text>
-						<Text className="mt-1 text-muted text-xs">
+						</BodyMedium>
+						<Caption className="mt-1">
 							Enable access to continue. You can retry or open system settings.
-						</Text>
+						</Caption>
 						<View className="mt-3 flex-row gap-2">
 							<Button variant="secondary" onPress={handlePermissionRetry}>
 								<Button.Label>Try again</Button.Label>
@@ -113,12 +115,8 @@ export default function DocumentsScreen() {
 			{asset ? (
 				<View className="px-6">
 					<Surface variant="secondary" className="rounded-2xl p-4">
-						<Text className="font-medium text-foreground text-sm">
-							Prescription preview
-						</Text>
-						<Text className="text-muted text-xs">
-							Confirm before sending for extraction.
-						</Text>
+						<BodyMedium>Prescription preview</BodyMedium>
+						<Caption>Confirm before sending for extraction.</Caption>
 						<View className="mt-3 gap-2">
 							<Image
 								source={{ uri: asset.uri }}
@@ -137,7 +135,7 @@ export default function DocumentsScreen() {
 							</Button>
 						</View>
 						{error ? (
-							<Text className="mt-3 text-danger text-xs">{error}</Text>
+							<Caption className="mt-3 text-danger">{error}</Caption>
 						) : null}
 					</Surface>
 				</View>
@@ -163,10 +161,8 @@ export default function DocumentsScreen() {
 							>
 								<Ionicons name="checkmark" size={18} color={accentUpload} />
 							</View>
-							<Text className="font-semibold text-foreground text-xl">
-								{processedCount ?? 0}
-							</Text>
-							<Text className="text-muted text-xs">Processed</Text>
+							<H2>{processedCount ?? 0}</H2>
+							<Caption>Processed</Caption>
 						</View>
 						<View className="h-10 w-px bg-border/60" />
 						<View className="flex-1 items-center gap-2">
@@ -181,19 +177,15 @@ export default function DocumentsScreen() {
 							>
 								<Ionicons name="alert" size={18} color={accentScan} />
 							</View>
-							<Text className="font-semibold text-foreground text-xl">
-								{pendingCount}
-							</Text>
-							<Text className="text-muted text-xs">In progress</Text>
+							<H2>{pendingCount}</H2>
+							<Caption>In progress</Caption>
 						</View>
 					</View>
 					<Pressable
 						onPress={() => router.push("/prescriptions")}
 						className="mt-4 items-center rounded-full border border-border/60 py-2"
 					>
-						<Text className="font-semibold text-primary text-sm">
-							See unified prescriptions
-						</Text>
+						<Link>See unified prescriptions</Link>
 					</Pressable>
 				</Surface>
 			</View>
@@ -201,9 +193,7 @@ export default function DocumentsScreen() {
 			<View className="px-6">
 				<Surface variant="secondary" className="rounded-2xl p-4">
 					<View className="flex-row items-center justify-between">
-						<Text className="font-medium text-foreground text-sm">
-							Recent uploads
-						</Text>
+						<BodyMedium>Recent uploads</BodyMedium>
 						<Button variant="ghost" onPress={() => prescriptions.refetch()}>
 							<Button.Label>Refresh</Button.Label>
 						</Button>
@@ -211,7 +201,7 @@ export default function DocumentsScreen() {
 
 					<View className="mt-3 gap-3">
 						{prescriptions.isLoading ? (
-							<Text className="text-muted text-xs">Loading...</Text>
+							<Caption>Loading...</Caption>
 						) : filteredPrescriptions.length ? (
 							filteredPrescriptions.map((item) => {
 								const targetId = item.rawId ?? item.id;
@@ -221,31 +211,25 @@ export default function DocumentsScreen() {
 										onPress={() => openPrescription(targetId)}
 										className="rounded-xl border border-border/60 bg-surface/40 p-3"
 									>
-										<Text className="font-medium text-foreground text-sm">
-											{item.filename}
-										</Text>
-										<Text className="text-[11px] text-muted">
-											{new Date(item.createdAt).toLocaleString()}
-										</Text>
+										<BodyMedium>{item.filename}</BodyMedium>
+										<Micro>{new Date(item.createdAt).toLocaleString()}</Micro>
 										<View className="mt-2 flex-row items-center justify-between">
-											<Text className="text-[11px] text-muted">
+											<Micro>
 												{item.medicationSummary
 													? `First med: ${item.medicationSummary}`
 													: "Processing"}
-											</Text>
-											<Text className="font-semibold text-[11px] text-muted">
-												{item.status.toUpperCase()}
-											</Text>
+											</Micro>
+											<MicroStrong>{item.status.toUpperCase()}</MicroStrong>
 										</View>
 									</Pressable>
 								);
 							})
 						) : (
-							<Text className="text-muted text-xs">
+							<Caption>
 								{searchQuery.trim()
 									? "No prescriptions match your search."
 									: "No uploads yet."}
-							</Text>
+							</Caption>
 						)}
 					</View>
 				</Surface>

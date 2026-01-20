@@ -1,7 +1,7 @@
 import { Link, Stack } from "expo-router";
 import { Button, Surface } from "heroui-native";
-import { Text, View } from "react-native";
-
+import { View } from "react-native";
+import { BodyMuted, Emoji, H3 } from "@/components/base/typography";
 import { Container } from "@/components/layout/container";
 
 export default function NotFoundScreen() {
@@ -14,13 +14,11 @@ export default function NotFoundScreen() {
 						variant="secondary"
 						className="max-w-sm items-center rounded-lg p-6"
 					>
-						<Text className="mb-3 text-4xl">🤔</Text>
-						<Text className="mb-1 font-medium text-foreground text-lg">
-							Page Not Found
-						</Text>
-						<Text className="mb-4 text-center text-muted text-sm">
+						<Emoji className="mb-3">🤔</Emoji>
+						<H3 className="mb-1">Page Not Found</H3>
+						<BodyMuted className="mb-4 text-center">
 							The page you're looking for doesn't exist.
-						</Text>
+						</BodyMuted>
 						<Link href="/" asChild>
 							<Button size="sm">Go Home</Button>
 						</Link>

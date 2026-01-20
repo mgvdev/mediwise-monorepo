@@ -66,6 +66,19 @@ export function Body({ className, ...props }: TypographyProps) {
 	);
 }
 
+export function BodyMedium({ className, ...props }: TypographyProps) {
+	return (
+		<Text
+			className={cn("font-medium text-foreground text-sm", className)}
+			{...props}
+		/>
+	);
+}
+
+export function BodyMuted({ className, ...props }: TypographyProps) {
+	return <Text className={cn("text-muted text-sm", className)} {...props} />;
+}
+
 export function BodyStrong({ className, ...props }: TypographyProps) {
 	return (
 		<Text
@@ -77,6 +90,30 @@ export function BodyStrong({ className, ...props }: TypographyProps) {
 
 export function Caption({ className, ...props }: TypographyProps) {
 	return <Text className={cn("text-muted text-xs", className)} {...props} />;
+}
+
+export function CaptionStrong({ className, ...props }: TypographyProps) {
+	return (
+		<Text
+			className={cn("font-semibold text-muted text-xs", className)}
+			{...props}
+		/>
+	);
+}
+
+export function Micro({ className, ...props }: TypographyProps) {
+	return (
+		<Text className={cn("text-[11px] text-muted", className)} {...props} />
+	);
+}
+
+export function MicroStrong({ className, ...props }: TypographyProps) {
+	return (
+		<Text
+			className={cn("font-semibold text-[11px] text-muted", className)}
+			{...props}
+		/>
+	);
 }
 
 export function Overline({ className, ...props }: TypographyProps) {
@@ -98,4 +135,8 @@ export function Link({ className, ...props }: TypographyProps) {
 			{...props}
 		/>
 	);
+}
+
+export function Emoji({ className, ...props }: TypographyProps) {
+	return <Text className={cn("text-4xl", className)} {...props} />;
 }

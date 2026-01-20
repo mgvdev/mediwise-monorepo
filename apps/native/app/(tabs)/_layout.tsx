@@ -7,10 +7,11 @@ export default function TabLayout() {
 	const themeColorBackground = useThemeColor("background");
 	const themeColorMuted = useThemeColor("muted");
 	const themeColorPrimary = useThemeColor("primary");
+	const allowedTabs = new Set(["index", "ai", "documents"]);
 
 	return (
 		<Tabs
-			screenOptions={{
+			screenOptions={({ route }) => ({
 				headerShown: false,
 				headerStyle: {
 					backgroundColor: themeColorBackground,
@@ -25,7 +26,11 @@ export default function TabLayout() {
 				tabBarStyle: {
 					backgroundColor: themeColorBackground,
 				},
-			}}
+				tabBarButton: allowedTabs.has(route.name) ? undefined : () => null,
+				tabBarItemStyle: allowedTabs.has(route.name)
+					? undefined
+					: { display: "none" },
+			})}
 		>
 			<Tabs.Screen
 				name="index"
@@ -51,15 +56,6 @@ export default function TabLayout() {
 					title: "Documents",
 					tabBarIcon: ({ color, size }: { color: string; size: number }) => (
 						<Ionicons name="document-text" size={size} color={color} />
-					),
-				}}
-			/>
-			<Tabs.Screen
-				name="profile"
-				options={{
-					title: "Profile",
-					tabBarIcon: ({ color, size }: { color: string; size: number }) => (
-						<Ionicons name="person" size={size} color={color} />
 					),
 				}}
 			/>

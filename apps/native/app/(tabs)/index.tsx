@@ -2,7 +2,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Surface, useThemeColor } from "heroui-native";
 import { useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
+import {
+	BodyMuted,
+	BodyStrong,
+	Caption,
+	H1,
+	Link,
+} from "@/components/base/typography";
 import {
 	RecapBuilderModal,
 	type RecapSection,
@@ -63,15 +70,11 @@ export default function Home() {
 	);
 
 	return (
-		<Container className="gap-6 px-6 pt-12 pb-10">
+		<Container className="gap-6 px-6 pt-12 pb-16">
 			<View className="gap-2">
-				<Text className="text-muted text-xs">Health profile</Text>
-				<Text className="font-semibold text-2xl text-foreground">
-					Your health summary
-				</Text>
-				<Text className="text-muted text-sm">
-					Answer a few questions to personalize your care.
-				</Text>
+				<Caption>Health profile</Caption>
+				<H1>Your health summary</H1>
+				<BodyMuted>Answer a few questions to personalize your care.</BodyMuted>
 			</View>
 			<View className="my-4">
 				<Pressable
@@ -79,9 +82,7 @@ export default function Home() {
 					className="flex-row items-center justify-center gap-2 rounded-full border border-primary px-4 py-2"
 				>
 					<Ionicons name="share-social-outline" size={18} color={primary} />
-					<Text className="font-semibold text-primary text-sm">
-						Share recap
-					</Text>
+					<Link>Share recap</Link>
 				</Pressable>
 			</View>
 
@@ -114,12 +115,8 @@ export default function Home() {
 										<Ionicons name={icon} size={18} color={primary} />
 									</View>
 									<View className="flex-1">
-										<Text className="font-semibold text-foreground text-sm">
-											{category.label}
-										</Text>
-										<Text className="text-muted text-xs">
-											Open questionnaire
-										</Text>
+										<BodyStrong>{category.label}</BodyStrong>
+										<Caption>Open questionnaire</Caption>
 									</View>
 									<Ionicons name="chevron-forward" size={18} color={muted} />
 								</View>

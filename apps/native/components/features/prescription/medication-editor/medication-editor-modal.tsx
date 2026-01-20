@@ -1,4 +1,4 @@
-import { Modal, View } from "react-native";
+import { SafeAreaSheet } from "@/components/base/safe-area-sheet";
 
 import type { MedicationDraft } from "@/components/features/prescription/prescription-types";
 import { MedicationEditor } from "./medication-editor";
@@ -21,25 +21,16 @@ export function MedicationEditorModal({
 	isEditable = true,
 }: MedicationEditorModalProps) {
 	return (
-		<Modal
-			visible={visible}
-			transparent
-			animationType="slide"
-			onRequestClose={onClose}
-		>
-			<View className="flex-1 justify-end bg-black/40">
-				<View className="flex-1" style={{ maxHeight: "90%" }}>
-					<MedicationEditor
-						value={value}
-						onChange={onChange}
-						onSave={onSave}
-						isEditable={isEditable}
-						showClose
-						onClose={onClose}
-						layout="sheet"
-					/>
-				</View>
-			</View>
-		</Modal>
+		<SafeAreaSheet visible={visible} onClose={onClose} contentClassName="px-0">
+			<MedicationEditor
+				value={value}
+				onChange={onChange}
+				onSave={onSave}
+				isEditable={isEditable}
+				showClose
+				onClose={onClose}
+				layout="sheet"
+			/>
+		</SafeAreaSheet>
 	);
 }

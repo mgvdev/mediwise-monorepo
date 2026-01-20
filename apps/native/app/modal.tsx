@@ -1,8 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Button, Surface, useThemeColor } from "heroui-native";
-import { Text, View } from "react-native";
-
+import { View } from "react-native";
+import { BodyMuted, H3 } from "@/components/base/typography";
 import { Container } from "@/components/layout/container";
 
 function Modal() {
@@ -24,12 +24,10 @@ function Modal() {
 								color={accentForegroundColor}
 							/>
 						</View>
-						<Text className="mb-1 font-medium text-foreground text-lg">
-							Modal Screen
-						</Text>
-						<Text className="mb-4 text-center text-muted text-sm">
+						<H3 className="mb-1">Modal Screen</H3>
+						<BodyMuted className="mb-4 text-center">
 							This is an example modal screen for dialogs and confirmations.
-						</Text>
+						</BodyMuted>
 					</View>
 					<Button onPress={handleClose} className="w-full" size="sm">
 						<Button.Label>Close</Button.Label>

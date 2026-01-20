@@ -1,9 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
-import { cn } from "heroui-native";
+import { cn, Dialog } from "heroui-native";
 import * as React from "react";
-import { Modal, Pressable, ScrollView, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
+import { Pressable, ScrollView, Text, View } from "react-native";
 import {
 	MedicationShape,
 	type MedicationShapeId,
@@ -28,55 +26,65 @@ export function MedicationShapePicker({
 	className,
 }: MedicationShapePickerProps) {
 	const [open, setOpen] = React.useState(false);
-	const insets = useSafeAreaInsets();
 	const currentLabel = SHAPE_LABELS_EN[value];
 
 	return (
-		<View className={cn("gap-3", className)}>
-			<Pressable
-				className="self-start rounded-2xl border border-panel-border bg-panel-background px-3 py-3"
-				onPress={() => setOpen(true)}
-				accessibilityRole="button"
-				accessibilityLabel="Choose medication shape"
-			>
-				<View className="items-center gap-2">
-					<View className="relative">
-						<MedicationShape
-							shape={value}
-							label={currentLabel}
-							showLabel={showValueLabel}
-							size={56}
-							iconSize={28}
-						/>
-						<View className="absolute -top-1 -right-1 rounded-full border border-panel-border bg-panel-background p-1">
-							<Ionicons name="chevron-down" size={14} className="text-muted" />
+		<Dialog isOpen={open} onOpenChange={setOpen}>
+			<Dialog.Trigger asChild>
+				<Pressable
+					className={cn(
+						"self-start rounded-2xl border border-panel-border bg-panel-background px-3 py-3",
+						className,
+					)}
+					onPress={() => setOpen(true)}
+					accessibilityRole="button"
+					accessibilityLabel="Choose medication shape"
+					hitSlop={8}
+				>
+					<View className="items-center gap-2">
+						<View className="relative">
+							<MedicationShape
+								shape={value}
+								label={currentLabel}
+								showLabel={showValueLabel}
+								size={56}
+								iconSize={28}
+							/>
+							<View className="absolute -top-1 -right-1 rounded-full border border-panel-border bg-panel-background p-1">
+								<Ionicons
+									name="chevron-down"
+									size={14}
+									className="text-muted"
+								/>
+							</View>
 						</View>
 					</View>
-				</View>
-			</Pressable>
+				</Pressable>
+			</Dialog.Trigger>
 
-			<Modal visible={open} transparent animationType="slide">
-				<View className="flex-1 justify-end bg-black/30">
-					<View
-						className="rounded-t-3xl border border-panel-border bg-panel-background px-5 pt-4 pb-6"
-						style={{
-							maxHeight: "85%",
-							paddingBottom: Math.max(insets.bottom, 16),
-						}}
-					>
-						<View className="flex-row items-center justify-between">
-							<Text className="font-semibold text-base text-foreground">
-								Select a shape
-							</Text>
-							<Pressable
-								onPress={() => setOpen(false)}
-								className="h-8 w-8 items-center justify-center rounded-full border border-panel-border"
-							>
+			<Dialog.Portal>
+				<Dialog.Overlay />
+				<Dialog.Content className="rounded-3xl border border-panel-border bg-panel-background px-5 pt-4 pb-6">
+					<View className="mb-3 flex-row items-center justify-between">
+						<View className="gap-1">
+							<Dialog.Title>Select a shape</Dialog.Title>
+							<Dialog.Description>
+								Choose the closest medication form.
+							</Dialog.Description>
+						</View>
+						<Dialog.Close asChild>
+							<Pressable className="h-8 w-8 items-center justify-center rounded-full border border-panel-border">
 								<Ionicons name="close" size={16} className="text-muted" />
 							</Pressable>
-						</View>
+						</Dialog.Close>
+					</View>
 
-						<ScrollView className="mt-4" showsVerticalScrollIndicator={false}>
+					<View className="h-[420px]">
+						<ScrollView
+							showsVerticalScrollIndicator={false}
+							keyboardShouldPersistTaps="handled"
+							contentContainerStyle={{ paddingBottom: 12 }}
+						>
 							<View className="gap-5">
 								{MEDICATION_SHAPE_GROUPS_EN.map((group) => (
 									<View key={group.title} className="gap-3">
@@ -91,6 +99,7 @@ export function MedicationShapePicker({
 														onChange(shape);
 														setOpen(false);
 													}}
+													hitSlop={8}
 													className={cn(
 														"rounded-2xl border border-panel-border bg-panel-background px-2 py-2",
 														shape === value && "border-primary bg-primary/10",
@@ -110,9 +119,9 @@ export function MedicationShapePicker({
 							</View>
 						</ScrollView>
 					</View>
-				</View>
-			</Modal>
-		</View>
+				</Dialog.Content>
+			</Dialog.Portal>
+		</Dialog>
 	);
 }
 

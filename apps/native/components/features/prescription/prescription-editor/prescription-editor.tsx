@@ -24,21 +24,6 @@ type PrescriptionEditorProps = {
 	showHeader?: boolean;
 };
 
-function formatMedicationSummary(medication: MedicationDraft) {
-	const parts = [];
-	if (medication.dosage) parts.push(medication.dosage);
-	if (medication.quantity) parts.push(`Qty: ${medication.quantity}`);
-	if (medication.frequencyCount) {
-		parts.push(`${medication.frequencyCount}x/${medication.frequencyUnit}`);
-	}
-	if (medication.durationValue) {
-		parts.push(
-			`${medication.durationValue} ${medication.durationUnit}${medication.durationValue === "1" ? "" : "s"}`,
-		);
-	}
-	return parts.join(" • ");
-}
-
 function formatMedicationSchedule(medication: MedicationDraft) {
 	const parts = [];
 	if (medication.frequencyCount) {

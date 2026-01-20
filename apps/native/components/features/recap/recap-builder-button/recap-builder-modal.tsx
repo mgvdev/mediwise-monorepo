@@ -1,8 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Button } from "heroui-native";
 import { useState } from "react";
-import { Modal, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
+import { SafeAreaSheet } from "@/components/base/safe-area-sheet";
 import { RecapEmailForm } from "./recap-email-form";
 import { RecapQRCode } from "./recap-qr-code";
 import { RecapSectionPicker } from "./recap-section-picker";
@@ -52,69 +53,67 @@ export function RecapBuilderModal({
 	};
 
 	return (
-		<Modal visible={open} transparent animationType="slide">
-			<View className="flex-1 justify-end bg-black/30">
-				<View className="max-h-[92%] rounded-t-3xl border border-panel-border bg-panel-background px-6 pt-5 pb-6">
-					<View className="mb-4 flex-row items-center justify-between">
-						<Text className="font-semibold text-foreground text-lg">
-							Build your recap
-						</Text>
-						<Pressable
-							className="h-9 w-9 items-center justify-center rounded-full bg-surface/60"
-							onPress={onClose}
-						>
-							<Ionicons name="close" size={18} className="text-foreground" />
-						</Pressable>
-					</View>
+		<SafeAreaSheet visible={open} onClose={onClose} contentClassName="px-0">
+			<View className="rounded-t-3xl border border-panel-border bg-panel-background px-6 pt-5 pb-6">
+				<View className="mb-4 flex-row items-center justify-between">
+					<Text className="font-semibold text-foreground text-lg">
+						Build your recap
+					</Text>
+					<Pressable
+						className="h-9 w-9 items-center justify-center rounded-full bg-surface/60"
+						onPress={onClose}
+					>
+						<Ionicons name="close" size={18} className="text-foreground" />
+					</Pressable>
+				</View>
 
-					{step === "sections" ? (
-						<View className="gap-4">
-							<Text className="text-muted text-sm">
-								Choose the information you want to include in your recap.
-							</Text>
-							<RecapSectionPicker
-								sections={sections}
-								selectedIds={selectedIds}
-								onToggle={toggleSection}
+				{step === "sections" ? (
+					<View className="gap-4">
+						<Text className="text-muted text-sm">
+							Choose the information you want to include in your recap.
+						</Text>
+						<RecapSectionPicker
+							sections={sections}
+							selectedIds={selectedIds}
+							onToggle={toggleSection}
+						/>
+						<Button
+							className="mt-2"
+							isDisabled={selectedIds.length === 0}
+							onPress={() => setStep("share")}
+						>
+							<Button.Label>Continue</Button.Label>
+						</Button>
+					</View>
+				) : (
+					<View className="gap-5">
+						<RecapShareOptions value={method} onChange={setMethod} />
+						{method === "qr" ? (
+							<RecapQRCode value={QR_PLACEHOLDER_VALUE} />
+						) : null}
+						{method === "pdf" ? (
+							<RecapEmailForm
+								email={email}
+								onEmailChange={setEmail}
+								onSend={handleFinish}
+								disabled={!email.trim().length}
 							/>
+						) : null}
+						<View className="flex-row items-center gap-3">
+							<Button variant="secondary" onPress={() => setStep("sections")}>
+								<Button.Label>Back</Button.Label>
+							</Button>
 							<Button
-								className="mt-2"
-								isDisabled={selectedIds.length === 0}
-								onPress={() => setStep("share")}
+								className="flex-1"
+								isDisabled={!method || (method === "pdf" && !email.trim())}
+								onPress={handleFinish}
 							>
-								<Button.Label>Continue</Button.Label>
+								<Button.Label>Finish</Button.Label>
 							</Button>
 						</View>
-					) : (
-						<View className="gap-5">
-							<RecapShareOptions value={method} onChange={setMethod} />
-							{method === "qr" ? (
-								<RecapQRCode value={QR_PLACEHOLDER_VALUE} />
-							) : null}
-							{method === "pdf" ? (
-								<RecapEmailForm
-									email={email}
-									onEmailChange={setEmail}
-									onSend={handleFinish}
-									disabled={!email.trim().length}
-								/>
-							) : null}
-							<View className="flex-row items-center gap-3">
-								<Button variant="secondary" onPress={() => setStep("sections")}>
-									<Button.Label>Back</Button.Label>
-								</Button>
-								<Button
-									className="flex-1"
-									isDisabled={!method || (method === "pdf" && !email.trim())}
-									onPress={handleFinish}
-								>
-									<Button.Label>Finish</Button.Label>
-								</Button>
-							</View>
-						</View>
-					)}
-				</View>
+					</View>
+				)}
 			</View>
-		</Modal>
+		</SafeAreaSheet>
 	);
 }

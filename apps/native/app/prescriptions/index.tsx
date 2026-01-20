@@ -1,6 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Surface, useThemeColor } from "heroui-native";
-import { Pressable, RefreshControl, Text, TextInput, View } from "react-native";
+import { Pressable, RefreshControl, TextInput, View } from "react-native";
+import {
+	BodyMedium,
+	Caption,
+	Micro,
+	MicroStrong,
+} from "@/components/base/typography";
 import { Container } from "@/components/layout/container";
 import { applyOpacity } from "@/components/utils";
 import { usePrescriptionsList } from "@/features/prescriptions/use-prescriptions-list";
@@ -35,9 +41,7 @@ export default function PrescriptionsListScreen() {
 			}}
 		>
 			<View className="px-6 pt-4">
-				<Text className="text-muted text-xs">
-					Review every upload and unified record in one place.
-				</Text>
+				<Caption>Review every upload and unified record in one place.</Caption>
 				<View
 					className="mt-4 flex-row items-center gap-2 rounded-full px-3 py-2"
 					style={{
@@ -61,17 +65,13 @@ export default function PrescriptionsListScreen() {
 			<View className="px-6">
 				<Surface variant="secondary" className="rounded-2xl p-4">
 					<View className="flex-row items-center justify-between">
-						<Text className="font-medium text-foreground text-sm">
-							All prescriptions
-						</Text>
-						<Text className="text-muted text-xs">
-							{filteredPrescriptions.length} total
-						</Text>
+						<BodyMedium>All prescriptions</BodyMedium>
+						<Caption>{filteredPrescriptions.length} total</Caption>
 					</View>
 
 					<View className="mt-3 gap-3">
 						{prescriptions.isLoading ? (
-							<Text className="text-muted text-xs">Loading...</Text>
+							<Caption>Loading...</Caption>
 						) : filteredPrescriptions.length ? (
 							filteredPrescriptions.map((item) => {
 								const targetId = item.rawId ?? item.id;
@@ -81,31 +81,25 @@ export default function PrescriptionsListScreen() {
 										onPress={() => openPrescription(targetId)}
 										className="rounded-xl border border-border/60 bg-surface/40 p-3"
 									>
-										<Text className="font-medium text-foreground text-sm">
-											{item.filename}
-										</Text>
-										<Text className="text-[11px] text-muted">
-											{new Date(item.createdAt).toLocaleString()}
-										</Text>
+										<BodyMedium>{item.filename}</BodyMedium>
+										<Micro>{new Date(item.createdAt).toLocaleString()}</Micro>
 										<View className="mt-2 flex-row items-center justify-between">
-											<Text className="text-[11px] text-muted">
+											<Micro>
 												{item.medicationSummary
 													? `First med: ${item.medicationSummary}`
 													: "Processing"}
-											</Text>
-											<Text className="font-semibold text-[11px] text-muted">
-												{item.status.toUpperCase()}
-											</Text>
+											</Micro>
+											<MicroStrong>{item.status.toUpperCase()}</MicroStrong>
 										</View>
 									</Pressable>
 								);
 							})
 						) : (
-							<Text className="text-muted text-xs">
+							<Caption>
 								{searchQuery.trim()
 									? "No prescriptions match your search."
 									: "No prescriptions yet."}
-							</Text>
+							</Caption>
 						)}
 					</View>
 				</Surface>

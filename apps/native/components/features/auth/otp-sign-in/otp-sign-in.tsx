@@ -3,6 +3,7 @@ import { Button, ErrorView, Spinner, useThemeColor } from "heroui-native";
 import { useState } from "react";
 import { Text, TextInput, View } from "react-native";
 
+import { InputOtp } from "@/components/base/input-otp";
 import { useOtpSignIn } from "@/features/auth/use-otp-sign-in";
 
 export function OtpSignIn() {
@@ -54,18 +55,13 @@ export function OtpSignIn() {
 					<Text className="font-semibold text-foreground text-xs uppercase tracking-widest">
 						One-time code
 					</Text>
-					<View className="flex-row items-center gap-2 rounded-2xl border border-border/60 px-4 py-3">
-						<Ionicons name="key-outline" size={18} className="text-muted" />
-						<TextInput
+					<View className="mt-2">
+						<InputOtp
 							value={otp}
-							onChangeText={setOtp}
-							placeholder="123456"
-							placeholderTextColor={placeholderColor}
-							keyboardType="number-pad"
-							maxLength={6}
-							autoCapitalize="none"
+							onChange={setOtp}
 							autoFocus
-							className="flex-1 text-foreground text-sm"
+							length={6}
+							className="self-start"
 						/>
 					</View>
 				</View>

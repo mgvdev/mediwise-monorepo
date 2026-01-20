@@ -1,7 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { Button, Surface } from "heroui-native";
-import { Text, View } from "react-native";
+import { View } from "react-native";
+import {
+	BodyMuted,
+	Caption,
+	Display,
+	Overline,
+	Title,
+} from "@/components/base/typography";
 import { ProfileActionRow } from "@/components/features/profile/profile-action-row";
 import { Container } from "@/components/layout/container";
 import { authClient } from "@/lib/auth-client";
@@ -48,29 +55,19 @@ export default function ProfileScreen() {
 	return (
 		<Container className="p-6">
 			<View className="mb-6 py-4">
-				<Text className="mb-2 font-bold text-3xl text-foreground">Profile</Text>
-				<Text className="text-muted text-sm">
-					Manage your Mediwise account.
-				</Text>
+				<Display className="mb-2">Profile</Display>
+				<BodyMuted>Manage your Mediwise account.</BodyMuted>
 			</View>
 
 			<Surface variant="secondary" className="rounded-2xl p-5">
-				<Text className="mb-2 text-muted text-xs uppercase tracking-widest">
-					Signed in email
-				</Text>
-				<Text className="font-semibold text-base text-foreground">
-					{session.user.email}
-				</Text>
+				<Overline className="mb-2 tracking-widest">Signed in email</Overline>
+				<Title>{session.user.email}</Title>
 			</Surface>
 
 			<Surface variant="secondary" className="mt-4 rounded-2xl p-5">
 				<View className="mb-3">
-					<Text className="font-semibold text-base text-foreground">
-						Health information
-					</Text>
-					<Text className="text-muted text-xs">
-						Keep your medical profile up to date.
-					</Text>
+					<Title>Health information</Title>
+					<Caption>Keep your medical profile up to date.</Caption>
 				</View>
 				<View className="gap-3">
 					<ProfileActionRow

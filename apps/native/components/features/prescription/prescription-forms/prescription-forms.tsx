@@ -28,6 +28,7 @@ export function ManualPrescriptionForm({
 					onClose={draftState.closeMedicationEditor}
 					showClose
 					layout="inline"
+					animateIn
 				/>
 			</View>
 		);
@@ -133,6 +134,7 @@ export function PrescriptionDetailForm({
 					onClose={draftState.closeMedicationEditor}
 					showClose
 					layout="inline"
+					animateIn
 				/>
 			</View>
 		);
@@ -152,8 +154,8 @@ export function PrescriptionDetailForm({
 			) : null}
 
 			<PrescriptionEditor
-				title="Unified prescription"
-				subtitle="Review the extracted info and make any corrections."
+				title="Edit prescription"
+				subtitle="Update prescription details and medications."
 				value={draftState.draft}
 				onChange={draftState.handleDraftChange}
 				onAddMedication={draftState.handleAddMedication}
@@ -162,7 +164,6 @@ export function PrescriptionDetailForm({
 				isSaving={isSaving}
 				error={error}
 				footerLabel={isSaving ? "Saving..." : "Continue"}
-				showHeader={false}
 			/>
 
 			{null}

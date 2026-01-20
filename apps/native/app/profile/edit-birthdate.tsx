@@ -2,14 +2,14 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { Button, Surface } from "heroui-native";
 import * as React from "react";
-import { Text, View } from "react-native";
-
-import { TagEditor } from "@/components/features/profile/tag-editor";
+import { View } from "react-native";
+import { Caption, H1 } from "@/components/base/typography";
+import { NativeDatePicker } from "@/components/features/profile/native-date-picker";
 import { Container } from "@/components/layout/container";
 import { authClient } from "@/lib/auth-client";
 import { queryClient, trpc } from "@/utils/trpc";
 
-export default function EditConditionsScreen() {
+export default function EditBirthdateScreen() {
 	const { data: session } = authClient.useSession();
 	const unifiedQuery = useQuery({
 		...trpc.prescriptions.unified.get.queryOptions(),
@@ -25,37 +25,31 @@ export default function EditConditionsScreen() {
 		}),
 	);
 
-	const initial = unifiedQuery.data?.profile?.conditions ?? [];
-	const [conditions, setConditions] = React.useState(initial);
+	const currentDate = unifiedQuery.data?.profile?.dateOfBirth ?? null;
+	const [dateOfBirth, setDateOfBirth] = React.useState(currentDate);
 
 	React.useEffect(() => {
-		setConditions(initial);
-	}, [initial]);
+		setDateOfBirth(currentDate);
+	}, [currentDate]);
 
 	if (!session?.user) return null;
 
 	const handleSave = async () => {
-		await mutation.mutateAsync({ conditions });
+		if (!dateOfBirth) return;
+		await mutation.mutateAsync({ dateOfBirth });
 	};
 
 	return (
 		<Container className="px-6 pt-12 pb-10">
 			<View className="mb-6">
-				<Text className="font-semibold text-2xl text-foreground">
-					Medical conditions
-				</Text>
-				<Text className="mt-1 text-muted text-xs">
-					Share ongoing conditions for better guidance.
-				</Text>
+				<H1>When were you born?</H1>
+				<Caption className="mt-1">
+					This helps personalize your health overview.
+				</Caption>
 			</View>
 
 			<Surface variant="secondary" className="rounded-2xl p-4">
-				<TagEditor
-					label="Conditions"
-					placeholder="e.g. Asthma"
-					value={conditions}
-					onChange={setConditions}
-				/>
+				<NativeDatePicker value={dateOfBirth} onChange={setDateOfBirth} />
 			</Surface>
 
 			<Button
@@ -63,7 +57,7 @@ export default function EditConditionsScreen() {
 				onPress={handleSave}
 				isDisabled={mutation.isPending}
 			>
-				<Button.Label>Save conditions</Button.Label>
+				<Button.Label>Save date</Button.Label>
 			</Button>
 		</Container>
 	);
