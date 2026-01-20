@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Button, cn, Surface, TextField } from "heroui-native";
 import { Pressable, ScrollView, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { DurationPicker } from "@/components/base/duration-picker";
 import { FrequencyPicker } from "@/components/base/frequency-picker";
 import { MedicationShapePicker } from "@/components/features/prescription/medication-shape-picker";
@@ -26,15 +27,18 @@ export function MedicationEditor({
 	layout = "inline",
 }: MedicationEditorProps) {
 	const isSheet = layout === "sheet";
+	const insets = useSafeAreaInsets();
+	const safeBottom = Math.max(insets.bottom, 12) + 16;
 	const frequencyCount = Number.parseInt(value.frequencyCount ?? "", 10);
 	const durationCount = Number.parseInt(value.durationValue ?? "", 10);
 
 	return (
 		<Surface
 			className={cn(
-				"rounded-t-3xl bg-background px-6 pt-5 pb-8",
+				"rounded-t-3xl bg-background px-6 pt-5",
 				isSheet && "min-h-0 flex-1",
 			)}
+			style={isSheet ? undefined : { paddingBottom: safeBottom }}
 		>
 			<View className="mb-4 flex-row items-center justify-between">
 				<Text className="font-semibold text-foreground text-lg">

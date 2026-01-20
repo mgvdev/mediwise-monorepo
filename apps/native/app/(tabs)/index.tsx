@@ -28,6 +28,11 @@ const CATEGORY_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
 
 const RECAP_SECTIONS: RecapSection[] = [
 	{
+		id: "personnal_information",
+		label: "Personal information",
+		description: "Basics about you",
+	},
+	{
 		id: "prescriptions",
 		label: "Prescriptions",
 		description: "Current medications and dosage",
@@ -68,7 +73,7 @@ export default function Home() {
 					Answer a few questions to personalize your care.
 				</Text>
 			</View>
-			<View className="mt-2">
+			<View className="my-4">
 				<Pressable
 					onPress={() => setRecapOpen(true)}
 					className="flex-row items-center justify-center gap-2 rounded-full border border-primary px-4 py-2"

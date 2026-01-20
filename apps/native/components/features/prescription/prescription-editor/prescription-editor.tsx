@@ -21,6 +21,7 @@ type PrescriptionEditorProps = {
 	error?: string | null;
 	topContent?: ReactNode;
 	footerLabel?: string;
+	showHeader?: boolean;
 };
 
 function formatMedicationSummary(medication: MedicationDraft) {
@@ -64,17 +65,22 @@ export function PrescriptionEditor({
 	error,
 	topContent,
 	footerLabel = "Continue",
+	showHeader = true,
 }: PrescriptionEditorProps) {
 	const accent = useThemeColor("primary");
 
 	return (
 		<View className="gap-5">
-			<View className="gap-1">
-				<Text className="font-semibold text-2xl text-foreground">{title}</Text>
-				{subtitle ? (
-					<Text className="text-muted text-xs">{subtitle}</Text>
-				) : null}
-			</View>
+			{showHeader ? (
+				<View className="gap-1">
+					<Text className="font-semibold text-2xl text-foreground">
+						{title}
+					</Text>
+					{subtitle ? (
+						<Text className="text-muted text-xs">{subtitle}</Text>
+					) : null}
+				</View>
+			) : null}
 
 			{topContent}
 

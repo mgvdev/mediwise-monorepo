@@ -1,9 +1,8 @@
 import { Button, Surface } from "heroui-native";
 import { Image, Linking, Text, View } from "react-native";
 
-import { MedicationEditorModal } from "@/components/features/prescription/medication-editor";
+import { MedicationEditor } from "@/components/features/prescription/medication-editor";
 import { PrescriptionEditor } from "@/components/features/prescription/prescription-editor";
-import { createMedicationDraft } from "@/components/features/prescription/prescription-types";
 import { useManualPrescriptionForm } from "@/features/prescriptions/use-manual-prescription-form";
 import { usePrescriptionDetailForm } from "@/features/prescriptions/use-prescription-detail-form";
 
@@ -17,6 +16,21 @@ export function ManualPrescriptionForm({
 
 	if (!session?.user) {
 		return null;
+	}
+
+	if (draftState.editorValue) {
+		return (
+			<View className="gap-4">
+				<MedicationEditor
+					value={draftState.editorValue}
+					onChange={(next) => draftState.setEditorValue(next)}
+					onSave={draftState.handleSaveMedication}
+					onClose={draftState.closeMedicationEditor}
+					showClose
+					layout="inline"
+				/>
+			</View>
+		);
 	}
 
 	const photoCard = (
@@ -88,13 +102,7 @@ export function ManualPrescriptionForm({
 				footerLabel={isSaving ? "Saving..." : "Continue"}
 			/>
 
-			<MedicationEditorModal
-				visible={!!draftState.editorValue}
-				value={draftState.editorValue ?? createMedicationDraft()}
-				onChange={(next) => draftState.setEditorValue(next)}
-				onClose={draftState.closeMedicationEditor}
-				onSave={draftState.handleSaveMedication}
-			/>
+			{null}
 		</View>
 	);
 }
@@ -113,6 +121,21 @@ export function PrescriptionDetailForm({
 
 	if (!session?.user) {
 		return null;
+	}
+
+	if (draftState.editorValue) {
+		return (
+			<View className="gap-4">
+				<MedicationEditor
+					value={draftState.editorValue}
+					onChange={(next) => draftState.setEditorValue(next)}
+					onSave={draftState.handleSaveMedication}
+					onClose={draftState.closeMedicationEditor}
+					showClose
+					layout="inline"
+				/>
+			</View>
+		);
 	}
 
 	return (
@@ -139,15 +162,10 @@ export function PrescriptionDetailForm({
 				isSaving={isSaving}
 				error={error}
 				footerLabel={isSaving ? "Saving..." : "Continue"}
+				showHeader={false}
 			/>
 
-			<MedicationEditorModal
-				visible={!!draftState.editorValue}
-				value={draftState.editorValue ?? createMedicationDraft()}
-				onChange={(next) => draftState.setEditorValue(next)}
-				onClose={draftState.closeMedicationEditor}
-				onSave={draftState.handleSaveMedication}
-			/>
+			{null}
 		</View>
 	);
 }

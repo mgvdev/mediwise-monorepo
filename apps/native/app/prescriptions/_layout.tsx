@@ -41,18 +41,8 @@ export default function PrescriptionsLayout() {
 			/>
 			<Stack.Screen
 				name="[id]"
-				title="Prescription"
 				options={{
-					headerShown: true,
-					title: "Prescription",
-					headerLeft: () => (
-						<Pressable
-							onPress={() => router.back()}
-							style={{ paddingHorizontal: 12 }}
-						>
-							<Ionicons name="chevron-back" size={24} color={foreground} />
-						</Pressable>
-					),
+					headerShown: false,
 				}}
 			/>
 		</Stack>
