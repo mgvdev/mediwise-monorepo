@@ -44,6 +44,7 @@ export const env = createEnv({
 		OLLAMA_MODEL: z.string().default("gemma3:4b"),
 		OPENAI_API_KEY: z.string().optional(),
 		OPENAI_MODEL: z.string().default("gpt-4o-mini"),
+		HEALTH_DATA_ENCRYPTION_KEY: z.string().optional(),
 		JOB_POLL_INTERVAL_MS: z.coerce.number().default(2000),
 		JOB_LOCK_TIMEOUT_MS: z.coerce.number().default(120000),
 		JOB_MAX_ATTEMPTS: z.coerce.number().default(3),

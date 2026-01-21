@@ -48,7 +48,7 @@ export function SafeAreaSheet({
 			statusBarTranslucent
 			onRequestClose={onClose}
 		>
-			<View className={cn("", containerClassName)}>
+			<View className={cn(containerClassName)}>
 				<Pressable
 					className="flex-1 bg-black/30"
 					onPress={dismissOnBackdropPress ? onClose : undefined}

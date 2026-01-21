@@ -1,5 +1,6 @@
 import { protectedProcedure, publicProcedure, router } from "../index";
 import { adminRouter } from "./admin";
+import { healthDataRouter } from "./health-data";
 import { prescriptionsRouter } from "./prescriptions";
 import { questionnaireRouter } from "./questionnaire";
 
@@ -13,6 +14,7 @@ export const appRouter = router({
 			user: ctx.session.user,
 		};
 	}),
+	healthData: healthDataRouter,
 	prescriptions: prescriptionsRouter,
 	questionnaire: questionnaireRouter,
 	admin: adminRouter,

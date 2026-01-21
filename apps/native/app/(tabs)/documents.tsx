@@ -1,4 +1,3 @@
-import { Background } from "@react-navigation/elements";
 import { router } from "expo-router";
 import { Button, Spinner, Surface } from "heroui-native";
 import { Image, Linking, Pressable, RefreshControl, View } from "react-native";

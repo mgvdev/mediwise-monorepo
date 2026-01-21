@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Button, Dialog } from "heroui-native";
+import { Button } from "heroui-native";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 

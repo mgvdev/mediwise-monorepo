@@ -10,6 +10,11 @@ const userSchema = new Schema(
 		emailVerified: { type: Boolean, required: true },
 		tenantId: { type: String },
 		image: { type: String },
+		healthData: {
+			personal: { type: Schema.Types.Mixed },
+			encrypted: { type: String },
+			updatedAt: { type: Date },
+		},
 		createdAt: { type: Date, required: true },
 		updatedAt: { type: Date, required: true },
 	},

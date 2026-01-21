@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useThemeColor } from "heroui-native";
+import { Button, useThemeColor } from "heroui-native";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
 import { AppHeader } from "@/components/base/app-header";
@@ -20,6 +20,8 @@ import {
 } from "@/components/features/recap/recap-builder-button";
 import { Container } from "@/components/layout/container";
 import { applyOpacity, pressableFeedback } from "@/components/utils";
+import { authClient } from "@/lib/auth-client";
+import { queryClient } from "@/utils/trpc";
 import { healthCategories } from "../health/health-schema";
 
 const CATEGORY_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
@@ -97,6 +99,17 @@ export default function Home() {
 						<Ionicons name="share-social-outline" size={18} color={primary} />
 						<Link>Share recap</Link>
 					</Pressable>
+				</View>
+				<View>
+					<Button
+						variant="secondary"
+						onPress={() => {
+							authClient.signOut();
+							queryClient.invalidateQueries();
+						}}
+					>
+						<Button.Label>Sign out</Button.Label>
+					</Button>
 				</View>
 
 				<View className="gap-3">

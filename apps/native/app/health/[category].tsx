@@ -1,17 +1,20 @@
-import { Redirect, Stack, useLocalSearchParams } from "expo-router";
-import { Button, Surface, TextField } from "heroui-native";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Redirect, router, Stack, useLocalSearchParams } from "expo-router";
+import { Button, Spinner, Surface, TextField } from "heroui-native";
 import * as React from "react";
 import { Pressable, View } from "react-native";
 
 import { ChoiceInput, type ChoiceValue } from "@/components/base/choice";
+import { ListInput } from "@/components/base/list-input/list-input";
 import { SafeAreaSheet } from "@/components/base/safe-area-sheet";
 import { Body, Caption, H3 } from "@/components/base/typography";
 import { Container } from "@/components/layout/container";
 import { HeightPicker } from "@/components/medical-pickers/height-picker";
 import { WeightPicker } from "@/components/medical-pickers/weight-picker";
+import { trpc } from "@/utils/trpc";
 import { type HealthField, healthCategoryMap } from "./health-schema";
 
-type FormValue = string | null;
+type FormValue = string | string[] | null;
 
 type FormState = Record<string, FormValue>;
 
@@ -48,6 +51,30 @@ export default function HealthCategoryScreen() {
 	const [heightValue, setHeightValue] = React.useState(170);
 	const [weightUnit, setWeightUnit] = React.useState<"kg" | "lbs">("kg");
 	const [weightValue, setWeightValue] = React.useState(68);
+
+	const healthQuery = useQuery({
+		...trpc.healthData.get.queryOptions(),
+	});
+	const saveMutation = useMutation(trpc.healthData.save.mutationOptions());
+
+	React.useEffect(() => {
+		if (!healthQuery.data?.data) return;
+		setValues((prev) => {
+			const next = { ...prev };
+			Object.entries(healthQuery.data?.data ?? {}).forEach(
+				([categoryKey, fields]) => {
+					Object.entries(fields ?? {}).forEach(([fieldKey, fieldValue]) => {
+						const key = buildFieldKey(categoryKey, fieldKey);
+						if (next[key] === undefined) {
+							next[key] = (fieldValue ?? null) as FormValue;
+						}
+					});
+				},
+			);
+			return next;
+		});
+	}, [healthQuery.data?.data]);
+
 	if (!resolvedCategory) {
 		return <Redirect href="/" />;
 	}
@@ -115,6 +142,31 @@ export default function HealthCategoryScreen() {
 		return `${value} ${unit}`;
 	};
 
+	const handleSave = () => {
+		if (!resolvedCategory) return;
+		const valuesByField: Record<string, FormValue> = {};
+		Object.entries(resolvedCategory.fields).forEach(([fieldKey, field]) => {
+			const storageKey = buildFieldKey(resolvedCategory.key, fieldKey);
+			const rawValue = values[storageKey];
+			if (field.type === "list") {
+				valuesByField[fieldKey] = Array.isArray(rawValue) ? rawValue : [];
+			} else {
+				valuesByField[fieldKey] = rawValue ?? null;
+			}
+		});
+		saveMutation.mutate(
+			{
+				categoryKey: resolvedCategory.key,
+				values: valuesByField,
+			},
+			{
+				onSuccess: () => {
+					router.back();
+				},
+			},
+		);
+	};
+
 	return (
 		<Container className="px-6 pt-4 pb-12">
 			<Stack.Screen options={{ title: resolvedCategory.label }} />
@@ -139,6 +191,20 @@ export default function HealthCategoryScreen() {
 										label: formatChoiceLabel(choice),
 									}))}
 									layout="auto"
+								/>
+							</View>
+						);
+					}
+
+					if (field.type === "list") {
+						const listValue = Array.isArray(value) ? value : [];
+						return (
+							<View key={storageKey} className="gap-2">
+								<ListInput
+									label={field.label}
+									value={listValue}
+									onChange={(next) => handleChange(storageKey, next)}
+									placeholder="Add item"
 								/>
 							</View>
 						);
@@ -218,6 +284,20 @@ export default function HealthCategoryScreen() {
 						</View>
 					);
 				})}
+			</View>
+			<View className="mt-6">
+				<Button onPress={handleSave} isDisabled={saveMutation.isPending}>
+					{saveMutation.isPending ? (
+						<Spinner size="sm" color="default" />
+					) : (
+						<Button.Label>Save</Button.Label>
+					)}
+				</Button>
+				{saveMutation.isError ? (
+					<Caption className="mt-2 text-danger">
+						Something went wrong while saving.
+					</Caption>
+				) : null}
 			</View>
 			<SafeAreaSheet
 				visible={activePicker !== null}

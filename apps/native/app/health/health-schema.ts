@@ -1,4 +1,4 @@
-export type FieldType = "string" | "number" | "choice";
+export type FieldType = "string" | "number" | "choice" | "list";
 
 export type HealthField = {
 	label: string;
@@ -45,7 +45,7 @@ export const healthCategories: HealthCategory[] = [
 		key: "allergies",
 		label: "Allergies",
 		fields: {
-			details: { label: "Drug or food allergies", type: "string" },
+			details: { label: "Drug or food allergies", type: "list" },
 		},
 	},
 	{
@@ -74,14 +74,14 @@ export const healthCategories: HealthCategory[] = [
 			},
 			cancer_details: {
 				label: "Cancer type, relative and age",
-				type: "string",
+				type: "list",
 			},
 			neurodegenerative: {
 				label: "Family history of neurodegenerative diseases",
 				type: "choice",
 				choices: ["yes", "no"],
 			},
-			other: { label: "Other family medical history", type: "string" },
+			other: { label: "Other family medical history", type: "list" },
 		},
 	},
 	{
@@ -93,7 +93,7 @@ export const healthCategories: HealthCategory[] = [
 				type: "choice",
 				choices: ["yes", "no"],
 			},
-			details: { label: "Surgical procedures details", type: "string" },
+			details: { label: "Surgical procedures details", type: "list" },
 		},
 	},
 	{
@@ -125,7 +125,7 @@ export const healthCategories: HealthCategory[] = [
 				type: "choice",
 				choices: ["yes", "no", "suspected"],
 			},
-			other: { label: "Other cardiovascular conditions", type: "string" },
+			other: { label: "Other cardiovascular conditions", type: "list" },
 		},
 	},
 	{
@@ -157,7 +157,7 @@ export const healthCategories: HealthCategory[] = [
 				type: "choice",
 				choices: ["yes", "no", "suspected"],
 			},
-			other: { label: "Other pulmonary conditions", type: "string" },
+			other: { label: "Other pulmonary conditions", type: "list" },
 		},
 	},
 	{
@@ -194,7 +194,7 @@ export const healthCategories: HealthCategory[] = [
 				type: "choice",
 				choices: ["yes", "no", "suspected"],
 			},
-			other: { label: "Other neurological conditions", type: "string" },
+			other: { label: "Other neurological conditions", type: "list" },
 		},
 	},
 	{
@@ -231,7 +231,7 @@ export const healthCategories: HealthCategory[] = [
 				type: "choice",
 				choices: ["yes", "no", "suspected"],
 			},
-			other: { label: "Other endocrine disorders", type: "string" },
+			other: { label: "Other endocrine disorders", type: "list" },
 		},
 	},
 	{
@@ -268,14 +268,18 @@ export const healthCategories: HealthCategory[] = [
 				type: "choice",
 				choices: ["yes", "no", "suspected"],
 			},
-			other: { label: "Other psychiatric disorders", type: "string" },
+			other: { label: "Other psychiatric disorders", type: "list" },
 		},
 	},
 	{
 		key: "gynecology",
 		label: "Gynecological history",
 		fields: {
-			menopause: { label: "Menopause", type: "choice", choices: ["yes", "no"] },
+			menopause: {
+				label: "Menopause",
+				type: "choice",
+				choices: ["yes", "no"],
+			},
 			contraception: { label: "Contraception method", type: "string" },
 			pcos: {
 				label: "Polycystic ovary syndrome",
@@ -292,7 +296,7 @@ export const healthCategories: HealthCategory[] = [
 				type: "choice",
 				choices: ["yes", "no", "suspected"],
 			},
-			other: { label: "Other gynecological conditions", type: "string" },
+			other: { label: "Other gynecological conditions", type: "list" },
 		},
 	},
 	{
@@ -301,7 +305,10 @@ export const healthCategories: HealthCategory[] = [
 		fields: {
 			pregnancies: { label: "Number of pregnancies", type: "number" },
 			deliveries: { label: "Number of deliveries", type: "number" },
-			c_sections: { label: "Number of cesarean sections", type: "number" },
+			c_sections: {
+				label: "Number of cesarean sections",
+				type: "number",
+			},
 			ectopic_pregnancy: {
 				label: "History of ectopic pregnancy",
 				type: "choice",
@@ -322,7 +329,7 @@ export const healthCategories: HealthCategory[] = [
 				type: "choice",
 				choices: ["yes", "no"],
 			},
-			other: { label: "Other obstetric history", type: "string" },
+			other: { label: "Other obstetric history", type: "list" },
 		},
 	},
 ];

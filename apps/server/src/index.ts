@@ -37,6 +37,9 @@ app.use(
 		createContext: (_opts, context) => {
 			return createContext({ context });
 		},
+		onError: (err) => {
+			console.error(err);
+		},
 	}),
 );
 
