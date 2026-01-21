@@ -3,13 +3,9 @@ import { router } from "expo-router";
 import { Surface, useThemeColor } from "heroui-native";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
-import {
-	BodyMuted,
-	BodyStrong,
-	Caption,
-	H1,
-	Link,
-} from "@/components/base/typography";
+import { AppHeader } from "@/components/base/app-header";
+import { SoftHealthBackground } from "@/components/base/backgrounds";
+import { BodyStrong, Caption, Link } from "@/components/base/typography";
 import {
 	RecapBuilderModal,
 	type RecapSection,
@@ -70,68 +66,77 @@ export default function Home() {
 	);
 
 	return (
-		<Container className="gap-6 px-6 pt-12 pb-16">
-			<View className="gap-2">
-				<Caption>Health profile</Caption>
-				<H1>Your health summary</H1>
-				<BodyMuted>Answer a few questions to personalize your care.</BodyMuted>
-			</View>
-			<View className="my-4">
-				<Pressable
-					onPress={() => setRecapOpen(true)}
-					className="flex-row items-center justify-center gap-2 rounded-full border border-primary px-4 py-2"
-				>
-					<Ionicons name="share-social-outline" size={18} color={primary} />
-					<Link>Share recap</Link>
-				</Pressable>
-			</View>
+		<View className="flex-1 bg-background">
+			<SoftHealthBackground heightRatio={0.33} />
 
-			<View className="gap-3">
-				{healthCategories.map((category) => {
-					const icon = CATEGORY_ICONS[category.key] ?? "medkit-outline";
+			<Container className="gap-6 bg-transparent px-6 pt-12 pb-16">
+				<AppHeader
+					title="Home"
+					subtitle="Your health summary"
+					score={88}
+					statusLabel="Healthy"
+					memberLabel="plus Member"
+					notificationCount={3}
+					showChevron={false}
+					variant="dark"
+				/>
+				<View className="my-4">
+					<Pressable
+						onPress={() => setRecapOpen(true)}
+						className="flex-row items-center justify-center gap-2 rounded-full border border-primary px-4 py-2"
+					>
+						<Ionicons name="share-social-outline" size={18} color={primary} />
+						<Link>Share recap</Link>
+					</Pressable>
+				</View>
 
-					return (
-						<Pressable
-							key={category.key}
-							onPress={() =>
-								router.push({
-									pathname: "/health/[category]",
-									params: { category: category.key },
-								})
-							}
-							className="rounded-2xl"
-						>
-							<Surface variant="secondary" className="rounded-2xl p-4">
-								<View className="flex-row items-center gap-3">
-									<View
-										className="h-10 w-10 items-center justify-center rounded-full"
-										style={{
-											backgroundColor:
-												applyOpacity(primary, 0.12) ?? "transparent",
-											borderColor: applyOpacity(primary, 0.35) ?? primary,
-											borderWidth: 1,
-										}}
-									>
-										<Ionicons name={icon} size={18} color={primary} />
+				<View className="gap-3">
+					{healthCategories.map((category) => {
+						const icon = CATEGORY_ICONS[category.key] ?? "medkit-outline";
+
+						return (
+							<Pressable
+								key={category.key}
+								onPress={() =>
+									router.push({
+										pathname: "/health/[category]",
+										params: { category: category.key },
+									})
+								}
+								className="rounded-2xl"
+							>
+								<Surface variant="secondary" className="rounded-2xl p-4">
+									<View className="flex-row items-center gap-3">
+										<View
+											className="h-10 w-10 items-center justify-center rounded-full"
+											style={{
+												backgroundColor:
+													applyOpacity(primary, 0.12) ?? "transparent",
+												borderColor: applyOpacity(primary, 0.35) ?? primary,
+												borderWidth: 1,
+											}}
+										>
+											<Ionicons name={icon} size={18} color={primary} />
+										</View>
+										<View className="flex-1">
+											<BodyStrong>{category.label}</BodyStrong>
+											<Caption>Open questionnaire</Caption>
+										</View>
+										<Ionicons name="chevron-forward" size={18} color={muted} />
 									</View>
-									<View className="flex-1">
-										<BodyStrong>{category.label}</BodyStrong>
-										<Caption>Open questionnaire</Caption>
-									</View>
-									<Ionicons name="chevron-forward" size={18} color={muted} />
-								</View>
-							</Surface>
-						</Pressable>
-					);
-				})}
-			</View>
-			<RecapBuilderModal
-				open={recapOpen}
-				onClose={() => setRecapOpen(false)}
-				sections={RECAP_SECTIONS}
-				selectedIds={recapSelectedIds}
-				onSelectedIdsChange={setRecapSelectedIds}
-			/>
-		</Container>
+								</Surface>
+							</Pressable>
+						);
+					})}
+				</View>
+				<RecapBuilderModal
+					open={recapOpen}
+					onClose={() => setRecapOpen(false)}
+					sections={RECAP_SECTIONS}
+					selectedIds={recapSelectedIds}
+					onSelectedIdsChange={setRecapSelectedIds}
+				/>
+			</Container>
+		</View>
 	);
 }
