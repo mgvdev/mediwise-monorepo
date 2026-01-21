@@ -8,6 +8,8 @@ import type {
 } from "react-native";
 import { Pressable, Text, View } from "react-native";
 
+import { pressableFeedback } from "@/components/utils";
+
 export type ChoiceValue = string | null;
 export type ChoiceLayout = "horizontal" | "vertical" | "auto";
 
@@ -98,6 +100,7 @@ export function ChoiceOption({
 	label,
 	layout = "horizontal",
 	className,
+	style,
 	...props
 }: ChoiceOptionProps) {
 	return (
@@ -110,6 +113,7 @@ export function ChoiceOption({
 			)}
 			accessibilityRole="radio"
 			accessibilityState={{ selected }}
+			style={pressableFeedback(style)}
 			{...props}
 		>
 			<ChoiceIndicator selected={selected} />

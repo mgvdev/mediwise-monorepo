@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { pressableFeedback } from "@/components/utils";
+
 type SafeAreaSheetProps = {
 	visible: boolean;
 	onClose: () => void;
@@ -47,10 +49,17 @@ export function SafeAreaSheet({
 				<Pressable
 					className="flex-1 bg-black/30"
 					onPress={dismissOnBackdropPress ? onClose : undefined}
+					style={pressableFeedback(undefined, {
+						opacity: 0.2,
+						scale: 1,
+					})}
 				/>
 				<View
 					className={cn("px-6", contentClassName)}
-					style={{ maxHeight, paddingBottom: Math.max(insets.bottom, 16) }}
+					style={{
+						maxHeight,
+						paddingBottom: Math.max(insets.bottom, 16),
+					}}
 					{...viewProps}
 				>
 					{children}

@@ -4,6 +4,8 @@ import * as React from "react";
 import type { PressableProps, TextProps, ViewProps } from "react-native";
 import { Pressable, Text, View } from "react-native";
 
+import { pressableFeedback } from "@/components/utils";
+
 type SelectableCardProps = PressableProps & {
 	selected?: boolean;
 	className?: string;
@@ -12,6 +14,7 @@ type SelectableCardProps = PressableProps & {
 export function SelectableCard({
 	selected = false,
 	className,
+	style,
 	...props
 }: SelectableCardProps) {
 	return (
@@ -21,6 +24,7 @@ export function SelectableCard({
 				selected && "border-primary bg-primary/5",
 				className,
 			)}
+			style={pressableFeedback(style)}
 			{...props}
 		/>
 	);

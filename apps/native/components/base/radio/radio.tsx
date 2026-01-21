@@ -3,12 +3,19 @@ import { cn } from "heroui-native";
 import type { PressableProps, ViewProps } from "react-native";
 import { Pressable, View } from "react-native";
 
+import { pressableFeedback } from "@/components/utils";
+
 type RadioProps = PressableProps & {
 	selected?: boolean;
 	className?: string;
 };
 
-export function Radio({ selected = false, className, ...props }: RadioProps) {
+export function Radio({
+	selected = false,
+	className,
+	style,
+	...props
+}: RadioProps) {
 	return (
 		<Pressable
 			className={cn(
@@ -16,6 +23,7 @@ export function Radio({ selected = false, className, ...props }: RadioProps) {
 				selected && "border-primary bg-primary/10",
 				className,
 			)}
+			style={pressableFeedback(style)}
 			{...props}
 		/>
 	);

@@ -1,6 +1,8 @@
 import { cn } from "heroui-native";
 import { Pressable, Text, TextInput, View } from "react-native";
 
+import { pressableFeedback } from "@/components/utils";
+
 export type FrequencyUnit = "day" | "week" | "month";
 
 export type FrequencyValue = {
@@ -68,6 +70,9 @@ export function FrequencyPicker({
 									selected && "border-primary bg-primary/10",
 									!isEditable && "opacity-60",
 								)}
+								style={pressableFeedback(undefined, {
+									disabled: !isEditable,
+								})}
 							>
 								<Text
 									className={cn(

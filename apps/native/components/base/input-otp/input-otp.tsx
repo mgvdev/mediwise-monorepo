@@ -3,6 +3,8 @@ import type { ComponentProps } from "react";
 import { useCallback, useMemo, useRef } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 
+import { pressableFeedback } from "@/components/utils";
+
 type InputOtpProps = {
 	value: string;
 	onChange: (next: string) => void;
@@ -55,6 +57,7 @@ export function InputOtp({
 			accessibilityRole="button"
 			accessibilityLabel="One-time code input"
 			disabled={isDisabled}
+			style={pressableFeedback(undefined, { disabled: isDisabled })}
 		>
 			<View className="flex-row items-center gap-2">
 				{cells.map((cell) => {

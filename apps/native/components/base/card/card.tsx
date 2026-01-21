@@ -9,6 +9,8 @@ import type {
 import { Animated, Easing, Pressable, Text, View } from "react-native";
 import Svg, { Defs, LinearGradient, Rect, Stop } from "react-native-svg";
 
+import { pressableFeedback } from "@/components/utils";
+
 type CardProps = ViewProps & {
 	variant?: "default" | "ai";
 	aiAnimated?: boolean;
@@ -225,13 +227,16 @@ type CardActionProps = PressableProps & {
 };
 
 export function CardAction({ className, ...props }: CardActionProps) {
+	const { style, ...pressableProps } = props;
+
 	return (
 		<Pressable
 			className={cn(
 				"items-center justify-center rounded-full border border-panel-border bg-white/70 px-3 py-1",
 				className,
 			)}
-			{...props}
+			style={pressableFeedback(style)}
+			{...pressableProps}
 		/>
 	);
 }

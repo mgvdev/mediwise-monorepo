@@ -1,6 +1,8 @@
 import { cn } from "heroui-native";
 import { Pressable, Text, TextInput, View } from "react-native";
 
+import { pressableFeedback } from "@/components/utils";
+
 export type DurationUnit = "day" | "week" | "month";
 
 export type DurationValue = {
@@ -68,6 +70,9 @@ export function DurationPicker({
 									selected && "border-primary bg-primary/10",
 									!isEditable && "opacity-60",
 								)}
+								style={pressableFeedback(undefined, {
+									disabled: !isEditable,
+								})}
 							>
 								<Text
 									className={cn(

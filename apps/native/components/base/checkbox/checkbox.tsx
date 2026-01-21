@@ -3,6 +3,8 @@ import { cn } from "heroui-native";
 import type { PressableProps } from "react-native";
 import { Pressable, Text, View } from "react-native";
 
+import { pressableFeedback } from "@/components/utils";
+
 type CheckboxProps = PressableProps & {
 	checked: boolean;
 	onCheckedChange: (next: boolean) => void;
@@ -17,6 +19,7 @@ export function Checkbox({
 	label,
 	description,
 	className,
+	style,
 	...props
 }: CheckboxProps) {
 	return (
@@ -25,6 +28,7 @@ export function Checkbox({
 			onPress={() => onCheckedChange(!checked)}
 			accessibilityRole="checkbox"
 			accessibilityState={{ checked }}
+			style={pressableFeedback(style)}
 			{...props}
 		>
 			<View

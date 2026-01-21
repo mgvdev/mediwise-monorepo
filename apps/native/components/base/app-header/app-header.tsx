@@ -2,7 +2,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { cn, useThemeColor } from "heroui-native";
 import type { ReactNode } from "react";
 import { Image, Pressable, View } from "react-native";
-
 import {
 	Body,
 	BodyMuted,
@@ -10,6 +9,7 @@ import {
 	H2,
 	Micro,
 } from "@/components/base/typography";
+import { pressableFeedback } from "@/components/utils";
 
 type AppHeaderVariant = "dark" | "light" | "gradient" | "soft" | "outline";
 
@@ -122,6 +122,7 @@ function ScoreRing({
 			onPress={onPress}
 			accessibilityRole="button"
 			accessibilityLabel="Open score details"
+			style={pressableFeedback()}
 		>
 			{ring}
 		</Pressable>
@@ -148,17 +149,26 @@ function AppHeaderContainer({
 	onPress?: () => void;
 	className?: string;
 }) {
-	const Wrapper = onPress ? Pressable : View;
 	const { styles } = useVariantTokens(variant);
-
-	return (
-		<Wrapper
-			className={cn("rounded-3xl px-5 pt-5 pb-4", styles.container, className)}
-			onPress={onPress}
-		>
-			{children}
-		</Wrapper>
+	const containerClassName = cn(
+		"rounded-3xl px-5 pt-5 pb-4",
+		styles.container,
+		className,
 	);
+
+	if (onPress) {
+		return (
+			<Pressable
+				className={containerClassName}
+				onPress={onPress}
+				style={pressableFeedback()}
+			>
+				{children}
+			</Pressable>
+		);
+	}
+
+	return <View className={containerClassName}>{children}</View>;
 }
 
 function AppHeaderAvatar({ avatarUri }: { avatarUri?: string }) {
@@ -207,6 +217,7 @@ function AppHeaderNotification({
 			className="h-10 w-10 items-center justify-center rounded-full"
 			accessibilityRole="button"
 			accessibilityLabel="Notifications"
+			style={pressableFeedback()}
 		>
 			<Ionicons name="notifications-outline" size={22} color={iconColor} />
 			<NotificationBadge count={count} />
