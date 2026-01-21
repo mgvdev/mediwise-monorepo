@@ -18,6 +18,10 @@ type SafeAreaSheetProps = {
 	contentClassName?: string;
 	containerClassName?: string;
 	dismissOnBackdropPress?: boolean;
+	/**
+	 * The max height we ask to the sheet, if null it's go maximum of screen
+	 */
+	maxHeight?: number;
 } & ViewProps;
 
 export function SafeAreaSheet({
@@ -39,13 +43,12 @@ export function SafeAreaSheet({
 	return (
 		<Modal
 			visible={visible}
-			transparent
 			animationType="slide"
-			presentationStyle="overFullScreen"
+			presentationStyle="pageSheet"
 			statusBarTranslucent
 			onRequestClose={onClose}
 		>
-			<View className={cn("flex-1 justify-end", containerClassName)}>
+			<View className={cn("", containerClassName)}>
 				<Pressable
 					className="flex-1 bg-black/30"
 					onPress={dismissOnBackdropPress ? onClose : undefined}
@@ -55,7 +58,7 @@ export function SafeAreaSheet({
 					})}
 				/>
 				<View
-					className={cn("px-6", contentClassName)}
+					className={contentClassName}
 					style={{
 						maxHeight,
 						paddingBottom: Math.max(insets.bottom, 16),

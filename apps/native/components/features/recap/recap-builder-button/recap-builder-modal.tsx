@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Button } from "heroui-native";
+import { Button, Dialog } from "heroui-native";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
@@ -53,8 +53,8 @@ export function RecapBuilderModal({
 	};
 
 	return (
-		<SafeAreaSheet visible={open} onClose={onClose} contentClassName="px-0">
-			<View className="rounded-t-3xl border border-panel-border bg-panel-background px-6 pt-5 pb-6">
+		<SafeAreaSheet visible={open} onClose={onClose}>
+			<View className="h-full border border-panel-border bg-panel-background px-6 pt-5">
 				<View className="mb-4 flex-row items-center justify-between">
 					<Text className="font-semibold text-foreground text-lg">
 						Build your recap
