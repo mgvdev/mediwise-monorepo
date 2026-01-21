@@ -1,5 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
+import {
+	Icon,
+	Label,
+	NativeTabs,
+	VectorIcon,
+} from "expo-router/unstable-native-tabs";
 import { useThemeColor } from "heroui-native";
 
 export default function TabLayout() {
@@ -7,58 +12,41 @@ export default function TabLayout() {
 	const themeColorBackground = useThemeColor("background");
 	const themeColorMuted = useThemeColor("muted");
 	const themeColorPrimary = useThemeColor("primary");
-	const allowedTabs = new Set(["index", "ai", "documents"]);
 
 	return (
-		<Tabs
-			screenOptions={({ route }) => ({
-				headerShown: false,
-				headerStyle: {
-					backgroundColor: themeColorBackground,
+		<NativeTabs
+			backgroundColor={themeColorBackground}
+			iconColor={{
+				default: themeColorMuted,
+				selected: themeColorPrimary,
+			}}
+			labelStyle={{
+				default: {
+					color: themeColorMuted,
+					fontWeight: "500",
 				},
-				headerTintColor: themeColorForeground,
-				headerTitleStyle: {
-					color: themeColorForeground,
+				selected: {
+					color: themeColorPrimary,
 					fontWeight: "600",
 				},
-				tabBarActiveTintColor: themeColorPrimary,
-				tabBarInactiveTintColor: themeColorMuted,
-				tabBarStyle: {
-					backgroundColor: themeColorBackground,
-				},
-				tabBarButton: allowedTabs.has(route.name) ? undefined : () => null,
-				tabBarItemStyle: allowedTabs.has(route.name)
-					? undefined
-					: { display: "none" },
-			})}
+			}}
+			tintColor={themeColorForeground}
+			disableTransparentOnScrollEdge
 		>
-			<Tabs.Screen
-				name="index"
-				options={{
-					title: "Home",
-					tabBarIcon: ({ color, size }: { color: string; size: number }) => (
-						<Ionicons name="home" size={size} color={color} />
-					),
-				}}
-			/>
-			<Tabs.Screen
-				name="ai"
-				options={{
-					title: "AI Assistant",
-					tabBarIcon: ({ color, size }: { color: string; size: number }) => (
-						<Ionicons name="chatbubble-ellipses" size={size} color={color} />
-					),
-				}}
-			/>
-			<Tabs.Screen
-				name="documents"
-				options={{
-					title: "Documents",
-					tabBarIcon: ({ color, size }: { color: string; size: number }) => (
-						<Ionicons name="document-text" size={size} color={color} />
-					),
-				}}
-			/>
-		</Tabs>
+			<NativeTabs.Trigger name="index">
+				<Label>Home</Label>
+				<Icon src={<VectorIcon family={Ionicons} name="home" />} />
+			</NativeTabs.Trigger>
+			<NativeTabs.Trigger name="ai">
+				<Label>AI Assistant</Label>
+				<Icon
+					src={<VectorIcon family={Ionicons} name="chatbubble-ellipses" />}
+				/>
+			</NativeTabs.Trigger>
+			<NativeTabs.Trigger name="documents">
+				<Label>Documents</Label>
+				<Icon src={<VectorIcon family={Ionicons} name="document-text" />} />
+			</NativeTabs.Trigger>
+		</NativeTabs>
 	);
 }

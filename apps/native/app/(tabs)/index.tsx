@@ -11,7 +11,7 @@ import {
 	type RecapSection,
 } from "@/components/features/recap/recap-builder-button";
 import { Container } from "@/components/layout/container";
-import { applyOpacity } from "@/components/utils";
+import { applyOpacity, pressableFeedback } from "@/components/utils";
 import { healthCategories } from "../health/health-schema";
 
 const CATEGORY_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
@@ -84,6 +84,7 @@ export default function Home() {
 					<Pressable
 						onPress={() => setRecapOpen(true)}
 						className="flex-row items-center justify-center gap-2 rounded-full border border-primary px-4 py-2"
+						style={pressableFeedback(undefined, {})}
 					>
 						<Ionicons name="share-social-outline" size={18} color={primary} />
 						<Link>Share recap</Link>
@@ -104,6 +105,9 @@ export default function Home() {
 									})
 								}
 								className="rounded-2xl"
+								style={pressableFeedback(undefined, {
+									opacity: 0.8,
+								})}
 							>
 								<Surface variant="secondary" className="rounded-2xl p-4">
 									<View className="flex-row items-center gap-3">
