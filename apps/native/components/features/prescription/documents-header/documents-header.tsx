@@ -1,17 +1,20 @@
 import { Ionicons } from "@expo/vector-icons";
-import { StatusBar } from "expo-status-bar";
-import { Surface, useThemeColor } from "heroui-native";
-import { Pressable, Text, TextInput, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { cn, useThemeColor } from "heroui-native";
+import { Pressable, Text, View } from "react-native";
 
-import { applyOpacity, getRelativeLuminance } from "@/components/utils";
+import { Card } from "@/components/base/card";
+import { Link } from "@/components/base/typography";
+import {
+	applyOpacity,
+	getRelativeLuminance,
+	pressableFeedback,
+} from "@/components/utils";
 
 type DocumentsHeaderProps = {
-	searchQuery: string;
-	onSearchQueryChange: (value: string) => void;
 	onPickFromLibrary: () => void;
 	onTakePhoto: () => void;
 	onAddManual: () => void;
+	className?: string;
 };
 
 type ActionTileProps = {
@@ -34,11 +37,11 @@ function ActionTile({
 		<Pressable
 			onPress={onPress}
 			className="flex-1"
-			style={({ pressed }) => [
-				{ opacity: pressed ? 0.9 : 1, borderColor: accent },
+			style={pressableFeedback([
+				{ borderColor: accent },
 				accentBackground ? { backgroundColor: accentBackground } : null,
 				styles.actionTile,
-			]}
+			])}
 		>
 			<Ionicons name={icon} size={22} color={accent} />
 			<Text
@@ -52,13 +55,11 @@ function ActionTile({
 }
 
 export function DocumentsHeader({
-	searchQuery,
-	onSearchQueryChange,
 	onPickFromLibrary,
 	onTakePhoto,
 	onAddManual,
+	className,
 }: DocumentsHeaderProps) {
-	const insets = useSafeAreaInsets();
 	const baseBackground = useThemeColor("background");
 	const baseForeground = useThemeColor("foreground");
 	const accentUpload = useThemeColor("success");
@@ -67,72 +68,39 @@ export function DocumentsHeader({
 	const headerBackground = baseForeground;
 	const headerText = baseBackground;
 	const headerMuted = applyOpacity(headerText, 0.7) ?? headerText;
-	const searchPlaceholder = applyOpacity(baseForeground, 0.4) ?? baseForeground;
 	const luminance = getRelativeLuminance(headerBackground);
-	const statusBarStyle =
-		luminance !== null && luminance > 0.5 ? "dark" : "light";
+	const iconTint =
+		luminance !== null && luminance > 0.5 ? headerMuted : headerText;
 
 	return (
-		<>
-			<StatusBar style={statusBarStyle} backgroundColor={headerBackground} />
-			<Surface
-				variant="secondary"
-				className="rounded-b-3xl"
-				style={{
-					paddingTop: insets.top,
-					backgroundColor: headerBackground,
-				}}
+		<Card className={cn("gap-4 p-5", className)} variant="inverse">
+			<View className="flex-row gap-3">
+				<ActionTile
+					label="Upload Prescription"
+					icon="cloud-upload-outline"
+					accent={accentUpload}
+					labelColor={headerText}
+					onPress={onPickFromLibrary}
+				/>
+				<ActionTile
+					label="Scan Prescription"
+					icon="camera-outline"
+					accent={accentScan}
+					labelColor={headerText}
+					onPress={onTakePhoto}
+				/>
+			</View>
+			<Pressable
+				onPress={onAddManual}
+				className="flex-row items-center gap-1 self-start"
+				style={pressableFeedback()}
 			>
-				<View className="px-6 pt-4 pb-5">
-					<View className="mb-3 flex-row gap-3">
-						<ActionTile
-							label="Upload Prescription"
-							icon="cloud-upload-outline"
-							accent={accentUpload}
-							labelColor={headerText}
-							onPress={onPickFromLibrary}
-						/>
-						<ActionTile
-							label="Scan Prescription"
-							icon="camera-outline"
-							accent={accentScan}
-							labelColor={headerText}
-							onPress={onTakePhoto}
-						/>
-					</View>
-					<View
-						className="flex-row items-center gap-2 rounded-full px-3 py-2"
-						style={{
-							backgroundColor: baseBackground,
-							borderWidth: 1,
-							borderColor: applyOpacity(baseForeground, 0.12) ?? baseForeground,
-						}}
-					>
-						<Ionicons name="search" size={18} color={searchPlaceholder} />
-						<TextInput
-							value={searchQuery}
-							onChangeText={onSearchQueryChange}
-							placeholder="Search E-Pharmacy"
-							placeholderTextColor={searchPlaceholder}
-							className="flex-1 text-sm"
-							style={{ color: baseForeground }}
-						/>
-					</View>
-					<Text className="mt-3 text-xs" style={{ color: headerMuted }}>
-						Upload or scan prescriptions to build the unified record.
-					</Text>
-					<Pressable
-						onPress={onAddManual}
-						className="mt-3 flex-row items-center gap-1 self-start"
-					>
-						<Ionicons name="add" size={16} color={headerMuted} />
-						<Text className="text-xs" style={{ color: headerMuted }}>
-							Add a prescription manually
-						</Text>
-					</Pressable>
-				</View>
-			</Surface>
-		</>
+				<Ionicons name="add" size={16} color={iconTint} />
+				<Link className="text-xs" style={{ color: iconTint }}>
+					Add a prescription manually
+				</Link>
+			</Pressable>
+		</Card>
 	);
 }
 

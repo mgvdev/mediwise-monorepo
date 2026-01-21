@@ -8,6 +8,10 @@ import {
 	CardBody,
 	CardFooter,
 	CardHeader,
+	CardRow,
+	CardRowAction,
+	CardRowContent,
+	CardRowIcon,
 	CardTitle,
 } from "./card";
 
@@ -92,6 +96,55 @@ export const AiBorder = () => (
 			</CardBody>
 			<CardFooter>
 				<Text className="text-muted text-xs">Updated 2 minutes ago</Text>
+			</CardFooter>
+		</Card>
+	</View>
+);
+
+export const Rows = () => (
+	<View className="flex-1 bg-background p-6">
+		<Card className="p-0">
+			<CardBody className="mt-0">
+				<CardRow>
+					<CardRowIcon className="border border-panel-border bg-primary/10">
+						<Ionicons
+							name="person-outline"
+							size={18}
+							className="text-primary"
+						/>
+					</CardRowIcon>
+					<CardRowContent>
+						<CardTitle className="text-sm">Personal information</CardTitle>
+						<Text className="text-muted text-xs">Open questionnaire</Text>
+					</CardRowContent>
+					<CardRowAction>
+						<Ionicons name="chevron-forward" size={16} className="text-muted" />
+					</CardRowAction>
+				</CardRow>
+			</CardBody>
+		</Card>
+	</View>
+);
+
+export const Inverse = () => (
+	<View className="flex-1 bg-background p-6">
+		<Card variant="inverse">
+			<CardHeader>
+				<CardTitle className="text-white">Coverage status</CardTitle>
+				<CardAction
+					onPress={() => undefined}
+					className="border-white/20 bg-white/10 px-2"
+				>
+					<Ionicons name="shield-checkmark" size={16} className="text-white" />
+				</CardAction>
+			</CardHeader>
+			<CardBody>
+				<Text className="text-white/70 text-xs">
+					Priority claims are active and processing.
+				</Text>
+			</CardBody>
+			<CardFooter>
+				<Text className="text-white/60 text-xs">Updated 5 minutes ago</Text>
 			</CardFooter>
 		</Card>
 	</View>

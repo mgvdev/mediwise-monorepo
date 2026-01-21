@@ -1,10 +1,18 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { Surface, useThemeColor } from "heroui-native";
+import { useThemeColor } from "heroui-native";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
 import { AppHeader } from "@/components/base/app-header";
 import { SoftHealthBackground } from "@/components/base/backgrounds";
+import {
+	Card,
+	CardBody,
+	CardRow,
+	CardRowAction,
+	CardRowContent,
+	CardRowIcon,
+} from "@/components/base/card";
 import { BodyStrong, Caption, Link } from "@/components/base/typography";
 import {
 	RecapBuilderModal,
@@ -67,9 +75,9 @@ export default function Home() {
 
 	return (
 		<View className="flex-1 bg-background">
-			<SoftHealthBackground heightRatio={0.33} />
+			<SoftHealthBackground heightRatio={1} />
 
-			<Container className="gap-6 bg-transparent px-6 pt-12 pb-16">
+			<Container className="mb-16 gap-6 bg-transparent px-6 pt-12 pb-16">
 				<AppHeader
 					title="Home"
 					subtitle="Your health summary"
@@ -109,26 +117,33 @@ export default function Home() {
 									opacity: 0.8,
 								})}
 							>
-								<Surface variant="secondary" className="rounded-2xl p-4">
-									<View className="flex-row items-center gap-3">
-										<View
-											className="h-10 w-10 items-center justify-center rounded-full"
-											style={{
-												backgroundColor:
-													applyOpacity(primary, 0.12) ?? "transparent",
-												borderColor: applyOpacity(primary, 0.35) ?? primary,
-												borderWidth: 1,
-											}}
-										>
-											<Ionicons name={icon} size={18} color={primary} />
-										</View>
-										<View className="flex-1">
-											<BodyStrong>{category.label}</BodyStrong>
-											<Caption>Open questionnaire</Caption>
-										</View>
-										<Ionicons name="chevron-forward" size={18} color={muted} />
-									</View>
-								</Surface>
+								<Card className="p-0">
+									<CardBody className="mt-0">
+										<CardRow>
+											<CardRowIcon
+												style={{
+													backgroundColor:
+														applyOpacity(primary, 0.12) ?? "transparent",
+													borderColor: applyOpacity(primary, 0.35) ?? primary,
+													borderWidth: 1,
+												}}
+											>
+												<Ionicons name={icon} size={18} color={primary} />
+											</CardRowIcon>
+											<CardRowContent>
+												<BodyStrong>{category.label}</BodyStrong>
+												<Caption>Open questionnaire</Caption>
+											</CardRowContent>
+											<CardRowAction>
+												<Ionicons
+													name="chevron-forward"
+													size={18}
+													color={muted}
+												/>
+											</CardRowAction>
+										</CardRow>
+									</CardBody>
+								</Card>
 							</Pressable>
 						);
 					})}

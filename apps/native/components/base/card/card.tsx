@@ -12,9 +12,10 @@ import Svg, { Defs, LinearGradient, Rect, Stop } from "react-native-svg";
 import { pressableFeedback } from "@/components/utils";
 
 type CardProps = ViewProps & {
-	variant?: "default" | "ai";
+	variant?: "default" | "ai" | "inverse" | "outline";
 	aiAnimated?: boolean;
 	className?: string;
+	containerClassName?: string;
 };
 
 const CARD_RADIUS = 16;
@@ -141,15 +142,19 @@ export function Card({
 	variant = "default",
 	aiAnimated = true,
 	onLayout,
+	containerClassName,
 	...props
 }: CardProps) {
 	const baseClasses =
 		"rounded-2xl border border-panel-border bg-panel-background p-4";
+	const inverseClasses =
+		"rounded-2xl border border-transparent bg-[#1f2937] p-4";
 
 	if (variant === "ai") {
 		return (
 			<AiCard
 				className={className}
+				containerClassName={containerClassName}
 				aiAnimated={aiAnimated}
 				onLayout={onLayout}
 				{...props}
@@ -157,15 +162,36 @@ export function Card({
 		);
 	}
 
-	return <View className={cn(baseClasses, className)} {...props} />;
+	if (variant === "inverse") {
+		return (
+			<View
+				className={cn(inverseClasses, className, containerClassName)}
+				{...props}
+			/>
+		);
+	}
+
+	return (
+		<View
+			className={cn(baseClasses, className, containerClassName)}
+			{...props}
+		/>
+	);
 }
 
 type AiCardProps = ViewProps & {
 	aiAnimated: boolean;
 	className?: string;
+	containerClassName?: string;
 };
 
-function AiCard({ className, aiAnimated, onLayout, ...props }: AiCardProps) {
+function AiCard({
+	className,
+	containerClassName,
+	aiAnimated,
+	onLayout,
+	...props
+}: AiCardProps) {
 	const [size, setSize] = useState({ width: 0, height: 0 });
 	const handleLayout = (event: LayoutChangeEvent) => {
 		onLayout?.(event);
@@ -176,7 +202,7 @@ function AiCard({ className, aiAnimated, onLayout, ...props }: AiCardProps) {
 	};
 
 	return (
-		<View className="relative">
+		<View className={cn("relative", containerClassName)}>
 			{size.width > 0 ? (
 				<AiBorder
 					width={size.width}
@@ -255,4 +281,51 @@ type CardFooterProps = ViewProps & {
 
 export function CardFooter({ className, ...props }: CardFooterProps) {
 	return <View className={cn("mt-4", className)} {...props} />;
+}
+
+type CardRowProps = ViewProps & {
+	className?: string;
+};
+
+export function CardRow({ className, ...props }: CardRowProps) {
+	return (
+		<View
+			className={cn("flex-row items-center gap-3 px-5 py-4", className)}
+			{...props}
+		/>
+	);
+}
+
+type CardRowIconProps = ViewProps & {
+	className?: string;
+};
+
+export function CardRowIcon({ className, ...props }: CardRowIconProps) {
+	return (
+		<View
+			className={cn(
+				"h-11 w-11 shrink-0 items-center justify-center rounded-full",
+				className,
+			)}
+			{...props}
+		/>
+	);
+}
+
+type CardRowContentProps = ViewProps & {
+	className?: string;
+};
+
+export function CardRowContent({ className, ...props }: CardRowContentProps) {
+	return <View className={cn("flex-1", className)} {...props} />;
+}
+
+type CardRowActionProps = ViewProps & {
+	className?: string;
+};
+
+export function CardRowAction({ className, ...props }: CardRowActionProps) {
+	return (
+		<View className={cn("items-center justify-center", className)} {...props} />
+	);
 }
