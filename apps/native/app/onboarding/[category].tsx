@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Redirect, router, Stack, useLocalSearchParams } from "expo-router";
-import { Button, Spinner, Surface, TextField } from "heroui-native";
+import { Button, Spinner, TextField } from "heroui-native";
 import * as React from "react";
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 import {
 	type HealthField,
 	healthCategories,
@@ -10,12 +10,11 @@ import {
 } from "@/app/health/health-schema";
 import { ChoiceInput, type ChoiceValue } from "@/components/base/choice";
 import { DatePicker } from "@/components/base/date-picker/date-picker";
+import { HeightInput } from "@/components/base/height-input/height-input";
 import { ListInput } from "@/components/base/list-input/list-input";
-import { SafeAreaSheet } from "@/components/base/safe-area-sheet";
-import { Body, Caption, H3 } from "@/components/base/typography";
+import { Caption } from "@/components/base/typography";
+import { WeightInput } from "@/components/base/weight-input/weight-input";
 import { Container } from "@/components/layout/container";
-import { HeightPicker } from "@/components/medical-pickers/height-picker";
-import { WeightPicker } from "@/components/medical-pickers/weight-picker";
 import { trpc } from "@/utils/trpc";
 
 type FormValue = string | string[] | null;
@@ -96,9 +95,6 @@ export default function OnboardingCategoryScreen() {
 		? healthCategoryMap.get(resolvedKey)
 		: undefined;
 	const [values, setValues] = React.useState<FormState>({});
-	const [activePicker, setActivePicker] = React.useState<
-		"height" | "weight" | null
-	>(null);
 	const [heightUnit, setHeightUnit] = React.useState<"cm" | "inch">("cm");
 	const [heightValue, setHeightValue] = React.useState(170);
 	const [weightUnit, setWeightUnit] = React.useState<"kg" | "lbs">("kg");
@@ -171,7 +167,6 @@ export default function OnboardingCategoryScreen() {
 
 		setHeightUnit(unit);
 		setHeightValue(displayValue);
-		setActivePicker("height");
 	};
 
 	const openWeightPicker = () => {
@@ -185,7 +180,6 @@ export default function OnboardingCategoryScreen() {
 
 		setWeightUnit(unit);
 		setWeightValue(displayValue);
-		setActivePicker("weight");
 	};
 
 	const confirmHeight = () => {
@@ -196,7 +190,6 @@ export default function OnboardingCategoryScreen() {
 
 		handleChange(heightKey, String(heightCm));
 		handleChange(unitKey, heightUnit);
-		setActivePicker(null);
 	};
 
 	const confirmWeight = () => {
@@ -207,7 +200,6 @@ export default function OnboardingCategoryScreen() {
 
 		handleChange(weightKey, String(weightKg));
 		handleChange(unitKey, weightUnit);
-		setActivePicker(null);
 	};
 
 	const formatPickerValue = (value: string | null, unit: string) => {
@@ -365,15 +357,20 @@ export default function OnboardingCategoryScreen() {
 											: String(parsed);
 
 									return (
-										<View key={storageKey} className="gap-2">
-											<Caption>{field.label}</Caption>
-											<Pressable
-												onPress={openHeightPicker}
-												className="rounded-2xl border border-panel-border bg-panel-background px-4 py-3"
-											>
-												<Body>{formatPickerValue(displayValue, unit)}</Body>
-											</Pressable>
-										</View>
+										<HeightInput
+											key={storageKey}
+											label={field.label}
+											valueLabel={formatPickerValue(displayValue, unit)}
+											pickerValue={heightValue}
+											pickerUnit={heightUnit}
+											onPickerChange={(nextValue, nextUnit) => {
+												setHeightUnit(nextUnit);
+												setHeightValue(nextValue);
+											}}
+											onOpen={openHeightPicker}
+											onConfirm={confirmHeight}
+											snapPoints={[480]}
+										/>
 									);
 								}
 
@@ -394,15 +391,20 @@ export default function OnboardingCategoryScreen() {
 											: String(parsed);
 
 									return (
-										<View key={storageKey} className="gap-2">
-											<Caption>{field.label}</Caption>
-											<Pressable
-												onPress={openWeightPicker}
-												className="rounded-2xl border border-panel-border bg-panel-background px-4 py-3"
-											>
-												<Body>{formatPickerValue(displayValue, unit)}</Body>
-											</Pressable>
-										</View>
+										<WeightInput
+											key={storageKey}
+											label={field.label}
+											valueLabel={formatPickerValue(displayValue, unit)}
+											pickerValue={weightValue}
+											pickerUnit={weightUnit}
+											onPickerChange={(nextValue, nextUnit) => {
+												setWeightUnit(nextUnit);
+												setWeightValue(nextValue);
+											}}
+											onOpen={openWeightPicker}
+											onConfirm={confirmWeight}
+											snapPoints={[440]}
+										/>
 									);
 								}
 
@@ -463,65 +465,6 @@ export default function OnboardingCategoryScreen() {
 					) : null}
 				</View>
 			</View>
-			<SafeAreaSheet
-				visible={activePicker !== null}
-				onClose={() => setActivePicker(null)}
-				presentationStyle="overFullScreen"
-				contentStyle={{ height: 460 }}
-			>
-				<Surface variant="secondary" className="rounded-3xl p-5">
-					{activePicker === "height" ? (
-						<View className="gap-4">
-							<H3>Select your height</H3>
-							<HeightPicker
-								value={heightValue}
-								unit={heightUnit}
-								onChange={(nextValue, nextUnit) => {
-									setHeightUnit(nextUnit);
-									setHeightValue(nextValue);
-								}}
-							/>
-							<View className="flex-row gap-2">
-								<Button
-									variant="secondary"
-									className="flex-1"
-									onPress={() => setActivePicker(null)}
-								>
-									<Button.Label>Cancel</Button.Label>
-								</Button>
-								<Button className="flex-1" onPress={confirmHeight}>
-									<Button.Label>Save</Button.Label>
-								</Button>
-							</View>
-						</View>
-					) : null}
-					{activePicker === "weight" ? (
-						<View className="gap-4">
-							<H3>Select your weight</H3>
-							<WeightPicker
-								value={weightValue}
-								unit={weightUnit}
-								onChange={(nextValue, nextUnit) => {
-									setWeightUnit(nextUnit);
-									setWeightValue(nextValue);
-								}}
-							/>
-							<View className="flex-row gap-2">
-								<Button
-									variant="secondary"
-									className="flex-1"
-									onPress={() => setActivePicker(null)}
-								>
-									<Button.Label>Cancel</Button.Label>
-								</Button>
-								<Button className="flex-1" onPress={confirmWeight}>
-									<Button.Label>Save</Button.Label>
-								</Button>
-							</View>
-						</View>
-					) : null}
-				</Surface>
-			</SafeAreaSheet>
 		</Container>
 	);
 }

@@ -1,9 +1,8 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { Button, Surface, useThemeColor } from "heroui-native";
+import { BottomSheet, Button, TextField, useThemeColor } from "heroui-native";
 import * as React from "react";
 import { Pressable, Text, View } from "react-native";
 
-import { SafeAreaSheet } from "@/components/base/safe-area-sheet";
 import { Caption, H3 } from "@/components/base/typography";
 
 const MIN_DATE = new Date(1920, 0, 1);
@@ -51,26 +50,29 @@ export function DatePicker({
 	};
 
 	return (
-		<>
-			<Pressable
-				className="rounded-2xl border border-border/60 px-4 py-3"
-				onPress={() => setOpen(true)}
-			>
-				<Text className="font-semibold text-base text-foreground">
-					{formatDate(value ? new Date(value) : null)}
-				</Text>
-				{helperText ? (
-					<Text className="mt-1 text-muted text-xs">{helperText}</Text>
-				) : null}
-			</Pressable>
-			<SafeAreaSheet
-				visible={open}
-				onClose={() => setOpen(false)}
-				maxHeight={360}
-				presentationStyle="overFullScreen"
-				contentStyle={{ height: 380 }}
-			>
-				<Surface variant="secondary" className="rounded-3xl p-5">
+		<BottomSheet isOpen={open} onOpenChange={setOpen}>
+			<BottomSheet.Trigger asChild>
+				<Pressable>
+					<TextField>
+						{label ? <TextField.Label>{label}</TextField.Label> : null}
+						<TextField.Input
+							value={formatDate(value ? new Date(value) : null)}
+							editable={false}
+							pointerEvents="none"
+						/>
+						{helperText ? (
+							<Text className="mt-1 text-muted text-xs">{helperText}</Text>
+						) : null}
+					</TextField>
+				</Pressable>
+			</BottomSheet.Trigger>
+			<BottomSheet.Portal>
+				<BottomSheet.Overlay />
+				<BottomSheet.Content
+					snapPoints={[450]}
+					enablePanDownToClose
+					contentContainerClassName="px-5 pt-4"
+				>
 					<View className="gap-4">
 						<H3>{label ?? "Select date"}</H3>
 						<DateTimePicker
@@ -99,8 +101,8 @@ export function DatePicker({
 							</Button>
 						</View>
 					</View>
-				</Surface>
-			</SafeAreaSheet>
-		</>
+				</BottomSheet.Content>
+			</BottomSheet.Portal>
+		</BottomSheet>
 	);
 }

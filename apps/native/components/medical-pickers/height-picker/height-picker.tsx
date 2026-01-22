@@ -125,6 +125,7 @@ export function HeightPicker({ value, unit, onChange }: HeightPickerProps) {
 					ref={listRef}
 					data={values}
 					keyExtractor={(item) => `${item}`}
+					nestedScrollEnabled
 					showsVerticalScrollIndicator={false}
 					snapToInterval={itemHeight}
 					snapToAlignment="center"

@@ -43,6 +43,7 @@ export function WeightPicker({ value, unit, onChange }: WeightPickerProps) {
 	};
 
 	const handleScroll = (offsetX: number) => {
+		if (!isDraggingRef.current) return;
 		if (frameRef.current !== null) {
 			cancelAnimationFrame(frameRef.current);
 		}
@@ -52,7 +53,6 @@ export function WeightPicker({ value, unit, onChange }: WeightPickerProps) {
 			if (nextValue !== lastValueRef.current) {
 				lastValueRef.current = nextValue;
 				setDisplayValue(nextValue);
-				onChange(nextValue, unit);
 			}
 		});
 	};
@@ -120,6 +120,7 @@ export function WeightPicker({ value, unit, onChange }: WeightPickerProps) {
 					horizontal
 					data={values}
 					keyExtractor={(item) => `${item}`}
+					nestedScrollEnabled
 					showsHorizontalScrollIndicator={false}
 					snapToInterval={itemWidth}
 					decelerationRate="fast"
@@ -130,16 +131,17 @@ export function WeightPicker({ value, unit, onChange }: WeightPickerProps) {
 						isDraggingRef.current = true;
 					}}
 					onScrollEndDrag={() => {
-						isDraggingRef.current = false;
+						isDraggingRef.current = true;
 					}}
 					getItemLayout={(_, index) => ({
 						length: itemWidth,
 						offset: itemWidth * index,
 						index,
 					})}
-					onMomentumScrollEnd={(event) =>
-						handleScrollEnd(event.nativeEvent.contentOffset.x)
-					}
+					onMomentumScrollEnd={(event) => {
+						isDraggingRef.current = false;
+						handleScrollEnd(event.nativeEvent.contentOffset.x);
+					}}
 					renderItem={({ item }) => {
 						const isMajor = item % 10 === 0;
 						return (
