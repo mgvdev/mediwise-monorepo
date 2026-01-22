@@ -13,8 +13,14 @@ const userSchema = new Schema(
 		healthData: {
 			personal: { type: Schema.Types.Mixed },
 			encrypted: { type: String },
+			onboarding: {
+				currentCategoryKey: { type: String },
+				startedAt: { type: Date },
+				completedAt: { type: Date },
+			},
 			updatedAt: { type: Date },
 		},
+		onboardedAt: { type: Date },
 		createdAt: { type: Date, required: true },
 		updatedAt: { type: Date, required: true },
 	},

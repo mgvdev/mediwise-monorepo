@@ -5,6 +5,7 @@ import * as React from "react";
 import { Pressable, View } from "react-native";
 
 import { ChoiceInput, type ChoiceValue } from "@/components/base/choice";
+import { DatePicker } from "@/components/base/date-picker/date-picker";
 import { ListInput } from "@/components/base/list-input/list-input";
 import { SafeAreaSheet } from "@/components/base/safe-area-sheet";
 import { Body, Caption, H3 } from "@/components/base/typography";
@@ -20,6 +21,8 @@ type FormState = Record<string, FormValue>;
 
 const buildFieldKey = (categoryKey: string, fieldKey: string) =>
 	`health.${categoryKey}.${fieldKey}`;
+const buildCommentKey = (categoryKey: string, fieldKey: string) =>
+	`health.${categoryKey}.${fieldKey}_comment`;
 
 const CM_TO_IN = 0.3937008;
 const KG_TO_LBS = 2.20462;
@@ -148,6 +151,10 @@ export default function HealthCategoryScreen() {
 		Object.entries(resolvedCategory.fields).forEach(([fieldKey, field]) => {
 			const storageKey = buildFieldKey(resolvedCategory.key, fieldKey);
 			const rawValue = values[storageKey];
+			if (field.commentOnYes) {
+				const commentKey = buildCommentKey(resolvedCategory.key, fieldKey);
+				valuesByField[`${fieldKey}_comment`] = values[commentKey] ?? null;
+			}
 			if (field.type === "list") {
 				valuesByField[fieldKey] = Array.isArray(rawValue) ? rawValue : [];
 			} else {
@@ -180,6 +187,7 @@ export default function HealthCategoryScreen() {
 					const value = values[storageKey];
 
 					if (field.type === "choice" && field.choices) {
+						const commentKey = buildCommentKey(resolvedCategory.key, fieldKey);
 						return (
 							<View key={storageKey} className="gap-2">
 								<ChoiceInput
@@ -192,6 +200,18 @@ export default function HealthCategoryScreen() {
 									}))}
 									layout="auto"
 								/>
+								{field.commentOnYes && value === "yes" ? (
+									<TextField>
+										<TextField.Label>
+											{field.commentOnYes.label}
+										</TextField.Label>
+										<TextField.Input
+											value={(values[commentKey] as string | null) ?? ""}
+											onChangeText={(next) => handleChange(commentKey, next)}
+											placeholder="Add details"
+										/>
+									</TextField>
+								) : null}
 							</View>
 						);
 					}
@@ -205,6 +225,20 @@ export default function HealthCategoryScreen() {
 									value={listValue}
 									onChange={(next) => handleChange(storageKey, next)}
 									placeholder="Add item"
+								/>
+							</View>
+						);
+					}
+
+					if (field.type === "date") {
+						return (
+							<View key={storageKey} className="gap-2">
+								<Caption>{field.label}</Caption>
+								<DatePicker
+									label={field.label}
+									helperText="Tap to select date"
+									value={(value as string | null) ?? null}
+									onChange={(next) => handleChange(storageKey, next)}
 								/>
 							</View>
 						);
@@ -302,6 +336,8 @@ export default function HealthCategoryScreen() {
 			<SafeAreaSheet
 				visible={activePicker !== null}
 				onClose={() => setActivePicker(null)}
+				presentationStyle="overFullScreen"
+				contentStyle={{ height: 460 }}
 			>
 				<Surface variant="secondary" className="rounded-3xl p-5">
 					{activePicker === "height" ? (

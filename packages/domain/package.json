@@ -14,5 +14,8 @@
 		"typescript": "catalog:",
 		"@mediwise-monorepo/config": "workspace:*"
 	},
-	"dependencies": {}
+	"dependencies": {
+		"@mediwise-monorepo/db": "workspace:*",
+		"@mediwise-monorepo/env": "workspace:*"
+	}
 }

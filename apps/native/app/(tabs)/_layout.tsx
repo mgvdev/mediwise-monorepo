@@ -47,9 +47,6 @@ export default function TabLayout() {
 				<Label>Documents</Label>
 				<Icon src={<VectorIcon family={Ionicons} name="document-text" />} />
 			</NativeTabs.Trigger>
-			<NativeTabs.Trigger name="search" role="search">
-				<Label>Search</Label>
-			</NativeTabs.Trigger>
 		</NativeTabs>
 	);
 }

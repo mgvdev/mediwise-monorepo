@@ -278,6 +278,10 @@
     },
     "packages/domain": {
       "name": "@mediwise-monorepo/domain",
+      "dependencies": {
+        "@mediwise-monorepo/db": "workspace:*",
+        "@mediwise-monorepo/env": "workspace:*",
+      },
       "devDependencies": {
         "@mediwise-monorepo/config": "workspace:*",
         "typescript": "catalog:",

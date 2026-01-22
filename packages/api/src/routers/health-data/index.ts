@@ -1,6 +1,11 @@
+import {
+	completeOnboarding,
+	getHealthData,
+	saveHealthData,
+	setOnboardingStep,
+} from "@mediwise-monorepo/domain";
 import { protectedProcedure, router } from "../../index";
-import { healthDataSaveInput } from "./dto";
-import { getHealthData, saveHealthData } from "./services";
+import { healthDataSaveInput, healthDataSetCurrentInput } from "./dto";
 
 export const healthDataRouter = router({
 	get: protectedProcedure.query(({ ctx }) => {
@@ -11,4 +16,15 @@ export const healthDataRouter = router({
 		.mutation(({ ctx, input }) => {
 			return saveHealthData({ user: ctx.session.user, input });
 		}),
+	setOnboardingStep: protectedProcedure
+		.input(healthDataSetCurrentInput)
+		.mutation(({ ctx, input }) => {
+			return setOnboardingStep({
+				user: ctx.session.user,
+				categoryKey: input.categoryKey,
+			});
+		}),
+	completeOnboarding: protectedProcedure.mutation(({ ctx }) => {
+		return completeOnboarding({ user: ctx.session.user });
+	}),
 });

@@ -1,14 +1,23 @@
 import { mongoose, User } from "@mediwise-monorepo/db";
-import type { HealthDataSaveInput } from "./dto";
 import { decryptHealthPayload, encryptHealthPayload } from "./encryption";
 
 type HealthDataValue = string | string[] | null;
 type CategoryValues = Record<string, HealthDataValue>;
 type HealthDataMap = Record<string, CategoryValues>;
 
+export type HealthDataSaveInput = {
+	categoryKey: string;
+	values: Record<string, HealthDataValue>;
+};
+
 type StoredHealthData = {
 	personal?: HealthDataMap;
 	encrypted?: string | null;
+	onboarding?: {
+		currentCategoryKey?: string | null;
+		startedAt?: Date;
+		completedAt?: Date;
+	};
 	updatedAt?: Date;
 };
 
@@ -44,9 +53,17 @@ export async function getHealthData(user: SessionUser) {
 	const filter = buildUserFilter(user);
 	const found = await User.findOne(filter).lean<{
 		healthData?: StoredHealthData;
+		onboardedAt?: Date;
 	} | null>();
 	const stored = found?.healthData ?? {};
-	if (!found) return { data: {}, updatedAt: null };
+	if (!found) {
+		return {
+			data: {},
+			updatedAt: null,
+			onboarding: null,
+			onboardedAt: null,
+		};
+	}
 	const personal = stored.personal ?? {};
 	const sensitive = decodeSensitive(stored.encrypted);
 	return {
@@ -55,6 +72,8 @@ export async function getHealthData(user: SessionUser) {
 			...personal,
 		},
 		updatedAt: stored.updatedAt ?? null,
+		onboarding: stored.onboarding ?? null,
+		onboardedAt: found.onboardedAt ?? null,
 	};
 }
 
@@ -96,6 +115,7 @@ export async function saveHealthData(params: {
 	await User.findOneAndUpdate(filter, {
 		$set: {
 			healthData: {
+				...stored,
 				personal: nextPersonal,
 				encrypted,
 				updatedAt,
@@ -104,4 +124,34 @@ export async function saveHealthData(params: {
 	});
 
 	return { updatedAt };
+}
+
+export async function setOnboardingStep(params: {
+	user: SessionUser;
+	categoryKey: string;
+}) {
+	const { user, categoryKey } = params;
+	const filter = buildUserFilter(user);
+	const now = new Date();
+	await User.findOneAndUpdate(filter, {
+		$set: {
+			"healthData.onboarding.currentCategoryKey": categoryKey,
+			"healthData.onboarding.startedAt": now,
+		},
+	});
+	return { currentCategoryKey: categoryKey };
+}
+
+export async function completeOnboarding(params: { user: SessionUser }) {
+	const { user } = params;
+	const filter = buildUserFilter(user);
+	const now = new Date();
+	await User.findOneAndUpdate(filter, {
+		$set: {
+			onboardedAt: now,
+			"healthData.onboarding.completedAt": now,
+			"healthData.onboarding.currentCategoryKey": null,
+		},
+	});
+	return { onboardedAt: now };
 }

@@ -8,3 +8,7 @@ export const healthDataSaveInput = z.object({
 });
 
 export type HealthDataSaveInput = z.infer<typeof healthDataSaveInput>;
+
+export const healthDataSetCurrentInput = z.object({
+	categoryKey: z.string().min(1),
+});

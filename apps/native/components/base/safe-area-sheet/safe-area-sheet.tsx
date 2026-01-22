@@ -22,6 +22,15 @@ type SafeAreaSheetProps = {
 	 * The max height we ask to the sheet, if null it's go maximum of screen
 	 */
 	maxHeight?: number;
+	presentationStyle?:
+		| "pageSheet"
+		| "formSheet"
+		| "fullScreen"
+		| "overFullScreen";
+	/**
+	 * Custom styles for the sheet container.
+	 */
+	contentStyle?: ViewProps["style"];
 } & ViewProps;
 
 export function SafeAreaSheet({
@@ -31,6 +40,10 @@ export function SafeAreaSheet({
 	contentClassName,
 	containerClassName,
 	dismissOnBackdropPress = true,
+	maxHeight: maxHeightOverride,
+	presentationStyle = "pageSheet",
+	contentStyle,
+	style,
 	...viewProps
 }: SafeAreaSheetProps) {
 	const insets = useSafeAreaInsets();
@@ -39,30 +52,40 @@ export function SafeAreaSheet({
 		0,
 		height - insets.top - Math.max(insets.bottom, 12),
 	);
+	const resolvedMaxHeight = maxHeightOverride ?? maxHeight;
+	const isOverlay = presentationStyle === "overFullScreen";
+	const bottomInset = Math.max(insets.bottom, 12);
 
 	return (
 		<Modal
 			visible={visible}
 			animationType="slide"
-			presentationStyle="pageSheet"
+			presentationStyle={presentationStyle}
+			transparent={isOverlay}
 			statusBarTranslucent
 			onRequestClose={onClose}
 		>
-			<View className={cn(containerClassName)}>
-				<Pressable
-					className="flex-1 bg-black/30"
-					onPress={dismissOnBackdropPress ? onClose : undefined}
-					style={pressableFeedback(undefined, {
-						opacity: 0.2,
-						scale: 1,
-					})}
-				/>
+			<View className={cn("flex-1 justify-end", containerClassName)}>
+				{isOverlay ? (
+					<Pressable
+						className="absolute inset-0 bg-black/20"
+						onPress={dismissOnBackdropPress ? onClose : undefined}
+						style={pressableFeedback(undefined, {
+							opacity: 0.2,
+							scale: 1,
+						})}
+					/>
+				) : null}
 				<View
 					className={contentClassName}
-					style={{
-						maxHeight,
-						paddingBottom: Math.max(insets.bottom, 16),
-					}}
+					style={[
+						{
+							maxHeight: resolvedMaxHeight,
+							marginBottom: bottomInset,
+						},
+						contentStyle,
+						style,
+					]}
 					{...viewProps}
 				>
 					{children}

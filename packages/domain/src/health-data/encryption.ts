@@ -10,7 +10,10 @@ function getEncryptionKey() {
 	}
 	const rawKey = env.HEALTH_DATA_ENCRYPTION_KEY;
 	if (!rawKey) {
-		throw new Error("HEALTH_DATA_ENCRYPTION_KEY is required in production.");
+		console.warn(
+			"[health-data] HEALTH_DATA_ENCRYPTION_KEY missing; falling back to tag-only encryption.",
+		);
+		return null;
 	}
 	const key = Buffer.from(rawKey, "base64");
 	if (key.length !== 32) {
