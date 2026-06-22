@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Button, ErrorView, Spinner, useThemeColor } from "heroui-native";
+import { Button, FieldError, Spinner, useThemeColor } from "heroui-native";
 import { useState } from "react";
 import { Text, TextInput, View } from "react-native";
 
@@ -86,7 +86,7 @@ export function OtpSignIn() {
 				<Text className="font-medium text-primary text-xs">Need help?</Text>
 			</View>
 
-			<ErrorView isInvalid={!!error}>{error}</ErrorView>
+			<FieldError isInvalid={!!error}>{error}</FieldError>
 
 			{step === "request" ? (
 				<Button onPress={handleSendCode} isDisabled={isSending}>

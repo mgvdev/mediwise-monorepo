@@ -1,4 +1,4 @@
-import { Button, TextField } from "heroui-native";
+import { Button, Input, Label, TextField } from "heroui-native";
 import { Text, View } from "react-native";
 
 type RecapEmailFormProps = {
@@ -17,8 +17,8 @@ export function RecapEmailForm({
 	return (
 		<View className="gap-4">
 			<TextField>
-				<TextField.Label>Send PDF to</TextField.Label>
-				<TextField.Input
+				<Label>Send PDF to</Label>
+				<Input
 					value={email}
 					onChangeText={onEmailChange}
 					placeholder="doctor@example.com"

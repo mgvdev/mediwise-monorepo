@@ -6,7 +6,7 @@ import { OtpSignIn } from "@/components/features/auth/otp-sign-in";
 import { Container } from "@/components/layout/container";
 
 export default function SignInScreen() {
-	const accent = useThemeColor("primary");
+	const accent = useThemeColor("accent");
 
 	return (
 		<Container className="px-6 pt-16 pb-10">

@@ -11,11 +11,10 @@ type UnifiedPrescriptionData = {
 	medications?: Array<{
 		name: string;
 		dosage?: string | null;
-		type?: string | null;
-		quantity?: string | null;
 		frequency?: string | null;
 		frequencyCount?: number | null;
 		frequencyUnit?: "day" | "week" | "month" | null;
+		durationType?: "one_off" | "chronic" | null;
 		duration?: string | null;
 		durationValue?: number | null;
 		durationUnit?: "day" | "week" | "month" | null;
@@ -33,11 +32,10 @@ type SavePayload = {
 	medications: Array<{
 		name: string;
 		dosage: string | null;
-		type: string | null;
-		quantity: string | null;
 		frequency: string | null;
 		frequencyCount: number | null;
 		frequencyUnit: "day" | "week" | "month" | null;
+		durationType: "one_off" | "chronic" | null;
 		duration: string | null;
 		durationValue: number | null;
 		durationUnit: "day" | "week" | "month" | null;
@@ -67,6 +65,7 @@ export function computeValidUntil(
 	if (Number.isNaN(parsed.getTime())) return "";
 	const durations = medications
 		.map((medication) => {
+			if (medication.durationType === "chronic") return 0;
 			const count = Number.parseInt(medication.durationValue, 10);
 			if (!count) return 0;
 			return durationToDays(count, medication.durationUnit);
@@ -86,12 +85,13 @@ export function mapUnifiedToDraft(data: UnifiedPrescriptionData) {
 			createMedicationDraft({
 				name: medication.name ?? "",
 				dosage: medication.dosage ?? "",
-				type: medication.type ?? medication.route ?? "",
-				quantity: medication.quantity ?? "",
 				frequencyCount: medication.frequencyCount
 					? String(medication.frequencyCount)
 					: "",
 				frequencyUnit: medication.frequencyUnit ?? "day",
+				durationType:
+					medication.durationType ??
+					(medication.durationValue ? "one_off" : "chronic"),
 				durationValue: medication.durationValue
 					? String(medication.durationValue)
 					: "",
@@ -131,16 +131,18 @@ export function buildPrescriptionPayload(input: {
 			return {
 				name: medication.name.trim(),
 				dosage: medication.dosage.trim() || null,
-				type: medication.type.trim() || null,
-				quantity: medication.quantity.trim() || null,
 				frequency: frequencyText,
 				frequencyCount: Number.isNaN(frequencyCount) ? null : frequencyCount,
 				frequencyUnit: medication.frequencyCount
 					? medication.frequencyUnit
 					: null,
+				durationType: medication.durationType ?? null,
 				duration: durationText,
 				durationValue: Number.isNaN(durationValue) ? null : durationValue,
-				durationUnit: medication.durationValue ? medication.durationUnit : null,
+				durationUnit:
+					medication.durationType === "one_off" && medication.durationValue
+						? medication.durationUnit
+						: null,
 				route: medication.route ?? null,
 				instructions: medication.instructions ?? null,
 			};

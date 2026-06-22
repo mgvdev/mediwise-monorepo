@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Redirect, router, Stack, useLocalSearchParams } from "expo-router";
-import { Button, Spinner, TextField } from "heroui-native";
+import { Button, Input, Label, Spinner, TextField } from "heroui-native";
 import * as React from "react";
 import { View } from "react-native";
 import {
@@ -8,6 +8,8 @@ import {
 	healthCategories,
 	healthCategoryMap,
 } from "@/app/health/health-schema";
+import { BloodGroupInput } from "@/components/base/blood-group-input";
+import { BloodPressureInput } from "@/components/base/blood-pressure-input";
 import { ChoiceInput, type ChoiceValue } from "@/components/base/choice";
 import { DatePicker } from "@/components/base/date-picker/date-picker";
 import { HeightInput } from "@/components/base/height-input/height-input";
@@ -295,10 +297,8 @@ export default function OnboardingCategoryScreen() {
 											/>
 											{field.commentOnYes && value === "yes" ? (
 												<TextField>
-													<TextField.Label>
-														{field.commentOnYes.label}
-													</TextField.Label>
-													<TextField.Input
+													<Label>{field.commentOnYes.label}</Label>
+													<Input
 														value={(values[commentKey] as string | null) ?? ""}
 														onChangeText={(next) =>
 															handleChange(commentKey, next)
@@ -332,6 +332,18 @@ export default function OnboardingCategoryScreen() {
 											<DatePicker
 												label={field.label}
 												helperText="Tap to select date"
+												value={(value as string | null) ?? null}
+												onChange={(next) => handleChange(storageKey, next)}
+											/>
+										</View>
+									);
+								}
+
+								if (field.type === "blood_pressure") {
+									return (
+										<View key={storageKey} className="gap-2">
+											<BloodPressureInput
+												label={field.label}
 												value={(value as string | null) ?? null}
 												onChange={(next) => handleChange(storageKey, next)}
 											/>
@@ -376,6 +388,20 @@ export default function OnboardingCategoryScreen() {
 
 								if (
 									resolvedCategory.key === "personal_information" &&
+									fieldKey === "blood_group"
+								) {
+									return (
+										<View key={storageKey} className="gap-2">
+											<BloodGroupInput
+												value={(value as string | null) ?? null}
+												onChange={(next) => handleChange(storageKey, next)}
+											/>
+										</View>
+									);
+								}
+
+								if (
+									resolvedCategory.key === "personal_information" &&
 									fieldKey === "weight_kg"
 								) {
 									const unitKey = buildFieldKey(
@@ -411,8 +437,8 @@ export default function OnboardingCategoryScreen() {
 								return (
 									<View key={storageKey} className="gap-2">
 										<TextField>
-											<TextField.Label>{field.label}</TextField.Label>
-											<TextField.Input
+											<Label>{field.label}</Label>
+											<Input
 												value={(value as string | null) ?? ""}
 												onChangeText={(next) => handleChange(storageKey, next)}
 												placeholder={formatPlaceholder(field.label, field.type)}

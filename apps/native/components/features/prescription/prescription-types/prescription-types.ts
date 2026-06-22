@@ -1,16 +1,14 @@
-import type { MedicationShapeId } from "@/components/features/prescription/medication-shape";
-
 export type FrequencyUnit = "day" | "week" | "month";
 export type DurationUnit = "day" | "week" | "month";
+export type DurationType = "one_off" | "chronic";
 
 export type MedicationDraft = {
 	id: string;
 	name: string;
 	dosage: string;
-	type: string;
-	quantity: string;
 	frequencyCount: string;
 	frequencyUnit: FrequencyUnit;
+	durationType: DurationType;
 	durationValue: string;
 	durationUnit: DurationUnit;
 	frequencyText?: string;
@@ -18,7 +16,6 @@ export type MedicationDraft = {
 	route?: string | null;
 	instructions?: string | null;
 	comment?: string | null;
-	shape?: MedicationShapeId;
 };
 
 export type PrescriptionDraft = {
@@ -36,14 +33,12 @@ export function createMedicationDraft(
 		id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
 		name: "",
 		dosage: "",
-		type: "",
-		quantity: "",
 		frequencyCount: "",
 		frequencyUnit: "day",
+		durationType: "one_off",
 		durationValue: "",
 		durationUnit: "day",
 		comment: "",
-		shape: "capsule",
 		...overrides,
 	};
 }

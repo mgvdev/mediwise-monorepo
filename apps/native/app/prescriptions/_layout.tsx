@@ -1,11 +1,7 @@
-import { Ionicons } from "@expo/vector-icons";
-import { router, Stack } from "expo-router";
-import { useThemeColor } from "heroui-native";
-import { Pressable } from "react-native";
+import { Stack } from "expo-router";
+import { HeaderBack } from "@/components/base/header-back-button";
 
 export default function PrescriptionsLayout() {
-	const foreground = useThemeColor("foreground");
-
 	return (
 		<Stack screenOptions={{ headerShown: false }}>
 			<Stack.Screen
@@ -13,30 +9,23 @@ export default function PrescriptionsLayout() {
 				options={{
 					headerShown: true,
 					title: "Manual prescription",
-					headerLeft: () => (
-						<Pressable
-							onPress={() => router.back()}
-							style={{ paddingHorizontal: 12 }}
-						>
-							<Ionicons name="chevron-back" size={24} color={foreground} />
-						</Pressable>
-					),
+					headerLeft: () => <HeaderBack />,
 				}}
 			/>
 			<Stack.Screen
 				name="index"
-				title="Prescriptions"
 				options={{
 					headerShown: true,
 					title: "Prescriptions",
-					headerLeft: () => (
-						<Pressable
-							onPress={() => router.back()}
-							style={{ paddingHorizontal: 12 }}
-						>
-							<Ionicons name="chevron-back" size={24} color={foreground} />
-						</Pressable>
-					),
+					headerLeft: () => <HeaderBack />,
+				}}
+			/>
+			<Stack.Screen
+				name="current"
+				options={{
+					headerShown: true,
+					title: "Current treatments",
+					headerLeft: () => <HeaderBack />,
 				}}
 			/>
 			<Stack.Screen
@@ -44,14 +33,7 @@ export default function PrescriptionsLayout() {
 				options={{
 					headerShown: true,
 					title: "Edit prescription",
-					headerLeft: () => (
-						<Pressable
-							onPress={() => router.back()}
-							style={{ paddingHorizontal: 12 }}
-						>
-							<Ionicons name="chevron-back" size={24} color={foreground} />
-						</Pressable>
-					),
+					headerLeft: () => <HeaderBack />,
 				}}
 			/>
 		</Stack>

@@ -31,7 +31,7 @@ function StackLayout() {
 
 export default function Layout() {
 	if (isStorybookEnabled) {
-		const StorybookUIRoot = require("../.storybook").default;
+		const StorybookUIRoot = require("../.rnstorybook").default;
 
 		return (
 			<GestureHandlerRootView style={{ flex: 1 }}>

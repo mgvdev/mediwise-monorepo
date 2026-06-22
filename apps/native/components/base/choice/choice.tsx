@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { cn, TextField } from "heroui-native";
+import { cn, Input, Label, TextField } from "heroui-native";
 import type {
 	PressableProps,
 	TextInputProps,
@@ -178,8 +178,8 @@ export function ChoiceComment({
 	return (
 		<View className={cn("gap-2", className)}>
 			<TextField>
-				{label ? <TextField.Label>{label}</TextField.Label> : null}
-				<TextField.Input
+				{label ? <Label>{label}</Label> : null}
+				<Input
 					value={value}
 					onChangeText={onChangeText}
 					multiline={isMultiline}

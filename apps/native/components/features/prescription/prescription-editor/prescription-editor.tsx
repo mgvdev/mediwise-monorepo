@@ -1,9 +1,16 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Button, Surface, TextField, useThemeColor } from "heroui-native";
+import {
+	Button,
+	Input,
+	Label,
+	Surface,
+	TextField,
+	useThemeColor,
+} from "heroui-native";
 import type { ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 
-import { MedicationPrescriptionListItem } from "@/components/features/prescription/medication-prescription";
+import { MedicationListItem } from "@/components/features/prescription/medication-list-item";
 import type {
 	MedicationDraft,
 	PrescriptionDraft,
@@ -29,7 +36,9 @@ function formatMedicationSchedule(medication: MedicationDraft) {
 	if (medication.frequencyCount) {
 		parts.push(`${medication.frequencyCount}x/${medication.frequencyUnit}`);
 	}
-	if (medication.durationValue) {
+	if (medication.durationType === "chronic") {
+		parts.push("Chronic");
+	} else if (medication.durationValue) {
 		const plural = medication.durationValue === "1" ? "" : "s";
 		parts.push(
 			`for ${medication.durationValue} ${medication.durationUnit}${plural}`,
@@ -52,7 +61,7 @@ export function PrescriptionEditor({
 	footerLabel = "Continue",
 	showHeader = true,
 }: PrescriptionEditorProps) {
-	const accent = useThemeColor("primary");
+	const accent = useThemeColor("accent");
 
 	return (
 		<View className="gap-5">
@@ -75,24 +84,24 @@ export function PrescriptionEditor({
 				</Text>
 				<View className="mt-3 gap-3">
 					<TextField>
-						<TextField.Label>Prescription Date</TextField.Label>
-						<TextField.Input
+						<Label>Prescription Date</Label>
+						<Input
 							value={value.issuedDate}
 							onChangeText={(text) => onChange({ ...value, issuedDate: text })}
 							placeholder="YYYY-MM-DD"
 						/>
 					</TextField>
 					<TextField>
-						<TextField.Label>Valid Until</TextField.Label>
-						<TextField.Input
+						<Label>Valid Until</Label>
+						<Input
 							value={value.validUntil}
 							onChangeText={(text) => onChange({ ...value, validUntil: text })}
 							placeholder="YYYY-MM-DD"
 						/>
 					</TextField>
 					<TextField>
-						<TextField.Label>Doctor's Name</TextField.Label>
-						<TextField.Input
+						<Label>Doctor's Name</Label>
+						<Input
 							value={value.prescriberName}
 							onChangeText={(text) =>
 								onChange({ ...value, prescriberName: text })
@@ -121,14 +130,14 @@ export function PrescriptionEditor({
 				<View className="mt-3 gap-3">
 					{value.medications.length ? (
 						value.medications.map((medication, index) => (
-							<MedicationPrescriptionListItem
+							<MedicationListItem
 								key={medication.id}
 								medication={medication}
 								schedule={
 									formatMedicationSchedule(medication) || "Add schedule"
 								}
 								display={{ schedule: true, details: true }}
-								listVariant="card"
+								variant="card"
 								enableEditor={false}
 								onPress={() => onEditMedication(index)}
 							/>

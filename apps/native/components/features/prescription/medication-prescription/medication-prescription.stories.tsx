@@ -2,11 +2,9 @@ import type { Meta } from "@storybook/react-native";
 import { Button } from "heroui-native";
 import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
+import { MedicationListItem } from "@/components/features/prescription/medication-list-item";
 import { createMedicationDraft } from "@/components/features/prescription/prescription-types";
-import {
-	MedicationPrescriptionCard,
-	MedicationPrescriptionListItem,
-} from "./medication-prescription";
+import { MedicationPrescriptionCard } from "./medication-prescription";
 
 const meta: Meta = {
 	title: "Prescription/MedicationPrescription",
@@ -17,8 +15,6 @@ export default meta;
 const baseMedication = createMedicationDraft({
 	name: "Ibuprofen",
 	dosage: "20mg",
-	type: "Tablet",
-	shape: "capsule",
 	instructions: "After meal",
 	comment: "Take with a full glass of water after a light snack.",
 });
@@ -52,7 +48,7 @@ export const CardEditable = () => {
 
 export const ListItemDefault = () => (
 	<View className="flex-1 bg-background p-6">
-		<MedicationPrescriptionListItem
+		<MedicationListItem
 			medication={baseMedication}
 			subtitle="Levothyroxine Sodium - Tablet"
 			schedule="1 tablet at 12:22 am"
@@ -73,13 +69,12 @@ export const ListItemStack = () => {
 		...baseMedication,
 		name: "Vitamin D",
 		dosage: "1000 IU",
-		shape: "round",
 	});
 
 	return (
 		<ScrollView className="flex-1 bg-background p-6">
 			<View className="gap-6">
-				<MedicationPrescriptionListItem
+				<MedicationListItem
 					medication={primary}
 					subtitle="Levothyroxine Sodium - Tablet"
 					schedule="1 tablet at 12:22 am"
@@ -93,12 +88,11 @@ export const ListItemStack = () => {
 					editable
 					onSubmit={setPrimary}
 				/>
-				<MedicationPrescriptionListItem
+				<MedicationListItem
 					medication={{
 						...baseMedication,
 						name: "Amoxiciline",
 						dosage: "65mg",
-						shape: "oval",
 					}}
 					schedule="1 capsule at 8:10 am"
 					display={{
@@ -107,7 +101,7 @@ export const ListItemStack = () => {
 						comment: true,
 					}}
 				/>
-				<MedicationPrescriptionListItem
+				<MedicationListItem
 					medication={vitamin}
 					subtitle="Daily supplement"
 					schedule="1 tablet at 9:00 am"
@@ -116,7 +110,7 @@ export const ListItemStack = () => {
 						schedule: true,
 						details: true,
 					}}
-					listVariant="card"
+					variant="card"
 					editable
 					onSubmit={setVitamin}
 				/>
@@ -127,7 +121,7 @@ export const ListItemStack = () => {
 
 export const ListItemEditPageAction = () => (
 	<View className="flex-1 bg-background p-6">
-		<MedicationPrescriptionListItem
+		<MedicationListItem
 			medication={baseMedication}
 			subtitle="Levothyroxine Sodium - Tablet"
 			schedule="1 tablet at 12:22 am"
@@ -138,7 +132,7 @@ export const ListItemEditPageAction = () => (
 				instructions: true,
 				comment: true,
 			}}
-			listVariant="card"
+			variant="card"
 			showEditPageAction
 			onEditPage={() => console.log("[Storybook] edit page action clicked")}
 		/>

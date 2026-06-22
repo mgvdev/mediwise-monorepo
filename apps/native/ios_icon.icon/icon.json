@@ -1,58 +1,69 @@
 {
-	"fill": "system-light",
-	"groups": [
-		{
-			"layers": [
-				{
-					"fill": "automatic",
-					"glass": true,
-					"image-name": "Vector-1.svg",
-					"name": "Vector-1",
-					"position": {
-						"scale": 40,
-						"translation-in-points": [-81.44200164685344, 0.006319711158596419]
-					}
-				}
-			],
-			"shadow": {
-				"kind": "layer-color",
-				"opacity": 0.5
-			},
-			"translucency": {
-				"enabled": true,
-				"value": 0.5
-			}
-		},
-		{
-			"layers": [
-				{
-					"fill": {
-						"solid": "display-p3:0.20602,0.25368,0.35314,1.00000"
-					},
-					"image-name": "Vector.svg",
-					"name": "Vector",
-					"position": {
-						"scale": 40,
-						"translation-in-points": [13.63823646982496, 0.7559118973836121]
-					}
-				}
-			],
-			"position": {
-				"scale": 1,
-				"translation-in-points": [5.223273485796426, 8.52463031806542]
-			},
-			"shadow": {
-				"kind": "layer-color",
-				"opacity": 0.5
-			},
-			"translucency": {
-				"enabled": true,
-				"value": 0.5
-			}
-		}
-	],
-	"supported-platforms": {
-		"circles": ["watchOS"],
-		"squares": "shared"
-	}
+  "fill" : "system-light",
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "fill" : "automatic",
+          "glass" : true,
+          "image-name" : "Vector-1.svg",
+          "name" : "Vector-1",
+          "position" : {
+            "scale" : 40,
+            "translation-in-points" : [
+              -81.44200164685344,
+              0.006319711158596419
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "layer-color",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
+    {
+      "layers" : [
+        {
+          "fill" : {
+            "solid" : "display-p3:0.20602,0.25368,0.35314,1.00000"
+          },
+          "image-name" : "Vector.svg",
+          "name" : "Vector",
+          "position" : {
+            "scale" : 40,
+            "translation-in-points" : [
+              13.63823646982496,
+              0.7559118973836121
+            ]
+          }
+        }
+      ],
+      "position" : {
+        "scale" : 1,
+        "translation-in-points" : [
+          5.223273485796426,
+          8.52463031806542
+        ]
+      },
+      "shadow" : {
+        "kind" : "layer-color",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
 }

@@ -1,26 +1,35 @@
 {
-	"expo": {
-		"scheme": "mediwise-monorepo",
-		"userInterfaceStyle": "automatic",
-		"orientation": "default",
-		"web": {
-			"bundler": "metro"
-		},
-		"name": "mediwise-monorepo",
-		"slug": "mediwise-monorepo",
-		"plugins": ["expo-font"],
-		"ios": {
-			"infoPlist": {
-				"NSCameraUsageDescription": "Allow Mediwise to take prescription photos.",
-				"NSPhotoLibraryUsageDescription": "Allow Mediwise to upload prescription photos."
-			}
-		},
-		"android": {
-			"permissions": ["CAMERA", "READ_MEDIA_IMAGES", "READ_EXTERNAL_STORAGE"]
-		},
-		"experiments": {
-			"typedRoutes": true,
-			"reactCompiler": true
-		}
-	}
+  "expo": {
+    "scheme": "mediwise-monorepo",
+    "userInterfaceStyle": "automatic",
+    "orientation": "default",
+    "web": {
+      "bundler": "metro"
+    },
+    "name": "mediwise-monorepo",
+    "slug": "mediwise-monorepo",
+    "plugins": [
+      "expo-font",
+      "@react-native-community/datetimepicker",
+      "expo-router",
+      "expo-secure-store"
+    ],
+    "ios": {
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow Mediwise to take prescription photos.",
+        "NSPhotoLibraryUsageDescription": "Allow Mediwise to upload prescription photos."
+      }
+    },
+    "android": {
+      "permissions": [
+        "CAMERA",
+        "READ_MEDIA_IMAGES",
+        "READ_EXTERNAL_STORAGE"
+      ]
+    },
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
 }

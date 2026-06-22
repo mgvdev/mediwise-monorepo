@@ -1,4 +1,4 @@
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect } from "expo-router/react-navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useMemo, useState } from "react";
 import type { UploadSource } from "@/features/prescriptions/types";
@@ -22,6 +22,11 @@ export function useDocumentsScreen() {
 		enabled: !!session?.user,
 		refetchInterval: session?.user ? 5000 : false,
 	});
+	const unifiedCurrent = useQuery({
+		...trpc.prescriptions.unified.current.queryOptions(),
+		enabled: !!session?.user,
+		refetchInterval: session?.user ? 5000 : false,
+	});
 
 	const photo = usePrescriptionPhoto();
 	const uploader = usePrescriptionUpload();
@@ -39,6 +44,13 @@ export function useDocumentsScreen() {
 		prescriptions.data?.filter((item) => item.status === "completed").length ??
 		0;
 	const pendingCount = (prescriptions.data?.length ?? 0) - processedCount;
+	const treatmentNames = useMemo(() => {
+		if (!unifiedCurrent.data?.medications?.length) return [];
+		const names = unifiedCurrent.data.medications
+			.map((medication) => medication.name?.trim())
+			.filter((name): name is string => !!name);
+		return Array.from(new Set(names));
+	}, [unifiedCurrent.data?.medications]);
 
 	const handleUpload = async (source: UploadSource) => {
 		if (!photo.asset) {
@@ -106,6 +118,7 @@ export function useDocumentsScreen() {
 		filteredPrescriptions,
 		processedCount,
 		pendingCount,
+		treatmentNames,
 		isUploading: uploader.isUploading,
 	};
 }

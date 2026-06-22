@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { cn, useThemeColor } from "heroui-native";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { Card } from "@/components/base/card";
 import { Link } from "@/components/base/typography";
@@ -104,7 +104,7 @@ export function DocumentsHeader({
 	);
 }
 
-const styles = {
+const styles = StyleSheet.create({
 	actionTile: {
 		borderWidth: 2,
 		borderStyle: "dashed",
@@ -114,4 +114,4 @@ const styles = {
 		alignItems: "center",
 		justifyContent: "center",
 	},
-};
+});

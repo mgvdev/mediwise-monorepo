@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Button, Chip, TextField } from "heroui-native";
+import { Button, Chip, Input, Label, TextField } from "heroui-native";
 import * as React from "react";
 import { Pressable, Text, View } from "react-native";
 
@@ -39,8 +39,8 @@ export function TagEditor({
 			<View className="flex-row items-end gap-3">
 				<View className="flex-1">
 					<TextField>
-						<TextField.Label>Add item</TextField.Label>
-						<TextField.Input
+						<Label>Add item</Label>
+						<Input
 							value={input}
 							onChangeText={setInput}
 							placeholder={placeholder}

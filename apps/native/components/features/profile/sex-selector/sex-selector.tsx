@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { cn, TextField } from "heroui-native";
+import { cn, Input, Label, TextField } from "heroui-native";
 import { Text, View } from "react-native";
 
 import {
@@ -70,8 +70,8 @@ export function SexSelector({
 						{showOtherDetails ? (
 							<RadioComment>
 								<TextField>
-									<TextField.Label>Describe (optional)</TextField.Label>
-									<TextField.Input
+									<Label>Describe (optional)</Label>
+									<Input
 										value={otherDescription}
 										onChangeText={handleOtherDescriptionChange}
 										placeholder="Tell us how you identify"

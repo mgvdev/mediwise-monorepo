@@ -1,4 +1,4 @@
-import { BottomSheet, Button, TextField } from "heroui-native";
+import { BottomSheet, Button, Input, Label, TextField } from "heroui-native";
 import * as React from "react";
 import { Pressable, View } from "react-native";
 
@@ -45,12 +45,8 @@ export function WeightInput({
 			<BottomSheet.Trigger asChild>
 				<Pressable>
 					<TextField>
-						<TextField.Label>{label}</TextField.Label>
-						<TextField.Input
-							value={valueLabel}
-							editable={false}
-							pointerEvents="none"
-						/>
+						<Label>{label}</Label>
+						<Input value={valueLabel} editable={false} pointerEvents="none" />
 					</TextField>
 				</Pressable>
 			</BottomSheet.Trigger>

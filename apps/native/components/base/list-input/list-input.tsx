@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { cn, TextField, useThemeColor } from "heroui-native";
+import { cn, Input, Label, TextField, useThemeColor } from "heroui-native";
 import * as React from "react";
 import { Pressable, Text, View } from "react-native";
 
@@ -44,10 +44,10 @@ export function ListInput({
 	return (
 		<View className={cn("gap-3", className)}>
 			<TextField>
-				{label ? <TextField.Label>{label}</TextField.Label> : null}
+				{label ? <Label>{label}</Label> : null}
 				<View className="flex-row items-center gap-2">
 					<View className="flex-1">
-						<TextField.Input
+						<Input
 							value={input}
 							onChangeText={setInput}
 							placeholder={placeholder}

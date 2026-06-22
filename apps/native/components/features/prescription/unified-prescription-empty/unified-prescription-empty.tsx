@@ -16,7 +16,7 @@ export function UnifiedPrescriptionEmpty({
 	description = "Upload a prescription to build your unified medication list.",
 	className,
 }: UnifiedPrescriptionEmptyProps) {
-	const accent = useThemeColor("primary");
+	const accent = useThemeColor("accent");
 	const border = applyOpacity(accent, 0.28) ?? accent;
 	const fill = applyOpacity(accent, 0.12) ?? accent;
 

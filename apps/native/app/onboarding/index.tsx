@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { router, Stack } from "expo-router";
 import { Button } from "heroui-native";
 import { View } from "react-native";
 import { healthCategories } from "@/app/health/health-schema";
@@ -10,6 +10,8 @@ export default function OnboardingIntro() {
 
 	return (
 		<Container className="px-6 pt-12 pb-12">
+			<Stack.Screen options={{ title: "" }} />
+
 			<View className="gap-4">
 				<H1>Let’s set up your health profile</H1>
 				<Body>

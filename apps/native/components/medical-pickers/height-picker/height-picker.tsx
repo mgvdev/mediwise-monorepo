@@ -1,6 +1,7 @@
 import { Button } from "heroui-native";
 import * as React from "react";
 import { FlatList, Text, View } from "react-native";
+import { RollingNumber } from "@/components/base/rolling-number";
 
 const CM_RANGE = Array.from({ length: 131 }, (_, i) => i + 120);
 const IN_RANGE = Array.from({ length: 57 }, (_, i) => i + 48);
@@ -87,10 +88,10 @@ export function HeightPicker({ value, unit, onChange }: HeightPickerProps) {
 			</View>
 
 			<View className="items-center">
-				<Text className="font-semibold text-5xl text-foreground">
-					{displayValue}
-					<Text className="text-base text-muted"> {unit}</Text>
-				</Text>
+				<View className="flex-row items-end">
+					<RollingNumber value={displayValue} />
+					<Text className="self-end pb-2 text-base text-muted"> {unit}</Text>
+				</View>
 				<Text className="mt-1 text-muted text-xs">Scroll to adjust</Text>
 			</View>
 

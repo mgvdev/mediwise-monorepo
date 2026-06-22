@@ -1,17 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
-import {
-	Icon,
-	Label,
-	NativeTabs,
-	VectorIcon,
-} from "expo-router/unstable-native-tabs";
+import { NativeTabs } from "expo-router/unstable-native-tabs";
 import { useThemeColor } from "heroui-native";
+
+const { Icon, Label, VectorIcon } = NativeTabs.Trigger;
 
 export default function TabLayout() {
 	const themeColorForeground = useThemeColor("foreground");
 	const themeColorBackground = useThemeColor("background");
 	const themeColorMuted = useThemeColor("muted");
-	const themeColorPrimary = useThemeColor("primary");
+	const themeColorPrimary = useThemeColor("accent");
 
 	return (
 		<NativeTabs

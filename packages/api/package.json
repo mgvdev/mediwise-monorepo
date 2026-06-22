@@ -11,15 +11,15 @@
 	},
 	"scripts": {},
 	"devDependencies": {
-		"typescript": "catalog:",
+		"typescript": "^6.0.3",
 		"@mediwise-monorepo/config": "workspace:*"
 	},
 	"dependencies": {
-		"@trpc/server": "catalog:",
-		"@trpc/client": "catalog:",
-		"hono": "catalog:",
-		"dotenv": "catalog:",
-		"zod": "catalog:",
+		"@trpc/server": "^11.17.0",
+		"@trpc/client": "^11.17.0",
+		"hono": "^4.12.25",
+		"dotenv": "^17.4.2",
+		"zod": "^4.4.3",
 		"@mediwise-monorepo/infrastructure": "workspace:*",
 		"@mediwise-monorepo/env": "workspace:*",
 		"@mediwise-monorepo/auth": "workspace:*",

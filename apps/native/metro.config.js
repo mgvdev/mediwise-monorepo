@@ -1,3 +1,7 @@
+const path = require("node:path");
+const {
+	withStorybook,
+} = require("@storybook/react-native/metro/withStorybook");
 const { getDefaultConfig } = require("expo/metro-config");
 const { withUniwindConfig } = require("uniwind/metro");
 
@@ -11,4 +15,7 @@ const uniwindConfig = withUniwindConfig(config, {
 	dtsFile: "./uniwind-types.d.ts",
 });
 
-module.exports = uniwindConfig;
+module.exports = withStorybook(uniwindConfig, {
+	enabled: process.env.EXPO_PUBLIC_STORYBOOK === "1",
+	configPath: path.resolve(__dirname, "./.rnstorybook"),
+});

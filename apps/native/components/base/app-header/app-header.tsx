@@ -130,7 +130,7 @@ function ScoreRing({
 }
 
 function useVariantTokens(variant: AppHeaderVariant) {
-	const accent = useThemeColor("primary");
+	const accent = useThemeColor("accent");
 	const styles = variantStyles[variant];
 	const iconColor =
 		variant === "dark" || variant === "gradient" ? "white" : accent;
@@ -360,6 +360,7 @@ export function AppHeader({
 	);
 }
 
+export type { AppHeaderProps, AppHeaderVariant };
 export {
 	AppHeaderAvatar,
 	AppHeaderChevron,
@@ -369,5 +370,3 @@ export {
 	AppHeaderStatus,
 	AppHeaderTitle,
 };
-
-export type { AppHeaderProps, AppHeaderVariant };

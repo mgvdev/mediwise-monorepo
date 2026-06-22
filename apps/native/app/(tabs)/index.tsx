@@ -1,43 +1,30 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { Button, useThemeColor } from "heroui-native";
+import { useThemeColor } from "heroui-native";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
 import { AppHeader } from "@/components/base/app-header";
 import { SoftHealthBackground } from "@/components/base/backgrounds";
 import {
 	Card,
+	CardAction,
 	CardBody,
-	CardRow,
-	CardRowAction,
-	CardRowContent,
-	CardRowIcon,
+	CardHeader,
+	CardTitle,
 } from "@/components/base/card";
-import { BodyStrong, Caption, Link } from "@/components/base/typography";
+import {
+	Body,
+	BodyMuted,
+	BodyStrong,
+	Caption,
+} from "@/components/base/typography";
 import {
 	RecapBuilderModal,
 	type RecapSection,
 } from "@/components/features/recap/recap-builder-button";
 import { Container } from "@/components/layout/container";
+import { HorizontalStack, VerticalStack } from "@/components/layout/stack";
 import { applyOpacity, pressableFeedback } from "@/components/utils";
-import { authClient } from "@/lib/auth-client";
-import { queryClient } from "@/utils/trpc";
-import { healthCategories } from "../health/health-schema";
-
-const CATEGORY_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
-	personal_information: "person-outline",
-	vital_signs: "pulse-outline",
-	allergies: "leaf-outline",
-	family_history: "people-outline",
-	surgical_history: "cut-outline",
-	cardiology: "heart-outline",
-	pulmonology: "cloud-outline",
-	neurology: "hardware-chip-outline",
-	endocrinology: "flask-outline",
-	psychiatry: "chatbubble-ellipses-outline",
-	gynecology: "female-outline",
-	obstetrics: "male-female-outline",
-};
 
 const RECAP_SECTIONS: RecapSection[] = [
 	{
@@ -68,7 +55,7 @@ const RECAP_SECTIONS: RecapSection[] = [
 ];
 
 export default function Home() {
-	const primary = useThemeColor("primary");
+	const primary = useThemeColor("accent");
 	const muted = useThemeColor("muted");
 	const [recapOpen, setRecapOpen] = useState(false);
 	const [recapSelectedIds, setRecapSelectedIds] = useState(
@@ -79,7 +66,7 @@ export default function Home() {
 		<View className="flex-1 bg-background">
 			<SoftHealthBackground heightRatio={1} />
 
-			<Container className="mb-16 gap-6 bg-transparent px-6 pt-12 pb-16">
+			<Container className="mb-16 bg-transparent px-6 pt-12 pb-16">
 				<AppHeader
 					title="Home"
 					subtitle="Your health summary"
@@ -89,78 +76,167 @@ export default function Home() {
 					notificationCount={3}
 					showChevron={false}
 					variant="dark"
+					onPress={() => router.push("/profile")}
 				/>
-				<View className="my-4">
+				<VerticalStack className="mt-6">
 					<Pressable
-						onPress={() => setRecapOpen(true)}
-						className="flex-row items-center justify-center gap-2 rounded-full border border-primary px-4 py-2"
-						style={pressableFeedback(undefined, {})}
+						onPress={() => router.push("/health/overview")}
+						className="rounded-2xl"
+						style={pressableFeedback(undefined, { opacity: 0.9 })}
 					>
-						<Ionicons name="share-social-outline" size={18} color={primary} />
-						<Link>Share recap</Link>
+						<Card className="min-h-[160px]">
+							<CardHeader>
+								<CardTitle>Medical record</CardTitle>
+								<HorizontalStack className="gap-2">
+									<CardAction
+										onPress={() => setRecapOpen(true)}
+										accessibilityRole="button"
+										accessibilityLabel="Share recap"
+									>
+										<Ionicons
+											name="share-social-outline"
+											size={16}
+											color={primary}
+										/>
+									</CardAction>
+									<CardAction
+										onPress={() => router.push("/health")}
+										accessibilityRole="button"
+										accessibilityLabel="Edit medical record"
+									>
+										<Ionicons name="create-outline" size={16} color={primary} />
+									</CardAction>
+								</HorizontalStack>
+							</CardHeader>
+							<CardBody className="mt-2 gap-2">
+								<BodyStrong>All your health info, simplified.</BodyStrong>
+								<BodyMuted>
+									Readable summary of allergies, conditions, and treatments.
+								</BodyMuted>
+							</CardBody>
+						</Card>
 					</Pressable>
-				</View>
-				<View>
-					<Button
-						variant="secondary"
-						onPress={() => {
-							authClient.signOut();
-							queryClient.invalidateQueries();
-						}}
-					>
-						<Button.Label>Sign out</Button.Label>
-					</Button>
-				</View>
 
-				<View className="gap-3">
-					{healthCategories.map((category) => {
-						const icon = CATEGORY_ICONS[category.key] ?? "medkit-outline";
+					<HorizontalStack>
+						<Pressable
+							onPress={() => router.push("/documents")}
+							className="flex-1 rounded-2xl"
+							style={pressableFeedback(undefined, {
+								opacity: 0.9,
+							})}
+						>
+							<Card className="min-h-[150px]">
+								<CardBody className="mt-2 gap-3">
+									<View
+										className="h-11 w-11 items-center justify-center rounded-full"
+										style={{
+											backgroundColor:
+												applyOpacity(primary, 0.12) ?? "transparent",
+											borderColor: applyOpacity(primary, 0.35) ?? primary,
+											borderWidth: 1,
+										}}
+									>
+										<Ionicons
+											name="document-text-outline"
+											size={18}
+											color={primary}
+										/>
+									</View>
+									<View className="gap-1">
+										<BodyStrong>Documents</BodyStrong>
+										<Caption>Prescriptions & files</Caption>
+									</View>
+								</CardBody>
+							</Card>
+						</Pressable>
 
-						return (
-							<Pressable
-								key={category.key}
-								onPress={() =>
-									router.push({
-										pathname: "/health/[category]",
-										params: { category: category.key },
-									})
-								}
-								className="rounded-2xl"
-								style={pressableFeedback(undefined, {
-									opacity: 0.8,
-								})}
-							>
-								<Card className="p-0">
-									<CardBody className="mt-0">
-										<CardRow>
-											<CardRowIcon
-												style={{
-													backgroundColor:
-														applyOpacity(primary, 0.12) ?? "transparent",
-													borderColor: applyOpacity(primary, 0.35) ?? primary,
-													borderWidth: 1,
-												}}
-											>
-												<Ionicons name={icon} size={18} color={primary} />
-											</CardRowIcon>
-											<CardRowContent>
-												<BodyStrong>{category.label}</BodyStrong>
-												<Caption>Open questionnaire</Caption>
-											</CardRowContent>
-											<CardRowAction>
-												<Ionicons
-													name="chevron-forward"
-													size={18}
-													color={muted}
-												/>
-											</CardRowAction>
-										</CardRow>
-									</CardBody>
-								</Card>
-							</Pressable>
-						);
-					})}
-				</View>
+						<Pressable
+							onPress={() => router.push("/documents")}
+							className="flex-1 rounded-2xl"
+							style={pressableFeedback(undefined, {
+								opacity: 0.9,
+							})}
+						>
+							<Card className="min-h-[150px]">
+								<CardBody className="mt-2 gap-3">
+									<View
+										className="h-11 w-11 items-center justify-center rounded-full"
+										style={{
+											backgroundColor:
+												applyOpacity(primary, 0.12) ?? "transparent",
+											borderColor: applyOpacity(primary, 0.35) ?? primary,
+											borderWidth: 1,
+										}}
+									>
+										<Ionicons name="camera-outline" size={18} color={primary} />
+									</View>
+									<View className="gap-1">
+										<BodyStrong>Scan</BodyStrong>
+										<Caption>Capture a prescription</Caption>
+									</View>
+								</CardBody>
+							</Card>
+						</Pressable>
+					</HorizontalStack>
+
+					<HorizontalStack>
+						<Pressable
+							onPress={() => {}}
+							className="flex-1 rounded-2xl"
+							style={pressableFeedback(undefined, {
+								opacity: 0.9,
+							})}
+						>
+							<Card className="min-h-[150px]">
+								<CardBody className="mt-2 gap-3">
+									<View
+										className="h-11 w-11 items-center justify-center rounded-full"
+										style={{
+											backgroundColor:
+												applyOpacity(muted, 0.12) ?? "transparent",
+											borderColor: applyOpacity(muted, 0.35) ?? muted,
+											borderWidth: 1,
+										}}
+									>
+										<Ionicons name="alarm-outline" size={18} color={muted} />
+									</View>
+									<View className="gap-1">
+										<BodyStrong>Treatment reminders</BodyStrong>
+										<Caption>Coming soon</Caption>
+									</View>
+								</CardBody>
+							</Card>
+						</Pressable>
+
+						<Pressable
+							onPress={() => router.push("/prescriptions/current")}
+							className="flex-1 rounded-2xl"
+							style={pressableFeedback(undefined, {
+								opacity: 0.9,
+							})}
+						>
+							<Card className="min-h-[150px]">
+								<CardBody className="mt-2 gap-3">
+									<View
+										className="h-11 w-11 items-center justify-center rounded-full"
+										style={{
+											backgroundColor:
+												applyOpacity(primary, 0.12) ?? "transparent",
+											borderColor: applyOpacity(primary, 0.35) ?? primary,
+											borderWidth: 1,
+										}}
+									>
+										<Ionicons name="medkit-outline" size={18} color={primary} />
+									</View>
+									<View className="gap-1">
+										<BodyStrong>Current treatments</BodyStrong>
+										<Caption>What you take today</Caption>
+									</View>
+								</CardBody>
+							</Card>
+						</Pressable>
+					</HorizontalStack>
+				</VerticalStack>
 				<RecapBuilderModal
 					open={recapOpen}
 					onClose={() => setRecapOpen(false)}

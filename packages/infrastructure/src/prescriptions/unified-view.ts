@@ -1,291 +1,300 @@
 import {
-	PrescriptionUnified,
-	PrescriptionUnifiedView,
+    PrescriptionUnified,
+    PrescriptionUnifiedView,
 } from "@mediwise-monorepo/db";
 
 import type {
-	DurationUnit,
-	FrequencyUnit,
-	PrescriptionEntrySource,
-	PrescriptionUnifiedDoc,
+    DurationType,
+    DurationUnit,
+    FrequencyUnit,
+    PrescriptionEntrySource,
+    PrescriptionUnifiedDoc,
 } from "./types";
 
 export type UnifiedViewMedication = {
-	name: string;
-	dosage?: string | null;
-	type?: string | null;
-	frequency?: string | null;
-	frequencyCount?: number | null;
-	frequencyUnit?: FrequencyUnit | null;
-	route?: string | null;
-	duration?: string | null;
-	durationValue?: number | null;
-	durationUnit?: DurationUnit | null;
-	quantity?: string | null;
-	instructions?: string | null;
-	startDate?: string | null;
-	endDate?: string | null;
-	status: "active" | "ended";
-	sources: { id: string; rawId?: string | null }[];
+    name: string;
+    dosage?: string | null;
+    frequency?: string | null;
+    frequencyCount?: number | null;
+    frequencyUnit?: FrequencyUnit | null;
+    route?: string | null;
+    durationType?: DurationType | null;
+    duration?: string | null;
+    durationValue?: number | null;
+    durationUnit?: DurationUnit | null;
+    instructions?: string | null;
+    startDate?: string | null;
+    endDate?: string | null;
+    status: "active" | "ended";
+    sources: { id: string; rawId?: string | null }[];
 };
 
 export type UnifiedViewSource = {
-	id: string;
-	rawId?: string | null;
-	source: PrescriptionEntrySource;
-	issuedDate?: string | null;
-	prescriberName?: string | null;
-	createdAt: Date;
-	updatedAt?: Date | null;
+    id: string;
+    rawId?: string | null;
+    source: PrescriptionEntrySource;
+    issuedDate?: string | null;
+    prescriberName?: string | null;
+    createdAt: Date;
+    updatedAt?: Date | null;
 };
 
 export type UnifiedViewProfile = {
-	dateOfBirth?: string | null;
-	heightCm?: number | null;
-	heightUnit?: "cm" | "inch" | null;
-	weightKg?: number | null;
-	weightUnit?: "kg" | "lbs" | null;
-	symptoms: string[];
-	conditions: string[];
-	history: string[];
-	allergies: string[];
-	lifelongTreatments: string[];
-	notes?: string | null;
+    dateOfBirth?: string | null;
+    heightCm?: number | null;
+    heightUnit?: "cm" | "inch" | null;
+    weightKg?: number | null;
+    weightUnit?: "kg" | "lbs" | null;
+    symptoms: string[];
+    conditions: string[];
+    history: string[];
+    allergies: string[];
+    lifelongTreatments: string[];
+    notes?: string | null;
 };
 
 export type UnifiedPrescriptionViewDoc = {
-	_id: string;
-	userId: string;
-	tenantId: string | null;
-	updatedAt: Date;
-	prescriptions: UnifiedViewSource[];
-	medications: UnifiedViewMedication[];
-	profile: UnifiedViewProfile;
+    _id: string;
+    userId: string;
+    tenantId: string | null;
+    updatedAt: Date;
+    prescriptions: UnifiedViewSource[];
+    medications: UnifiedViewMedication[];
+    profile: UnifiedViewProfile;
 };
 
 const emptyProfile: UnifiedViewProfile = {
-	dateOfBirth: null,
-	heightCm: null,
-	heightUnit: "cm",
-	weightKg: null,
-	weightUnit: "kg",
-	symptoms: [],
-	conditions: [],
-	history: [],
-	allergies: [],
-	lifelongTreatments: [],
-	notes: null,
+    dateOfBirth: null,
+    heightCm: null,
+    heightUnit: "cm",
+    weightKg: null,
+    weightUnit: "kg",
+    symptoms: [],
+    conditions: [],
+    history: [],
+    allergies: [],
+    lifelongTreatments: [],
+    notes: null,
 };
 
 function normalizeName(value: string) {
-	return value.trim().toLowerCase();
+    return value.trim().toLowerCase();
 }
 
 function addDuration(date: Date, value: number, unit: DurationUnit) {
-	const copy = new Date(date.getTime());
-	switch (unit) {
-		case "day":
-			copy.setDate(copy.getDate() + value);
-			break;
-		case "week":
-			copy.setDate(copy.getDate() + value * 7);
-			break;
-		case "month":
-			copy.setMonth(copy.getMonth() + value);
-			break;
-		default:
-			break;
-	}
-	return copy;
+    const copy = new Date(date.getTime());
+    switch (unit) {
+        case "day":
+            copy.setDate(copy.getDate() + value);
+            break;
+        case "week":
+            copy.setDate(copy.getDate() + value * 7);
+            break;
+        case "month":
+            copy.setMonth(copy.getMonth() + value);
+            break;
+        default:
+            break;
+    }
+    return copy;
 }
 
 function computeEndDate(input: {
-	issuedDate?: string | null;
-	validUntil?: string | null;
-	durationValue?: number | null;
-	durationUnit?: DurationUnit | null;
+    issuedDate?: string | null;
+    validUntil?: string | null;
+    durationType?: DurationType | null;
+    durationValue?: number | null;
+    durationUnit?: DurationUnit | null;
 }) {
-	if (input.issuedDate && input.durationValue && input.durationUnit) {
-		const issued = new Date(input.issuedDate);
-		if (!Number.isNaN(issued.getTime())) {
-			return addDuration(
-				issued,
-				input.durationValue,
-				input.durationUnit,
-			).toISOString();
-		}
-	}
-	if (input.validUntil) {
-		const until = new Date(input.validUntil);
-		if (!Number.isNaN(until.getTime())) {
-			return until.toISOString();
-		}
-	}
-	return null;
+    if (input.durationType === "chronic") {
+        return null;
+    }
+    if (input.issuedDate && input.durationValue && input.durationUnit) {
+        const issued = new Date(input.issuedDate);
+        if (!Number.isNaN(issued.getTime())) {
+            return addDuration(
+                issued,
+                input.durationValue,
+                input.durationUnit,
+            ).toISOString();
+        }
+    }
+    if (input.validUntil) {
+        const until = new Date(input.validUntil);
+        if (!Number.isNaN(until.getTime())) {
+            return until.toISOString();
+        }
+    }
+    return null;
 }
 
 function resolveStatus(endDate: string | null) {
-	if (!endDate) return "active";
-	const date = new Date(endDate);
-	if (Number.isNaN(date.getTime())) return "active";
-	return date.getTime() >= Date.now() ? "active" : "ended";
+    if (!endDate) return "active";
+    const date = new Date(endDate);
+    if (Number.isNaN(date.getTime())) return "active";
+    return date.getTime() >= Date.now() ? "active" : "ended";
 }
 
 function buildMedicationKey(medication: {
-	name: string;
-	dosage?: string | null;
+    name: string;
+    dosage?: string | null;
 }) {
-	const dosage = medication.dosage
-		? medication.dosage.trim().toLowerCase()
-		: "";
-	return `${normalizeName(medication.name)}::${dosage}`;
+    const dosage = medication.dosage
+        ? medication.dosage.trim().toLowerCase()
+        : "";
+    return `${normalizeName(medication.name)}::${dosage}`;
 }
 
 function buildSources(unified: PrescriptionUnifiedDoc[]): UnifiedViewSource[] {
-	return unified.map((doc) => ({
-		id: doc._id,
-		rawId: doc.rawId ?? null,
-		source: doc.source ?? "manual",
-		issuedDate: doc.data.issuedDate ?? null,
-		prescriberName: doc.data.prescriberName ?? null,
-		createdAt: doc.createdAt,
-		updatedAt: doc.updatedAt ?? null,
-	}));
+    return unified.map((doc) => ({
+        id: doc._id,
+        rawId: doc.rawId ?? null,
+        source: doc.source ?? "manual",
+        issuedDate: doc.data.issuedDate ?? null,
+        prescriberName: doc.data.prescriberName ?? null,
+        createdAt: doc.createdAt,
+        updatedAt: doc.updatedAt ?? null,
+    }));
 }
 
 function buildMedications(unified: PrescriptionUnifiedDoc[]) {
-	const map = new Map<string, UnifiedViewMedication>();
+    const map = new Map<string, UnifiedViewMedication>();
 
-	for (const doc of unified) {
-		for (const medication of doc.data.medications ?? []) {
-			if (!medication?.name) continue;
+    for (const doc of unified) {
+        for (const medication of doc.data.medications ?? []) {
+            if (!medication?.name) continue;
 
-			const key = buildMedicationKey({
-				name: medication.name,
-				dosage: medication.dosage ?? null,
-			});
-			const endDate = computeEndDate({
-				issuedDate: doc.data.issuedDate ?? null,
-				validUntil: doc.data.validUntil ?? null,
-				durationValue: medication.durationValue ?? null,
-				durationUnit: medication.durationUnit ?? null,
-			});
-			const status = resolveStatus(endDate);
+            const key = buildMedicationKey({
+                name: medication.name,
+                dosage: medication.dosage ?? null,
+            });
+            const endDate = computeEndDate({
+                issuedDate: doc.data.issuedDate ?? null,
+                validUntil: doc.data.validUntil ?? null,
+                durationType: medication.durationType ?? null,
+                durationValue: medication.durationValue ?? null,
+                durationUnit: medication.durationUnit ?? null,
+            });
+            const status = resolveStatus(endDate);
 
-			const existing = map.get(key);
-			if (existing) {
-				existing.sources.push({ id: doc._id, rawId: doc.rawId ?? null });
-				if (!existing.endDate && endDate) {
-					existing.endDate = endDate;
-					existing.status = status;
-				}
-				continue;
-			}
+            const existing = map.get(key);
+            if (existing) {
+                existing.sources.push({
+                    id: doc._id,
+                    rawId: doc.rawId ?? null,
+                });
+                if (!existing.endDate && endDate) {
+                    existing.endDate = endDate;
+                    existing.status = status;
+                }
+                continue;
+            }
 
-			map.set(key, {
-				name: medication.name,
-				dosage: medication.dosage ?? null,
-				type: medication.type ?? null,
-				frequency: medication.frequency ?? null,
-				frequencyCount: medication.frequencyCount ?? null,
-				frequencyUnit: medication.frequencyUnit ?? null,
-				route: medication.route ?? null,
-				duration: medication.duration ?? null,
-				durationValue: medication.durationValue ?? null,
-				durationUnit: medication.durationUnit ?? null,
-				quantity: medication.quantity ?? null,
-				instructions: medication.instructions ?? null,
-				startDate: doc.data.issuedDate ?? null,
-				endDate,
-				status,
-				sources: [{ id: doc._id, rawId: doc.rawId ?? null }],
-			});
-		}
-	}
+            map.set(key, {
+                name: medication.name,
+                dosage: medication.dosage ?? null,
+                frequency: medication.frequency ?? null,
+                frequencyCount: medication.frequencyCount ?? null,
+                frequencyUnit: medication.frequencyUnit ?? null,
+                route: medication.route ?? null,
+                durationType: medication.durationType ?? null,
+                duration: medication.duration ?? null,
+                durationValue: medication.durationValue ?? null,
+                durationUnit: medication.durationUnit ?? null,
+                instructions: medication.instructions ?? null,
+                startDate: doc.data.issuedDate ?? null,
+                endDate,
+                status,
+                sources: [{ id: doc._id, rawId: doc.rawId ?? null }],
+            });
+        }
+    }
 
-	return Array.from(map.values());
+    return Array.from(map.values());
 }
 
 /**
  * Fetch the unified prescription view for a user.
  */
 export async function getUnifiedViewByUser(userId: string) {
-	return PrescriptionUnifiedView.findOne({
-		userId,
-	}).lean<UnifiedPrescriptionViewDoc | null>();
+    return PrescriptionUnifiedView.findOne({
+        userId,
+    }).lean<UnifiedPrescriptionViewDoc | null>();
 }
 
 /**
  * Update user-editable profile data inside the unified view.
  */
 export async function updateUnifiedViewProfile(input: {
-	userId: string;
-	profile: Partial<UnifiedViewProfile>;
+    userId: string;
+    profile: Partial<UnifiedViewProfile>;
 }) {
-	const existing = await PrescriptionUnifiedView.findOne({
-		userId: input.userId,
-	}).lean<UnifiedPrescriptionViewDoc | null>();
+    const existing = await PrescriptionUnifiedView.findOne({
+        userId: input.userId,
+    }).lean<UnifiedPrescriptionViewDoc | null>();
 
-	const mergedProfile: UnifiedViewProfile = {
-		...emptyProfile,
-		...(existing?.profile ?? {}),
-		...input.profile,
-	};
+    const mergedProfile: UnifiedViewProfile = {
+        ...emptyProfile,
+        ...(existing?.profile ?? {}),
+        ...input.profile,
+    };
 
-	const now = new Date();
-	const updated = await PrescriptionUnifiedView.findOneAndUpdate(
-		{ userId: input.userId },
-		{
-			$set: {
-				profile: mergedProfile,
-				updatedAt: now,
-			},
-			$setOnInsert: {
-				_id: input.userId,
-				userId: input.userId,
-				tenantId: null,
-				prescriptions: [],
-				medications: [],
-			},
-		},
-		{ upsert: true, new: true },
-	).lean<UnifiedPrescriptionViewDoc | null>();
+    const now = new Date();
+    const updated = await PrescriptionUnifiedView.findOneAndUpdate(
+        { userId: input.userId },
+        {
+            $set: {
+                profile: mergedProfile,
+                updatedAt: now,
+            },
+            $setOnInsert: {
+                _id: input.userId,
+                userId: input.userId,
+                tenantId: null,
+                prescriptions: [],
+                medications: [],
+            },
+        },
+        { upsert: true, new: true },
+    ).lean<UnifiedPrescriptionViewDoc | null>();
 
-	return updated;
+    return updated;
 }
 
 /**
  * Recompute and persist the unified view from all unified prescriptions.
  */
 export async function recomputeUnifiedView(userId: string) {
-	const unified = await PrescriptionUnified.find({ userId })
-		.sort({ createdAt: -1 })
-		.lean<PrescriptionUnifiedDoc[]>();
+    const unified = await PrescriptionUnified.find({ userId })
+        .sort({ createdAt: -1 })
+        .lean<PrescriptionUnifiedDoc[]>();
 
-	const existing = await PrescriptionUnifiedView.findOne({
-		userId,
-	}).lean<UnifiedPrescriptionViewDoc | null>();
+    const existing = await PrescriptionUnifiedView.findOne({
+        userId,
+    }).lean<UnifiedPrescriptionViewDoc | null>();
 
-	const prescriptions = buildSources(unified);
-	const medications = buildMedications(unified);
-	const tenantId =
-		unified.find((doc) => doc.tenantId)?.tenantId ?? existing?.tenantId ?? null;
+    const prescriptions = buildSources(unified);
+    const medications = buildMedications(unified);
+    const tenantId =
+        unified.find((doc) => doc.tenantId)?.tenantId ??
+        existing?.tenantId ??
+        null;
 
-	const doc: UnifiedPrescriptionViewDoc = {
-		_id: userId,
-		userId,
-		tenantId,
-		updatedAt: new Date(),
-		prescriptions,
-		medications,
-		profile: existing?.profile ?? emptyProfile,
-	};
+    const doc: UnifiedPrescriptionViewDoc = {
+        _id: userId,
+        userId,
+        tenantId,
+        updatedAt: new Date(),
+        prescriptions,
+        medications,
+        profile: existing?.profile ?? emptyProfile,
+    };
 
-	await PrescriptionUnifiedView.findOneAndUpdate(
-		{ userId },
-		{ $set: doc },
-		{ upsert: true },
-	);
+    await PrescriptionUnifiedView.findOneAndUpdate(
+        { userId },
+        { $set: doc },
+        { upsert: true },
+    );
 
-	return doc;
+    return doc;
 }

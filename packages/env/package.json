@@ -9,13 +9,13 @@
 		"./native": "./src/native.ts"
 	},
 	"dependencies": {
-		"zod": "catalog:",
-		"@t3-oss/env-core": "^0.13.1",
-		"dotenv": "catalog:"
+		"zod": "^4.4.3",
+		"@t3-oss/env-core": "^0.13.11",
+		"dotenv": "^17.4.2"
 	},
 	"devDependencies": {
-		"typescript": "catalog:",
-		"@types/bun": "catalog:",
+		"typescript": "^6.0.3",
+		"@types/bun": "^1.3.14",
 		"@mediwise-monorepo/config": "workspace:*"
 	}
 }

@@ -1,11 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Button, cn, Surface, TextField } from "heroui-native";
+import { Button, cn, Input, Label, Surface, TextField } from "heroui-native";
 import { useEffect, useRef } from "react";
 import { Animated, Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ChoiceInput } from "@/components/base/choice";
 import { DurationPicker } from "@/components/base/duration-picker";
 import { FrequencyPicker } from "@/components/base/frequency-picker";
-import { MedicationShapePicker } from "@/components/features/prescription/medication-shape-picker";
 import type { MedicationDraft } from "@/components/features/prescription/prescription-types";
 
 type MedicationEditorProps = {
@@ -38,6 +38,7 @@ export function MedicationEditor({
 	const safeBottom = Math.max(insets.bottom, 12) + 32;
 	const frequencyCount = Number.parseInt(value.frequencyCount ?? "", 10);
 	const durationCount = Number.parseInt(value.durationValue ?? "", 10);
+	const isChronic = value.durationType === "chronic";
 	const Wrapper = variant === "surface" ? Surface : View;
 	const opacity = useRef(new Animated.Value(animateIn ? 0 : 1)).current;
 	const translateY = useRef(new Animated.Value(animateIn ? 12 : 0)).current;
@@ -93,14 +94,9 @@ export function MedicationEditor({
 				contentContainerStyle={{ paddingBottom: 32, flexGrow: 1 }}
 			>
 				<View className="gap-4">
-					<MedicationShapePicker
-						value={value.shape ?? "capsule"}
-						onChange={(shape) => onChange({ ...value, shape })}
-						showValueLabel={false}
-					/>
 					<TextField>
-						<TextField.Label>Medication Name</TextField.Label>
-						<TextField.Input
+						<Label>Medication Name</Label>
+						<Input
 							value={value.name}
 							onChangeText={(text) => onChange({ ...value, name: text })}
 							placeholder="Escitalopram"
@@ -108,44 +104,19 @@ export function MedicationEditor({
 						/>
 					</TextField>
 
-					<View className="flex-row gap-3">
-						<View className="flex-1">
-							<TextField>
-								<TextField.Label>Medication Dose</TextField.Label>
-								<TextField.Input
-									value={value.dosage}
-									onChangeText={(text) => onChange({ ...value, dosage: text })}
-									placeholder="50mg"
-									editable={isEditable}
-								/>
-							</TextField>
-						</View>
-						<View className="flex-1">
-							<TextField>
-								<TextField.Label>Medication Type</TextField.Label>
-								<TextField.Input
-									value={value.type}
-									onChangeText={(text) => onChange({ ...value, type: text })}
-									placeholder="Tablet"
-									editable={isEditable}
-								/>
-							</TextField>
-						</View>
-					</View>
-
 					<TextField>
-						<TextField.Label>Medication Quantity</TextField.Label>
-						<TextField.Input
-							value={value.quantity}
-							onChangeText={(text) => onChange({ ...value, quantity: text })}
-							placeholder="30 tablets"
+						<Label>Medication Dose</Label>
+						<Input
+							value={value.dosage}
+							onChangeText={(text) => onChange({ ...value, dosage: text })}
+							placeholder="50mg"
 							editable={isEditable}
 						/>
 					</TextField>
 
 					<TextField>
-						<TextField.Label>Comment</TextField.Label>
-						<TextField.Input
+						<Label>Comment</Label>
+						<Input
 							value={value.comment ?? ""}
 							onChangeText={(text) => onChange({ ...value, comment: text })}
 							placeholder="After meal"
@@ -169,20 +140,39 @@ export function MedicationEditor({
 						isEditable={isEditable}
 					/>
 
-					<DurationPicker
-						value={{
-							duration: Number.isNaN(durationCount) ? 0 : durationCount,
-							durationUnit: value.durationUnit,
-						}}
+					<ChoiceInput
+						label="Treatment duration"
+						value={value.durationType}
 						onChange={(next) =>
 							onChange({
 								...value,
-								durationValue: String(next.duration ?? 0),
-								durationUnit: next.durationUnit,
+								durationType: next === "chronic" ? "chronic" : "one_off",
+								durationValue: next === "chronic" ? "" : value.durationValue,
 							})
 						}
-						isEditable={isEditable}
+						options={[
+							{ value: "one_off", label: "Ponctuel" },
+							{ value: "chronic", label: "Chronique" },
+						]}
+						layout="horizontal"
 					/>
+
+					{!isChronic ? (
+						<DurationPicker
+							value={{
+								duration: Number.isNaN(durationCount) ? 0 : durationCount,
+								durationUnit: value.durationUnit,
+							}}
+							onChange={(next) =>
+								onChange({
+									...value,
+									durationValue: String(next.duration ?? 0),
+									durationUnit: next.durationUnit,
+								})
+							}
+							isEditable={isEditable}
+						/>
+					) : null}
 				</View>
 			</ScrollView>
 

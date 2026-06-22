@@ -45,6 +45,7 @@ export default function DocumentsScreen() {
 		prescriptions,
 		filteredPrescriptions,
 		isUploading,
+		treatmentNames,
 	} = useDocumentsScreen();
 
 	if (!session?.user) {
@@ -135,17 +136,34 @@ export default function DocumentsScreen() {
 
 				<Card containerClassName="mx-6" variant="ai">
 					<CardHeader>
-						<CardTitle>Unified prescription</CardTitle>
+						<CardTitle>Unified Ordonnance</CardTitle>
 						<Pressable
-							onPress={() => router.push("/prescriptions")}
+							onPress={() => router.push("/prescriptions/current")}
 							className="px-2 py-1"
 							style={pressableFeedback()}
 						>
-							<Link>See all</Link>
+							<Link>Open</Link>
 						</Pressable>
 					</CardHeader>
 					<CardBody>
-						<UnifiedPrescriptionEmpty />
+						{treatmentNames.length ? (
+							<View className="gap-1">
+								<BodyMedium>
+									{treatmentNames.length} active treatments
+								</BodyMedium>
+								<Caption>
+									{treatmentNames.slice(0, 3).join(", ")}
+									{treatmentNames.length > 3
+										? ` +${treatmentNames.length - 3} more`
+										: ""}
+								</Caption>
+							</View>
+						) : (
+							<UnifiedPrescriptionEmpty
+								title="No active treatments"
+								description="Add a prescription to see current treatments."
+							/>
+						)}
 					</CardBody>
 					<CardFooter>
 						<BodyMuted>

@@ -1,17 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
-import { cn, Dialog } from "heroui-native";
+import { cn, Dialog, useThemeColor } from "heroui-native";
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
 import { MedicationEditor } from "@/components/features/prescription/medication-editor";
-import {
-	MedicationShape,
-	type MedicationShapeId,
-} from "@/components/features/prescription/medication-shape";
 import type { MedicationDraft } from "@/components/features/prescription/prescription-types";
-
-const DEFAULT_SHAPE: MedicationShapeId = "capsule";
 
 type MedicationPrescriptionDisplay = {
 	subtitle?: boolean;
@@ -45,21 +39,26 @@ function truncateText(text: string, maxLength: number) {
 
 function buildDetailsLine({
 	dosage,
-	form,
 	instructions,
 	showInstructions,
 }: {
 	dosage?: string;
-	form?: string;
 	instructions?: string;
 	showInstructions: boolean;
 }) {
-	const parts = [
-		dosage,
-		form,
-		showInstructions ? instructions : undefined,
-	].filter((part): part is string => Boolean(part?.trim()?.length));
+	const parts = [dosage, showInstructions ? instructions : undefined].filter(
+		(part): part is string => Boolean(part?.trim()?.length),
+	);
 	return parts.join(" - ");
+}
+
+function MedicationIcon() {
+	const accent = useThemeColor("accent");
+	return (
+		<View className="h-14 w-14 items-center justify-center rounded-full border border-primary/30 bg-primary/10">
+			<Ionicons name="medkit-outline" size={24} color={accent} />
+		</View>
+	);
 }
 
 function useMedicationEditorState(
@@ -155,7 +154,6 @@ export function MedicationPrescriptionCard({
 		() =>
 			buildDetailsLine({
 				dosage: medication.dosage,
-				form: medication.type,
 				instructions: instructions ?? medication.instructions ?? undefined,
 				showInstructions: Boolean(display?.instructions),
 			}),
@@ -163,7 +161,6 @@ export function MedicationPrescriptionCard({
 			display?.instructions,
 			instructions,
 			medication.dosage,
-			medication.type,
 			medication.instructions,
 		],
 	);
@@ -187,12 +184,7 @@ export function MedicationPrescriptionCard({
 					}}
 					className="flex-1 items-center gap-4 rounded-3xl border border-panel-border bg-panel-background px-6 py-6"
 				>
-					<MedicationShape
-						shape={medication.shape ?? DEFAULT_SHAPE}
-						size={76}
-						iconSize={36}
-						showLabel={false}
-					/>
+					<MedicationIcon />
 					<View className="items-center gap-2">
 						<Text className="font-semibold text-foreground text-xl">
 							{medication.name}
@@ -264,7 +256,6 @@ export function MedicationPrescriptionListItem({
 		() =>
 			buildDetailsLine({
 				dosage: medication.dosage,
-				form: medication.type,
 				instructions: instructions ?? medication.instructions ?? undefined,
 				showInstructions: Boolean(
 					display?.instructions ?? Boolean(instructions),
@@ -274,7 +265,6 @@ export function MedicationPrescriptionListItem({
 			display?.instructions,
 			instructions,
 			medication.dosage,
-			medication.type,
 			medication.instructions,
 		],
 	);
@@ -305,12 +295,7 @@ export function MedicationPrescriptionListItem({
 						listContainerClasses,
 					)}
 				>
-					<MedicationShape
-						shape={medication.shape ?? DEFAULT_SHAPE}
-						size={58}
-						iconSize={28}
-						showLabel={false}
-					/>
+					<MedicationIcon />
 					<View className="flex-1 gap-1">
 						<Text className="font-semibold text-foreground text-lg">
 							{medication.name}

@@ -1,4 +1,10 @@
-export type FieldType = "string" | "number" | "choice" | "list" | "date";
+export type FieldType =
+	| "string"
+	| "number"
+	| "choice"
+	| "list"
+	| "date"
+	| "blood_pressure";
 
 export type HealthField = {
 	label: string;
@@ -19,6 +25,20 @@ export type HealthCategory = {
 	// Remove this field to show for everyone.
 	onlyForSex?: "male" | "female";
 };
+
+export type BiologicalSex = "male" | "female";
+
+export function filterHealthCategoriesBySex(
+	categories: HealthCategory[],
+	sex?: string | null,
+) {
+	if (sex !== "male" && sex !== "female") {
+		return categories;
+	}
+	return categories.filter(
+		(category) => !category.onlyForSex || category.onlyForSex === sex,
+	);
+}
 
 export const healthCategories: HealthCategory[] = [
 	{
@@ -42,10 +62,10 @@ export const healthCategories: HealthCategory[] = [
 		key: "vital_signs",
 		label: "Vital signs",
 		fields: {
-			normal_blood_pressure: {
-				label: "Do you have normal blood pressure?",
-				type: "choice",
-				choices: ["yes", "no"],
+			blood_pressure: {
+				label: "Blood pressure",
+				type: "blood_pressure",
+				optional: true,
 			},
 		},
 	},
@@ -55,6 +75,35 @@ export const healthCategories: HealthCategory[] = [
 		fields: {
 			details: {
 				label: "Drug or food allergies",
+				type: "list",
+				optional: true,
+			},
+		},
+	},
+	{
+		key: "habits",
+		label: "Habits",
+		fields: {
+			tobacco: {
+				label: "Tobacco use",
+				type: "choice",
+				choices: ["yes", "no"],
+				commentOnYes: { label: "If yes, add details" },
+			},
+			alcohol: {
+				label: "Alcohol use",
+				type: "choice",
+				choices: ["yes", "no"],
+				commentOnYes: { label: "If yes, add details" },
+			},
+			drugs: {
+				label: "Recreational drug use",
+				type: "choice",
+				choices: ["yes", "no"],
+				commentOnYes: { label: "If yes, add details" },
+			},
+			other: {
+				label: "Other relevant habits",
 				type: "list",
 				optional: true,
 			},

@@ -1,9 +1,14 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { BottomSheet, Button, TextField, useThemeColor } from "heroui-native";
+import {
+	Button,
+	Dialog,
+	Input,
+	Label,
+	TextField,
+	useThemeColor,
+} from "heroui-native";
 import * as React from "react";
 import { Pressable, Text, View } from "react-native";
-
-import { Caption, H3 } from "@/components/base/typography";
 
 const MIN_DATE = new Date(1920, 0, 1);
 const MAX_DATE = new Date();
@@ -50,31 +55,32 @@ export function DatePicker({
 	};
 
 	return (
-		<BottomSheet isOpen={open} onOpenChange={setOpen}>
-			<BottomSheet.Trigger asChild>
+		<Dialog isOpen={open} onOpenChange={setOpen}>
+			<Dialog.Trigger asChild>
 				<Pressable>
 					<TextField>
-						{label ? <TextField.Label>{label}</TextField.Label> : null}
-						<TextField.Input
+						{label ? <Label>{label}</Label> : null}
+						<Input
 							value={formatDate(value ? new Date(value) : null)}
 							editable={false}
 							pointerEvents="none"
 						/>
-						{helperText ? (
-							<Text className="mt-1 text-muted text-xs">{helperText}</Text>
-						) : null}
 					</TextField>
+					{helperText ? (
+						<Text className="mt-1 text-muted text-xs">{helperText}</Text>
+					) : null}
 				</Pressable>
-			</BottomSheet.Trigger>
-			<BottomSheet.Portal>
-				<BottomSheet.Overlay />
-				<BottomSheet.Content
-					snapPoints={[450]}
-					enablePanDownToClose
-					contentContainerClassName="px-5 pt-4"
-				>
+			</Dialog.Trigger>
+			<Dialog.Portal>
+				<Dialog.Overlay />
+				<Dialog.Content>
 					<View className="gap-4">
-						<H3>{label ?? "Select date"}</H3>
+						<View className="gap-1">
+							<Dialog.Title>{label ?? "Select date"}</Dialog.Title>
+							{helperText ? (
+								<Dialog.Description>{helperText}</Dialog.Description>
+							) : null}
+						</View>
 						<DateTimePicker
 							mode="date"
 							display="spinner"
@@ -87,22 +93,19 @@ export function DatePicker({
 							textColor={foreground}
 							accentColor={accentColor}
 						/>
-						{helperText ? <Caption>{helperText}</Caption> : null}
 						<View className="flex-row gap-2">
-							<Button
-								variant="secondary"
-								className="flex-1"
-								onPress={() => setOpen(false)}
-							>
-								<Button.Label>Cancel</Button.Label>
-							</Button>
+							<Dialog.Close asChild>
+								<Button variant="secondary" className="flex-1">
+									<Button.Label>Cancel</Button.Label>
+								</Button>
+							</Dialog.Close>
 							<Button className="flex-1" onPress={handleConfirm}>
 								<Button.Label>Save</Button.Label>
 							</Button>
 						</View>
 					</View>
-				</BottomSheet.Content>
-			</BottomSheet.Portal>
-		</BottomSheet>
+				</Dialog.Content>
+			</Dialog.Portal>
+		</Dialog>
 	);
 }

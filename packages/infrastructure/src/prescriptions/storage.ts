@@ -1,3 +1,4 @@
+/// <reference types="bun" />
 import { randomUUID } from "node:crypto";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";

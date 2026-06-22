@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { cn } from "heroui-native";
-import { Text, View } from "react-native";
+import { useEffect, useRef } from "react";
+import { Animated, Easing, Text, View } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 
 import { applyOpacity } from "@/components/utils/color-utils";
@@ -40,11 +41,29 @@ export function HealthScore({
 	summary,
 	className,
 }: HealthScoreProps) {
+	const rotation = useRef(new Animated.Value(0)).current;
 	const safeScore = Math.max(0, Math.min(score, max));
 	const tone = getTone(safeScore, max);
 	const accent = SCORE_COLORS[tone];
 	const ringColor = applyOpacity(accent, 0.4) ?? accent;
 	const dotColor = applyOpacity(accent, 0.6) ?? accent;
+	const spin = rotation.interpolate({
+		inputRange: [0, 1],
+		outputRange: ["0deg", "360deg"],
+	});
+
+	useEffect(() => {
+		const loop = Animated.loop(
+			Animated.timing(rotation, {
+				toValue: 1,
+				duration: 18000,
+				easing: Easing.linear,
+				useNativeDriver: true,
+			}),
+		);
+		loop.start();
+		return () => loop.stop();
+	}, [rotation]);
 
 	return (
 		<View className={cn("items-center gap-6", className)}>
@@ -52,26 +71,28 @@ export function HealthScore({
 				className="relative items-center justify-center"
 				style={{ width: SIZE, height: SIZE }}
 			>
-				<Svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`}>
-					{Array.from({ length: DOT_COUNT }, (_, index) => {
-						const indexKey = index + 1;
-						const angle = (Math.PI * 2 * index) / DOT_COUNT;
-						const radius = DOT_RING_RADIUS + (index % 4 === 0 ? 8 : 0);
-						const dotSize = index % 4 === 0 ? 6 : index % 2 === 0 ? 4 : 3;
-						const x = CENTER + radius * Math.cos(angle);
-						const y = CENTER + radius * Math.sin(angle);
-						return (
-							<Circle
-								key={`dot-${indexKey}`}
-								cx={x}
-								cy={y}
-								r={dotSize}
-								fill={dotColor}
-								opacity={index % 4 === 0 ? 0.9 : 0.4}
-							/>
-						);
-					})}
-				</Svg>
+				<Animated.View style={{ transform: [{ rotate: spin }] }}>
+					<Svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`}>
+						{Array.from({ length: DOT_COUNT }, (_, index) => {
+							const indexKey = index + 1;
+							const angle = (Math.PI * 2 * index) / DOT_COUNT;
+							const radius = DOT_RING_RADIUS + (index % 4 === 0 ? 8 : 0);
+							const dotSize = index % 4 === 0 ? 6 : index % 2 === 0 ? 4 : 3;
+							const x = CENTER + radius * Math.cos(angle);
+							const y = CENTER + radius * Math.sin(angle);
+							return (
+								<Circle
+									key={`dot-${indexKey}`}
+									cx={x}
+									cy={y}
+									r={dotSize}
+									fill={dotColor}
+									opacity={index % 4 === 0 ? 0.9 : 0.4}
+								/>
+							);
+						})}
+					</Svg>
+				</Animated.View>
 				<View
 					className="absolute items-center justify-center rounded-full bg-background"
 					style={{

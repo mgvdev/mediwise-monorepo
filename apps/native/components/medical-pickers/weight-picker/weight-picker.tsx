@@ -1,6 +1,7 @@
 import { Button } from "heroui-native";
 import * as React from "react";
 import { FlatList, Text, useWindowDimensions, View } from "react-native";
+import { RollingNumber } from "@/components/base/rolling-number";
 
 const KG_RANGE = Array.from({ length: 171 }, (_, i) => i + 30);
 const LBS_RANGE = Array.from({ length: 375 }, (_, i) => i + 70);
@@ -85,10 +86,10 @@ export function WeightPicker({ value, unit, onChange }: WeightPickerProps) {
 			</View>
 
 			<View className="items-center">
-				<Text className="font-semibold text-5xl text-foreground">
-					{displayValue}
-					<Text className="text-base text-muted"> {unit}</Text>
-				</Text>
+				<View className="flex-row items-end">
+					<RollingNumber value={displayValue} />
+					<Text className="self-end pb-2 text-base text-muted"> {unit}</Text>
+				</View>
 				<Text className="mt-1 text-muted text-xs">Scroll to adjust</Text>
 			</View>
 
