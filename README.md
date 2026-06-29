@@ -16,7 +16,8 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 - **Mongoose** - TypeScript-first ORM
 - **MongoDB** - Database engine
 - **Authentication** - Better-Auth
-- **Biome** - Linting and formatting
+- **Oxlint** - Linting
+- **Oxfmt** - Formatting
 - **Husky** - Git hooks for code quality
 - **Turborepo** - Optimized monorepo build system
 
@@ -80,4 +81,6 @@ mediwise-monorepo/
 - `bun run dev:native`: Start the React Native/Expo development server
 - `bun run db:push`: Push schema changes to database
 - `bun run db:studio`: Open database studio UI
-- `bun run check`: Run Biome formatting and linting
+- `bun run check`: Run Oxlint (fix) and Oxfmt formatting
+- `bun run lint`: Run Oxlint
+- `bun run format`: Run Oxfmt formatting

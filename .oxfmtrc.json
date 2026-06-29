@@ -1,0 +1,30 @@
+{
+	"$schema": "./node_modules/oxfmt/configuration_schema.json",
+	"useTabs": true,
+	"singleQuote": false,
+	"printWidth": 80,
+	"sortImports": true,
+	"sortTailwindcss": {
+		"functions": ["cn", "clsx", "cva"]
+	},
+	"ignorePatterns": [
+		"**/.next",
+		"**/dist",
+		"**/.turbo",
+		"**/dev-dist",
+		"**/.expo",
+		"**/.codex",
+		"**/.zed",
+		"**/.vscode",
+		"**/.wrangler",
+		"**/.alchemy",
+		"**/.svelte-kit",
+		"**/.nuxt",
+		"**/.source",
+		"**/src-tauri",
+		"**/convex/_generated",
+		"**/routeTree.gen.ts",
+		"**/storybook.requires.ts",
+		"bun.lock"
+	]
+}

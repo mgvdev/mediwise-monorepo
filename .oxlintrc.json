@@ -1,0 +1,38 @@
+{
+	"$schema": "./node_modules/oxlint/configuration_schema.json",
+	"plugins": ["typescript", "react", "import"],
+	"categories": {
+		"correctness": "error"
+	},
+	"rules": {
+		"no-unused-vars": [
+			"warn",
+			{
+				"argsIgnorePattern": "^_",
+				"varsIgnorePattern": "^_",
+				"caughtErrorsIgnorePattern": "^_"
+			}
+		],
+		"no-param-reassign": "error",
+		"prefer-const": "error",
+		"no-else-return": "error",
+		"eslint/no-useless-rename": "error",
+		"react-hooks/exhaustive-deps": "warn",
+		"react/react-in-jsx-scope": "off",
+		"react/no-unescaped-entities": "off"
+	},
+	"ignorePatterns": [
+		"**/.next",
+		"**/dist",
+		"**/.turbo",
+		"**/dev-dist",
+		"**/.expo",
+		"**/.svelte-kit",
+		"**/.nuxt",
+		"**/.source",
+		"**/src-tauri",
+		"**/convex/_generated",
+		"**/routeTree.gen.ts",
+		"**/storybook.requires.ts"
+	]
+}
