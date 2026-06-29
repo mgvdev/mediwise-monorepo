@@ -4,7 +4,7 @@ import "@/global.css";
 import "@/polyfills";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
-import { HeroUINativeProvider } from "heroui-native";
+import { HeroUINativeProvider, ToastProvider } from "heroui-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { queryClient } from "@/utils/trpc";
@@ -38,7 +38,9 @@ export default function Layout() {
 				<KeyboardProvider>
 					<AppThemeProvider>
 						<HeroUINativeProvider>
-							<StorybookUIRoot />
+							<ToastProvider>
+									<StorybookUIRoot />
+							</ToastProvider>
 						</HeroUINativeProvider>
 					</AppThemeProvider>
 				</KeyboardProvider>
@@ -52,9 +54,11 @@ export default function Layout() {
 				<KeyboardProvider>
 					<AppThemeProvider>
 						<HeroUINativeProvider>
-							<AuthGate>
-								<StackLayout />
-							</AuthGate>
+							<ToastProvider>
+								<AuthGate>
+									<StackLayout />
+								</AuthGate>
+							</ToastProvider>
 						</HeroUINativeProvider>
 					</AppThemeProvider>
 				</KeyboardProvider>

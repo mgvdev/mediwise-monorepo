@@ -46,6 +46,18 @@ export function usePrescriptionDetailForm({
 		}),
 	);
 
+	const deleteMutation = useMutation(
+		trpc.prescriptions.delete.mutationOptions({
+			onSuccess: () => {
+				queryClient.invalidateQueries();
+				onSaved?.();
+			},
+			onError: (mutationError) => {
+				setError(mutationError.message || "Unable to delete prescription.");
+			},
+		}),
+	);
+
 	const handleSave = async () => {
 		setError(null);
 		if (!draftState.draft.medications.length) {
@@ -74,14 +86,37 @@ export function usePrescriptionDetailForm({
 	const raw = prescriptionQuery.data?.raw;
 	const unified = prescriptionQuery.data?.unified;
 	const isProcessing = raw && raw.status !== "completed" && !unified;
+	const isFailed = raw?.status === "failed" && !unified;
+	const documentType = unified?.data?.documentType ?? null;
+
+	const handleDelete = async () => {
+		setError(null);
+		const unifiedId = unified?.id;
+		if (!unifiedId) {
+			setError("Nothing to delete yet.");
+			return;
+		}
+		try {
+			await deleteMutation.mutateAsync({ id: unifiedId });
+		} catch (deleteError) {
+			setError(
+				deleteError instanceof Error ? deleteError.message : "Delete failed.",
+			);
+		}
+	};
 
 	return {
 		session,
 		error,
 		setError,
 		isSaving: saveMutation.isPending,
+		isDeleting: deleteMutation.isPending,
+		canDelete: Boolean(unified?.id),
 		handleSave,
+		handleDelete,
 		isProcessing,
+		isFailed,
+		documentType,
 		prescriptionQuery,
 		draftState,
 	};

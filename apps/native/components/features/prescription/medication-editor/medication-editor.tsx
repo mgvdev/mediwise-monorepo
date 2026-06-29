@@ -6,7 +6,11 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ChoiceInput } from "@/components/base/choice";
 import { DurationPicker } from "@/components/base/duration-picker";
 import { FrequencyPicker } from "@/components/base/frequency-picker";
-import type { MedicationDraft } from "@/components/features/prescription/prescription-types";
+import {
+	INTAKE_MOMENTS,
+	MEDICATION_FORMS,
+	type MedicationDraft,
+} from "@/components/features/prescription/prescription-types";
 
 type MedicationEditorProps = {
 	value: MedicationDraft;
@@ -39,6 +43,13 @@ export function MedicationEditor({
 	const frequencyCount = Number.parseInt(value.frequencyCount ?? "", 10);
 	const durationCount = Number.parseInt(value.durationValue ?? "", 10);
 	const isChronic = value.durationType === "chronic";
+	const intakeMoments = value.intakeMoments ?? [];
+	const toggleMoment = (moment: string) => {
+		const next = intakeMoments.includes(moment)
+			? intakeMoments.filter((item) => item !== moment)
+			: [...intakeMoments, moment];
+		onChange({ ...value, intakeMoments: next });
+	};
 	const Wrapper = variant === "surface" ? Surface : View;
 	const opacity = useRef(new Animated.Value(animateIn ? 0 : 1)).current;
 	const translateY = useRef(new Animated.Value(animateIn ? 12 : 0)).current;
@@ -114,6 +125,19 @@ export function MedicationEditor({
 						/>
 					</TextField>
 
+					<ChoiceInput
+						label="Forme galénique"
+						value={value.form ?? null}
+						onChange={(next) =>
+							onChange({ ...value, form: (next as string | null) ?? null })
+						}
+						options={MEDICATION_FORMS.map((form) => ({
+							value: form.value,
+							label: form.label,
+						}))}
+						layout="auto"
+					/>
+
 					<TextField>
 						<Label>Comment</Label>
 						<Input
@@ -124,6 +148,39 @@ export function MedicationEditor({
 							multiline
 						/>
 					</TextField>
+
+					<View className="gap-2">
+						<Label>Moments de prise</Label>
+						<View className="flex-row flex-wrap gap-2">
+							{INTAKE_MOMENTS.map((moment) => {
+								const selected = intakeMoments.includes(moment.value);
+								return (
+									<Pressable
+										key={moment.value}
+										onPress={() => toggleMoment(moment.value)}
+										disabled={!isEditable}
+										accessibilityRole="button"
+										accessibilityState={{ selected }}
+										className={cn(
+											"rounded-full border px-3 py-2",
+											selected
+												? "border-primary bg-primary/10"
+												: "border-panel-border bg-surface/40",
+										)}
+									>
+										<Text
+											className={cn(
+												"text-sm",
+												selected ? "text-primary" : "text-muted",
+											)}
+										>
+											{moment.label}
+										</Text>
+									</Pressable>
+								);
+							})}
+						</View>
+					</View>
 
 					<FrequencyPicker
 						value={{

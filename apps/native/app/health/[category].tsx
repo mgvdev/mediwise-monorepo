@@ -1,6 +1,13 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Redirect, router, Stack, useLocalSearchParams } from "expo-router";
-import { Button, Input, Label, Spinner, TextField } from "heroui-native";
+import {
+	Button,
+	Input,
+	Label,
+	Spinner,
+	TextField,
+	useToast,
+} from "heroui-native";
 import * as React from "react";
 import { View } from "react-native";
 import { BloodGroupInput } from "@/components/base/blood-group-input";
@@ -56,6 +63,7 @@ export default function HealthCategoryScreen() {
 		...trpc.healthData.get.queryOptions(),
 	});
 	const saveMutation = useMutation(trpc.healthData.save.mutationOptions());
+	const { toast } = useToast();
 
 	React.useEffect(() => {
 		if (!healthQuery.data?.data) return;
@@ -161,6 +169,10 @@ export default function HealthCategoryScreen() {
 			},
 			{
 				onSuccess: () => {
+					toast.show({
+						label: "Your medical record has been updated.",
+						variant: "success",
+					});
 					router.back();
 				},
 			},

@@ -11,6 +11,7 @@ import {
 } from "./models/auth.model";
 import { Job } from "./models/job.model";
 import {
+	PrescriptionInteractionsView,
 	PrescriptionRaw,
 	PrescriptionUnified,
 	PrescriptionUnifiedView,
@@ -25,15 +26,16 @@ await mongoose.connect(env.DATABASE_URL).catch((error) => {
 export {
 	Account,
 	Job,
+	mongoose,
+	PrescriptionInteractionsView,
 	PrescriptionRaw,
 	PrescriptionUnified,
 	PrescriptionUnifiedView,
 	Questionnaire,
 	Session,
-	TenantDomain,
 	Tenant,
+	TenantDomain,
 	TenantMember,
 	User,
 	Verification,
-	mongoose,
 };

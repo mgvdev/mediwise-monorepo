@@ -8,6 +8,7 @@ type PermissionError = "camera" | "library" | null;
 
 export function usePrescriptionPhoto() {
 	const [asset, setAsset] = useState<SelectedAsset | null>(null);
+	const [extraAssets, setExtraAssets] = useState<SelectedAsset[]>([]);
 	const [uploadSource, setUploadSource] = useState<UploadSource | null>(null);
 	const [photoError, setPhotoError] = useState<string | null>(null);
 	const [permissionError, setPermissionError] = useState<PermissionError>(null);
@@ -69,6 +70,7 @@ export function usePrescriptionPhoto() {
 
 		const result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+			allowsEditing: true,
 			quality: 0.8,
 			base64: true,
 		});
@@ -88,6 +90,7 @@ export function usePrescriptionPhoto() {
 		}
 
 		const result = await ImagePicker.launchCameraAsync({
+			allowsEditing: true,
 			quality: 0.8,
 			base64: true,
 		});
@@ -107,13 +110,40 @@ export function usePrescriptionPhoto() {
 		}
 	};
 
+	// Add extra pages (multi-page document) from the library, multi-select.
+	const handleAddPage = async () => {
+		setPhotoError(null);
+		const allowed = await requestLibraryPermission();
+		if (!allowed) {
+			setPhotoError("Photo library permission is required.");
+			return;
+		}
+
+		const result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+			allowsMultipleSelection: true,
+			quality: 0.8,
+			base64: true,
+		});
+
+		if (!result.canceled) {
+			setExtraAssets((prev) => [...prev, ...result.assets]);
+		}
+	};
+
+	const removeExtraAsset = (index: number) => {
+		setExtraAssets((prev) => prev.filter((_, i) => i !== index));
+	};
+
 	const resetPhoto = () => {
 		setAsset(null);
+		setExtraAssets([]);
 		setUploadSource(null);
 	};
 
 	return {
 		asset,
+		extraAssets,
 		uploadSource,
 		photoError,
 		permissionError,
@@ -121,6 +151,8 @@ export function usePrescriptionPhoto() {
 		setPermissionError,
 		handlePickFromLibrary,
 		handleTakePhoto,
+		handleAddPage,
+		removeExtraAsset,
 		handlePermissionRetry,
 		resetPhoto,
 	};

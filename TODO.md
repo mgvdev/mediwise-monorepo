@@ -11,10 +11,10 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 
 | # | Fonctionnalité (brief) | État |
 |---|------------------------|------|
-| 6.1 | Fiche médicale | 🟡 |
+| 6.1 | Fiche médicale | ✅ |
 | 6.2 | Menu de modification fiche | 🟡 |
-| 6.3 | Ordonnance unique | 🟡 |
-| 6.3 | Alerte interaction médicamenteuse | ❌ |
+| 6.3 | Ordonnance unique | ✅ |
+| 6.3 | Alerte interaction médicamenteuse | 🟡 |
 | 6.4 | Modification ordonnance (add/edit/delete) | 🟡 |
 | 6.5 | Scan de document | 🟡 |
 | 6.6 | Liste examens / comptes rendus | ❌ |
@@ -28,7 +28,7 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 
 ---
 
-## 6.1 Fiche médicale — 🟡
+## 6.1 Fiche médicale — ✅
 
 **Fait**
 - Schéma data complet couvre tous les champs du brief : `apps/native/app/health/health-schema.ts`
@@ -39,13 +39,11 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 - Stockage MongoDB chiffré/non-chiffré : `packages/db/src/models/auth.model.ts`, `packages/domain/src/health-data/service.ts`
 - Écran liste catégories : `apps/native/app/health/index.tsx`
 - Écran synthèse lecture seule : `apps/native/app/health/overview.tsx`
-
-**À faire**
-- [ ] Champ **tension artérielle** réel (actuellement juste choix oui/non, pas de valeur)
-- [ ] Champs **habitudes** : tabac, drogues, autres (brief les liste — vérifier présence dans schema)
-- [ ] Vraie **carte fiche médicale** synthèse "en un coup d'œil" (dashboard)
-- [ ] Accès rapide synthèse depuis home (aujourd'hui carte générique)
-- [ ] Message confirmation "Votre fiche médicale a été mise à jour."
+- [x] Champ **tension artérielle** réel (valeur saisie) : type `blood_pressure` + `BloodPressureInput`, persisté, affiché en overview + carte synthèse
+- [x] Champs **habitudes** : catégorie `habits` (tabac, alcool, drogues, autres) dans le schema
+- [x] Vraie **carte fiche médicale** synthèse "en un coup d'œil" : `apps/native/components/features/medical-summary/medical-summary-card.tsx` (nom, âge/sexe, groupe sanguin, tension, taille/poids, nb conditions, allergies)
+- [x] Accès rapide synthèse depuis home : carte « Medical record » affiche un aperçu réel (nom, âge/sexe, nb conditions, nb allergies) → `apps/native/app/(tabs)/index.tsx`
+- [x] Message confirmation "Your medical record has been updated." : toast `success` après save (`ToastProvider` dans `_layout.tsx`, `useToast` dans `app/health/[category].tsx`)
 
 ## 6.2 Menu modification fiche — 🟡
 
@@ -58,57 +56,64 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 - [ ] Champ **texte libre** "ajouter une information manuelle" par section
 - [ ] Regrouper en menu "Modifier vos infos persos" tel que décrit (sections : perso, allergies, habitudes, antécédents médicaux/chir/familiaux)
 
-## 6.3 Ordonnance unique — 🟡
+## 6.3 Ordonnance unique — ✅
 
 **Fait**
 - Écran traitements actifs unifiés : `apps/native/app/prescriptions/current.tsx`
 - Carte "Ordonnance unifiée" : `apps/native/app/(tabs)/documents.tsx`
 - Modèles : `PrescriptionUnified`, `PrescriptionUnifiedView` (`packages/db/src/models/prescriptions.model.ts`)
 - Champs médicament : nom, dosage, fréquence, durée, type (one_off/chronic), route, instructions
+- [x] Champ **forme** (galénique) stocké + affiché : liste courte (10 formes) `MEDICATION_FORMS`, picker dans `medication-editor`, persisté (DTO `form` → data → vue unifiée → AI extrait aussi `form`), affiché en chip dans `current.tsx`
+- [x] Champ **posologie / moment de prise** explicite : moments structurés `INTAKE_MOMENTS` (matin/midi/soir/coucher/pendant le repas), chips multi-sélection dans l'éditeur, persisté `intakeMoments`, affiché en chips
+- [x] Affichage **statut actif/terminé** : `current.tsx` lit la vue complète (`unified.get`), sépare actifs / terminés (carte « Past treatments ») + badge `DotChip` Actif/Terminé
+- [x] Distinction visuelle **chronique vs ponctuel** : badge dédié (chip accent « Chronique » / neutre « Ponctuel »)
 
-**À faire**
-- [ ] Champ **forme** (galénique) stocké + affiché (picker existe, pas persisté)
-- [ ] Champ **posologie / moment de prise** explicite
-- [ ] Affichage **statut actif/terminé** (existe en DB, pas en UI)
-- [ ] Distinction visuelle **chronique vs ponctuel** dans la vue
+## 6.3 Alerte interaction médicamenteuse — 🟡 (MVP hybride)
 
-## 6.3 Alerte interaction médicamenteuse — ❌
+**Fait**
+- [x] Source/référentiel **hybride** : ruleset curé déterministe (`packages/infrastructure/src/interactions/ruleset.ts` + `matcher.ts`) + couche LLM Ollama informative (`interactions/ai.ts`)
+- [x] Moteur détection sur l'ordonnance unique : job async `interaction.analysis` recalculé après `recomputeUnifiedView`, persisté dans `PrescriptionInteractionsView` (`interactions/service.ts`, `apps/queue/src/handlers/interaction.ts`)
+- [x] Détection conflit **allergie ↔ médicament** (règles de classe : bêta-lactamines, sulfamides, AINS, opioïdes ; allergies lues via `getHealthData`)
+- [x] UI alerte prudente + disclaimer + invite médecin/pharmacien : `components/features/prescription/interaction-alert/`, affichée dans `app/prescriptions/current.tsx`
+- [x] Niveaux de criticité : `info` / `warning` / `danger` (chip couleur)
+- API : `prescriptions.unified.interactions`. Test unitaire matcher : `interactions/matcher.test.ts`.
 
-**À faire** (à cadrer — brief demande niveau criticité, source médicale, responsabilité)
-- [ ] Source/référentiel interactions (base médicamenteuse)
-- [ ] Moteur détection interactions sur l'ordonnance unique
-- [ ] Détection conflit allergie ↔ médicament
-- [ ] UI alerte prudente + invite consulter médecin/pharmacien
-- [ ] Niveaux de criticité
+**À faire (durcissement)**
+- [ ] Étendre le ruleset curé (couverture limitée — MVP volontairement petit, paires haute sévérité)
+- [ ] Normalisation médicaments (texte libre → principe actif/ATC) pour fiabiliser le matching
+- [ ] Badge danger sur la carte ordonnance unifiée (`app/(tabs)/documents.tsx`)
+- [ ] Évaluer/limiter le risque d'hallucination de la couche LLM (garde-fous, validation)
 
-## 6.4 Modification ordonnance — 🟡
+## 6.4 Modification ordonnance — 🟡 (bloqué seulement par 6.10)
 
 **Fait**
 - Créer manuel : `apps/native/app/prescriptions/new.tsx`
 - Éditer existant : `apps/native/app/prescriptions/[id].tsx`, `prescription-editor/`, `medication-editor/`
 - Hooks : `use-manual-prescription-form.ts`, `use-prescription-detail-form.ts`, `use-prescription-draft.ts`
 - API `prescriptions.save` (upsert), `prescriptions.upload`, `prescriptions.get`
+- [x] **Suppression** traitement : endpoint `prescriptions.delete` (`deleteUnifiedPrescription` supprime l'unifié + le raw lié, recompute vue) + UI confirmée « Vous allez supprimer [nom]. Cette action est irréversible. » (dialog dans `prescription-forms.tsx`, bouton danger dans `prescription-editor`)
+- [x] Écran de **vérification** des infos extraites avant validation : `PrescriptionDetailForm` affiche l'extraction (états processing/failed/report), info éditable, « Review the extracted info and make any corrections » avant save
 
 **À faire**
-- [ ] **Suppression** traitement : endpoint + UI confirmée ("Vous allez supprimer [nom]…")
-- [ ] MAJ **rappels associés** après edit/delete (dépend de 6.10)
-- [ ] Écran de **vérification** des infos extraites avant validation
+- [ ] MAJ **rappels associés** après edit/delete — **bloqué : dépend de 6.10** (feature rappels inexistante)
 
-## 6.5 Scan de document — 🟡
+## 6.5 Scan de document — 🟢 (compte-rendu UI = 6.6)
 
 **Fait**
 - Caméra + galerie : `apps/native/features/prescriptions/use-prescription-photo.ts` (permissions iOS gérées)
 - Upload base64 : `use-prescription-upload.ts`
+- **IA locale fiabilisée** : provider Ollama `gemma3:4b` avec sortie structurée (`format` JSON schema), timeout, prompt classification — `packages/infrastructure/src/prescriptions/ai.ts` + `parser.ts` (`UNIFIED_JSON_SCHEMA`)
 - Extraction IA serveur (queue) : `apps/queue/src/handlers/prescription.ts`
 - UI upload/preview : `apps/native/app/(tabs)/documents.tsx`
+- [x] **Sélection zone d'intérêt** (crop) — `allowsEditing:true` (galerie + caméra)
+- [x] Distinguer **scan ordonnance** vs **compte rendu** — champ `documentType` (prescription/report/unknown) extrait par l'IA
+- [x] Écran **validation/correction** — `PrescriptionDetailDialog`/`Form` (poll + auto-remplit ; branches `failed` + report/unknown)
+- [x] Retour auto vers documents (carte ordonnance refetch) après save
+- [x] **Multi-pages** : `storageKeys[]` sur le raw, `images[]` en un appel Ollama, UI « Add page »
+- [x] Reports exclus de l'ordonnance unifiée (`recomputeUnifiedView` filtre `documentType==="report"`)
 
-**À faire**
-- [ ] **Sélection zone d'intérêt** (crop) avant analyse
-- [ ] Distinguer **scan ordonnance** vs **scan compte rendu** (classification type doc)
-- [ ] Écran **validation/correction** des infos détectées
-- [ ] Retour auto vers l'écran ordonnance modifiée après extraction
-- [ ] Cas compte rendu : router vers liste examens (dépend 6.6)
-- [ ] Ajouter une nouvelle photo (multi-pages)
+**À faire (dépend 6.6)**
+- [ ] Cas compte rendu : router vers liste examens + écran dédié (modèle Exam = 6.6). Aujourd'hui : classification persistée + placeholder « gestion à venir »
 
 ## 6.6 Liste examens / comptes rendus — ❌
 

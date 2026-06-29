@@ -1,5 +1,5 @@
 import { Dialog } from "heroui-native";
-import { ScrollView, View } from "react-native";
+import { ScrollView, useWindowDimensions, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
@@ -19,12 +19,16 @@ export function ManualPrescriptionDialog({
 	onSaved,
 }: ManualPrescriptionDialogProps) {
 	const insets = useSafeAreaInsets();
+	const { height } = useWindowDimensions();
 
 	return (
 		<Dialog isOpen={isOpen} onOpenChange={onOpenChange}>
 			<Dialog.Portal className="justify-end p-0">
 				<Dialog.Overlay className="bg-black/40" />
-				<Dialog.Content className="rounded-t-3xl border-0 bg-background p-0">
+				<Dialog.Content
+					className="rounded-t-3xl border-0 bg-background p-0"
+					style={{ maxHeight: height * 0.9 }}
+				>
 					<View className="items-center pt-3">
 						<View className="h-1 w-12 rounded-full bg-border/60" />
 					</View>
@@ -36,6 +40,7 @@ export function ManualPrescriptionDialog({
 					</View>
 					<Dialog.Close className="absolute top-4 right-4" />
 					<ScrollView
+						style={{ flexShrink: 1 }}
 						contentContainerStyle={{
 							paddingHorizontal: 24,
 							paddingBottom: insets.bottom + 24,
@@ -70,6 +75,7 @@ export function PrescriptionDetailDialog({
 	onSaved,
 }: PrescriptionDetailDialogProps) {
 	const insets = useSafeAreaInsets();
+	const { height } = useWindowDimensions();
 
 	if (!prescriptionId) return null;
 
@@ -77,7 +83,10 @@ export function PrescriptionDetailDialog({
 		<Dialog isOpen={isOpen} onOpenChange={onOpenChange}>
 			<Dialog.Portal className="justify-end p-0">
 				<Dialog.Overlay className="bg-black/40" />
-				<Dialog.Content className="rounded-t-3xl border-0 bg-background p-0">
+				<Dialog.Content
+					className="rounded-t-3xl border-0 bg-background p-0"
+					style={{ maxHeight: height * 0.9 }}
+				>
 					<View className="items-center pt-3">
 						<View className="h-1 w-12 rounded-full bg-border/60" />
 					</View>
@@ -89,6 +98,7 @@ export function PrescriptionDetailDialog({
 					</View>
 					<Dialog.Close className="absolute top-4 right-4" />
 					<ScrollView
+						style={{ flexShrink: 1 }}
 						contentContainerStyle={{
 							paddingHorizontal: 24,
 							paddingBottom: insets.bottom + 24,

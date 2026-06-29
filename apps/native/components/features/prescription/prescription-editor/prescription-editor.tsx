@@ -29,6 +29,9 @@ type PrescriptionEditorProps = {
 	topContent?: ReactNode;
 	footerLabel?: string;
 	showHeader?: boolean;
+	onDelete?: () => void;
+	isDeleting?: boolean;
+	deleteLabel?: string;
 };
 
 function formatMedicationSchedule(medication: MedicationDraft) {
@@ -60,6 +63,9 @@ export function PrescriptionEditor({
 	topContent,
 	footerLabel = "Continue",
 	showHeader = true,
+	onDelete,
+	isDeleting,
+	deleteLabel = "Supprimer l'ordonnance",
 }: PrescriptionEditorProps) {
 	const accent = useThemeColor("accent");
 
@@ -155,6 +161,19 @@ export function PrescriptionEditor({
 			<Button onPress={onSave} isDisabled={isSaving} className="mt-2">
 				<Button.Label>{isSaving ? "Saving..." : footerLabel}</Button.Label>
 			</Button>
+
+			{onDelete ? (
+				<Button
+					variant="secondary"
+					onPress={onDelete}
+					isDisabled={isDeleting}
+					className="mt-1 border-danger/40"
+				>
+					<Button.Label className="text-danger">
+						{isDeleting ? "Suppression..." : deleteLabel}
+					</Button.Label>
+				</Button>
+			) : null}
 		</View>
 	);
 }

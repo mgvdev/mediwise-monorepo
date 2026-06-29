@@ -22,6 +22,21 @@ export async function createJob<TType extends JobType>(input: {
 	return doc;
 }
 
+/**
+ * Drop still-queued jobs of a type for a given user, used to debounce
+ * recompute-style jobs so at most one is pending at a time.
+ */
+export async function dropQueuedJobsForUser(input: {
+	type: JobType;
+	userId: string;
+}) {
+	await Job.deleteMany({
+		type: input.type,
+		status: "queued",
+		"payload.userId": input.userId,
+	});
+}
+
 export async function lockNextJob(input: {
 	workerId: string;
 	lockTimeoutMs: number;

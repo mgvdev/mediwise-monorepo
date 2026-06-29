@@ -1,5 +1,6 @@
 export const JobTypes = {
 	prescriptionExtract: "prescription.extract",
+	interactionAnalysis: "interaction.analysis",
 } as const;
 
 export type JobType = (typeof JobTypes)[keyof typeof JobTypes];
@@ -9,6 +10,11 @@ export type JobStatus = "queued" | "processing" | "completed" | "failed";
 export type JobPayloadByType = {
 	[JobTypes.prescriptionExtract]: {
 		rawId: string;
+		provider: string | null;
+		model: string | null;
+	};
+	[JobTypes.interactionAnalysis]: {
+		userId: string;
 		provider: string | null;
 		model: string | null;
 	};

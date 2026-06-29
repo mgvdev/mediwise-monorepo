@@ -42,6 +42,7 @@ export const env = createEnv({
 		AI_PROVIDER: z.enum(["ollama", "openai"]).default("ollama"),
 		OLLAMA_BASE_URL: z.string().default("http://localhost:11434"),
 		OLLAMA_MODEL: z.string().default("gemma3:4b"),
+		OLLAMA_TIMEOUT_MS: z.coerce.number().default(120000),
 		OPENAI_API_KEY: z.string().optional(),
 		OPENAI_MODEL: z.string().default("gpt-4o-mini"),
 		HEALTH_DATA_ENCRYPTION_KEY: z.string().optional(),

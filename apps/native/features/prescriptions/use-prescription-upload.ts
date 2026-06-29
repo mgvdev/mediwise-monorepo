@@ -30,6 +30,7 @@ export function usePrescriptionUpload(options: UploadOptions = {}) {
 	const upload = async (
 		asset: SelectedAsset | null,
 		source: UploadSource | null,
+		extraAssets: SelectedAsset[] = [],
 	) => {
 		if (!asset || !source) {
 			setError(
@@ -50,12 +51,21 @@ export function usePrescriptionUpload(options: UploadOptions = {}) {
 				return null;
 			}
 
+			const additionalPages = extraAssets
+				.filter((page) => !!page.base64)
+				.map((page) => ({
+					filename: resolveFilename(page),
+					contentType: resolveMimeType(page),
+					base64: page.base64 as string,
+				}));
+
 			const data = (await trpcClient.mutation("prescriptions.upload", {
 				filename: resolveFilename(asset),
 				contentType: resolveMimeType(asset),
 				base64: asset.base64,
 				source,
 				intent: options.intent,
+				additionalPages: additionalPages.length ? additionalPages : undefined,
 			})) as UploadResult;
 
 			options.onSuccess?.(data.id);

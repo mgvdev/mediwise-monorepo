@@ -59,7 +59,11 @@ export function useDocumentsScreen() {
 		}
 
 		setUploadError(null);
-		const uploadedId = await uploader.upload(photo.asset, source);
+		const uploadedId = await uploader.upload(
+			photo.asset,
+			source,
+			photo.extraAssets,
+		);
 		if (!uploadedId) {
 			setUploadError(uploader.error ?? "Upload failed. Please try again.");
 			return;
@@ -107,9 +111,12 @@ export function useDocumentsScreen() {
 		error: uploadError ?? photo.photoError,
 		permissionError: photo.permissionError,
 		asset: photo.asset,
+		extraAssets: photo.extraAssets,
 		uploadSource: photo.uploadSource,
 		handlePickFromLibrary: photo.handlePickFromLibrary,
 		handleTakePhoto: photo.handleTakePhoto,
+		handleAddPage: photo.handleAddPage,
+		removeExtraAsset: photo.removeExtraAsset,
 		handlePermissionRetry,
 		handleUpload,
 		openPrescription,

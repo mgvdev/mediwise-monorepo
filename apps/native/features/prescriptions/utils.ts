@@ -20,6 +20,8 @@ type UnifiedPrescriptionData = {
 		durationUnit?: "day" | "week" | "month" | null;
 		route?: string | null;
 		instructions?: string | null;
+		form?: string | null;
+		intakeMoments?: string[] | null;
 	}>;
 };
 
@@ -41,6 +43,8 @@ type SavePayload = {
 		durationUnit: "day" | "week" | "month" | null;
 		route: string | null;
 		instructions: string | null;
+		form: string | null;
+		intakeMoments: string[] | null;
 	}>;
 	notes: string | null;
 };
@@ -100,6 +104,8 @@ export function mapUnifiedToDraft(data: UnifiedPrescriptionData) {
 				durationText: medication.duration ?? undefined,
 				route: medication.route ?? null,
 				instructions: medication.instructions ?? null,
+				form: medication.form ?? null,
+				intakeMoments: medication.intakeMoments ?? [],
 			}),
 		),
 	};
@@ -145,6 +151,10 @@ export function buildPrescriptionPayload(input: {
 						: null,
 				route: medication.route ?? null,
 				instructions: medication.instructions ?? null,
+				form: medication.form ?? null,
+				intakeMoments: medication.intakeMoments?.length
+					? medication.intakeMoments
+					: null,
 			};
 		}),
 		notes: draft.notes?.trim() || null,

@@ -9,6 +9,8 @@ const prescriptionRawSchema = new Schema(
 		tenantId: { type: String },
 		source: { type: String, required: true },
 		storageKey: { type: String, required: true },
+		// Extra pages for multi-page documents (storageKey is page 1).
+		storageKeys: { type: [String] },
 		originalFilename: { type: String, required: true },
 		contentType: { type: String, required: true },
 		size: { type: Number, required: true },
@@ -49,6 +51,20 @@ const prescriptionUnifiedViewSchema = new Schema(
 	{ collection: "prescription_unified_view" },
 );
 
+const prescriptionInteractionsViewSchema = new Schema(
+	{
+		_id: { type: String },
+		userId: { type: String, required: true },
+		tenantId: { type: String },
+		updatedAt: { type: Date, required: true },
+		provider: { type: String, required: true },
+		model: { type: String, required: true },
+		items: { type: Array, required: true },
+		disclaimer: { type: String, required: true },
+	},
+	{ collection: "prescription_interactions_view" },
+);
+
 const PrescriptionRaw = model("PrescriptionRaw", prescriptionRawSchema);
 const PrescriptionUnified = model(
 	"PrescriptionUnified",
@@ -58,5 +74,14 @@ const PrescriptionUnifiedView = model(
 	"PrescriptionUnifiedView",
 	prescriptionUnifiedViewSchema,
 );
+const PrescriptionInteractionsView = model(
+	"PrescriptionInteractionsView",
+	prescriptionInteractionsViewSchema,
+);
 
-export { PrescriptionRaw, PrescriptionUnified, PrescriptionUnifiedView };
+export {
+	PrescriptionInteractionsView,
+	PrescriptionRaw,
+	PrescriptionUnified,
+	PrescriptionUnifiedView,
+};

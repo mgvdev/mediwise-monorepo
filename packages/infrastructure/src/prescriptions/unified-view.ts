@@ -2,7 +2,10 @@ import {
     PrescriptionUnified,
     PrescriptionUnifiedView,
 } from "@mediwise-monorepo/db";
+import { env } from "@mediwise-monorepo/env/server";
 
+import { createJob, dropQueuedJobsForUser } from "../jobs/repository";
+import { JobTypes } from "../jobs/types";
 import type {
     DurationType,
     DurationUnit,
@@ -23,6 +26,8 @@ export type UnifiedViewMedication = {
     durationValue?: number | null;
     durationUnit?: DurationUnit | null;
     instructions?: string | null;
+    form?: string | null;
+    intakeMoments?: string[] | null;
     startDate?: string | null;
     endDate?: string | null;
     status: "active" | "ended";
@@ -187,6 +192,16 @@ function buildMedications(unified: PrescriptionUnifiedDoc[]) {
                     existing.endDate = endDate;
                     existing.status = status;
                 }
+                if (!existing.form && medication.form) {
+                    existing.form = medication.form;
+                }
+                if (
+                    (!existing.intakeMoments ||
+                        existing.intakeMoments.length === 0) &&
+                    medication.intakeMoments?.length
+                ) {
+                    existing.intakeMoments = medication.intakeMoments;
+                }
                 continue;
             }
 
@@ -202,6 +217,8 @@ function buildMedications(unified: PrescriptionUnifiedDoc[]) {
                 durationValue: medication.durationValue ?? null,
                 durationUnit: medication.durationUnit ?? null,
                 instructions: medication.instructions ?? null,
+                form: medication.form ?? null,
+                intakeMoments: medication.intakeMoments ?? null,
                 startDate: doc.data.issuedDate ?? null,
                 endDate,
                 status,
@@ -265,9 +282,14 @@ export async function updateUnifiedViewProfile(input: {
  * Recompute and persist the unified view from all unified prescriptions.
  */
 export async function recomputeUnifiedView(userId: string) {
-    const unified = await PrescriptionUnified.find({ userId })
+    const allUnified = await PrescriptionUnified.find({ userId })
         .sort({ createdAt: -1 })
         .lean<PrescriptionUnifiedDoc[]>();
+
+    // Keep medical reports / compte-rendus out of the prescription view.
+    const unified = allUnified.filter(
+        (doc) => doc.data?.documentType !== "report",
+    );
 
     const existing = await PrescriptionUnifiedView.findOne({
         userId,
@@ -295,6 +317,24 @@ export async function recomputeUnifiedView(userId: string) {
         { $set: doc },
         { upsert: true },
     );
+
+    // The medication set changed: (re)queue an async drug-interaction analysis.
+    // Debounced so at most one analysis is pending per user.
+    await dropQueuedJobsForUser({
+        type: JobTypes.interactionAnalysis,
+        userId,
+    });
+    await createJob({
+        type: JobTypes.interactionAnalysis,
+        payload: {
+            userId,
+            provider: env.AI_PROVIDER,
+            model:
+                env.AI_PROVIDER === "openai"
+                    ? env.OPENAI_MODEL
+                    : env.OLLAMA_MODEL,
+        },
+    });
 
     return doc;
 }

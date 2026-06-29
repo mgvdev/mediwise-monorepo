@@ -5,6 +5,12 @@
 		".": {
 			"default": "./src/index.ts"
 		},
+		"./interactions": {
+			"default": "./src/interactions/index.ts"
+		},
+		"./interactions/*": {
+			"default": "./src/interactions/*.ts"
+		},
 		"./jobs": {
 			"default": "./src/jobs/index.ts"
 		},

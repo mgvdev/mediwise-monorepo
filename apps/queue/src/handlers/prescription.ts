@@ -31,12 +31,19 @@ export function createPrescriptionHandler({
 			}
 
 			await updateRawStatus({ rawId: raw._id, status: "processing" });
-			const buffer = await storage.getFileBuffer(raw.storageKey);
+			const storageKeys =
+				raw.storageKeys?.length ? raw.storageKeys : [raw.storageKey];
+			const images = await Promise.all(
+				storageKeys.map((key) => storage.getFileBuffer(key)),
+			);
 			const data = await aiProvider.extractPrescription({
-				image: buffer,
+				images,
 				mimeType: raw.contentType,
 			});
 
+			// documentType ("prescription" | "report" | "unknown") rides along in
+			// `data`. Reports are persisted here but filtered out of the unified
+			// prescription view; full compte-rendu handling is TODO (6.6).
 			await createUnified({
 				raw,
 				provider: aiProvider.provider,

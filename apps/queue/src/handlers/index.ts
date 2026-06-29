@@ -4,6 +4,7 @@ import type {
 	StorageProvider,
 } from "@mediwise-monorepo/infrastructure/prescriptions";
 
+import { createInteractionHandler } from "./interaction";
 import { createPrescriptionHandler } from "./prescription";
 import type { JobHandlerMap } from "./types";
 
@@ -15,5 +16,6 @@ type HandlerDeps = {
 export function createHandlers(deps: HandlerDeps): JobHandlerMap {
 	return {
 		[JobTypes.prescriptionExtract]: createPrescriptionHandler(deps),
+		[JobTypes.interactionAnalysis]: createInteractionHandler(),
 	};
 }

@@ -15,6 +15,7 @@ export async function createRawPrescription(input: {
 	tenantId: string | null;
 	source: "upload" | "camera";
 	storageKey: string;
+	storageKeys?: string[];
 	originalFilename: string;
 	contentType: string;
 	size: number;
@@ -27,6 +28,7 @@ export async function createRawPrescription(input: {
 		tenantId: input.tenantId,
 		source: input.source,
 		storageKey: input.storageKey,
+		storageKeys: input.storageKeys ?? [input.storageKey],
 		originalFilename: input.originalFilename,
 		contentType: input.contentType,
 		size: input.size,
@@ -189,6 +191,36 @@ export async function findUnifiedById(input: { id: string; userId: string }) {
 		_id: input.id,
 		userId: input.userId,
 	}).lean<PrescriptionUnifiedDoc | null>();
+}
+
+/**
+ * Delete a unified prescription (and its source raw, if any), then recompute
+ * the unified view. Returns false when nothing matched the user.
+ */
+export async function deleteUnifiedPrescription(input: {
+	id: string;
+	userId: string;
+}) {
+	const existing = await PrescriptionUnified.findOne({
+		_id: input.id,
+		userId: input.userId,
+	}).lean<PrescriptionUnifiedDoc | null>();
+
+	if (!existing) return false;
+
+	await PrescriptionUnified.deleteOne({
+		_id: input.id,
+		userId: input.userId,
+	});
+	if (existing.rawId) {
+		await PrescriptionRaw.deleteOne({
+			_id: existing.rawId,
+			userId: input.userId,
+		});
+	}
+
+	await recomputeUnifiedView(input.userId);
+	return true;
 }
 
 export async function upsertUnifiedPrescription(input: {
