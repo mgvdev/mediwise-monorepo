@@ -67,7 +67,7 @@ export function DatePicker({
 						/>
 					</TextField>
 					{helperText ? (
-						<Text className="mt-1 text-muted text-xs">{helperText}</Text>
+						<Text className="text-muted mt-1 text-xs">{helperText}</Text>
 					) : null}
 				</Pressable>
 			</Dialog.Trigger>

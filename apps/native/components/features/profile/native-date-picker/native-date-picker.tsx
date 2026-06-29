@@ -45,13 +45,13 @@ export function NativeDatePicker({ value, onChange }: NativeDatePickerProps) {
 		<View className="gap-3">
 			{Platform.OS !== "ios" ? (
 				<Pressable
-					className="rounded-2xl border border-border/60 px-4 py-3"
+					className="border-border/60 rounded-2xl border px-4 py-3"
 					onPress={() => setShow(true)}
 				>
-					<Text className="font-semibold text-base text-foreground">
+					<Text className="text-foreground text-base font-semibold">
 						{formatDate(date)}
 					</Text>
-					<Text className="mt-1 text-muted text-xs">
+					<Text className="text-muted mt-1 text-xs">
 						Tap to select your birth date
 					</Text>
 				</Pressable>

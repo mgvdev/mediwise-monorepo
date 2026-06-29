@@ -1,5 +1,6 @@
 import { Button, Card, Input, Label } from "@heroui/react";
 import { createFileRoute, redirect } from "@tanstack/react-router";
+
 import { TenantCard } from "@/components/admin/tenant-card";
 import { TenantCreate } from "@/components/admin/tenant-create";
 import { PageHeader } from "@/components/backoffice/page-header";

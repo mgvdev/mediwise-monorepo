@@ -69,7 +69,7 @@ export function BirthdatePicker({ value, onChange }: BirthdatePickerProps) {
 	}, [selectedDay, selectedMonth, selectedYear, onChange]);
 
 	return (
-		<View className="flex-row justify-between rounded-2xl border border-border/60 px-3 py-4">
+		<View className="border-border/60 flex-row justify-between rounded-2xl border px-3 py-4">
 			<WheelColumn
 				data={months}
 				value={months[selectedMonth]}
@@ -105,7 +105,7 @@ function WheelColumn({ data, value, onSelect }: WheelColumnProps) {
 
 	return (
 		<View className="flex-1 items-center">
-			<View className="absolute top-1/2 right-0 left-0 h-[36px] rounded-xl border border-primary/40" />
+			<View className="border-primary/40 absolute top-1/2 right-0 left-0 h-[36px] rounded-xl border" />
 			<FlatList
 				ref={listRef}
 				data={data}
@@ -129,7 +129,7 @@ function WheelColumn({ data, value, onSelect }: WheelColumnProps) {
 						className="items-center justify-center"
 						style={{ height: ITEM_HEIGHT }}
 					>
-						<Text className="text-base text-muted">{item}</Text>
+						<Text className="text-muted text-base">{item}</Text>
 					</View>
 				)}
 			/>

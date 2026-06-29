@@ -29,11 +29,11 @@ export function OtpSignIn() {
 
 	return (
 		<View className="gap-4">
-			<Text className="font-semibold text-foreground text-xs uppercase tracking-widest">
+			<Text className="text-foreground text-xs font-semibold tracking-widest uppercase">
 				Email Address
 			</Text>
 
-			<View className="flex-row items-center gap-2 rounded-2xl border border-border/60 px-4 py-3">
+			<View className="border-border/60 flex-row items-center gap-2 rounded-2xl border px-4 py-3">
 				<Ionicons name="mail-outline" size={18} className="text-muted" />
 				<TextInput
 					value={email}
@@ -43,7 +43,7 @@ export function OtpSignIn() {
 					keyboardType="email-address"
 					autoCapitalize="none"
 					editable={step === "request"}
-					className="flex-1 text-foreground text-sm"
+					className="text-foreground flex-1 text-sm"
 				/>
 			</View>
 
@@ -52,7 +52,7 @@ export function OtpSignIn() {
 					<Text className="text-muted text-xs">
 						Code sent to <Text className="text-foreground">{email}</Text>
 					</Text>
-					<Text className="font-semibold text-foreground text-xs uppercase tracking-widest">
+					<Text className="text-foreground text-xs font-semibold tracking-widest uppercase">
 						One-time code
 					</Text>
 					<View className="mt-2">
@@ -83,7 +83,7 @@ export function OtpSignIn() {
 					</Button>
 					<Text className="text-muted text-xs">Keep me signed in</Text>
 				</View>
-				<Text className="font-medium text-primary text-xs">Need help?</Text>
+				<Text className="text-primary text-xs font-medium">Need help?</Text>
 			</View>
 
 			<FieldError isInvalid={!!error}>{error}</FieldError>

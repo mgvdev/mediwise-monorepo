@@ -212,7 +212,7 @@ function AiCard({
 			) : null}
 			<View
 				className={cn(
-					"rounded-2xl border border-transparent bg-panel-background p-4",
+					"bg-panel-background rounded-2xl border border-transparent p-4",
 					className,
 				)}
 				onLayout={handleLayout}
@@ -242,7 +242,7 @@ type CardTitleProps = TextProps & {
 export function CardTitle({ className, ...props }: CardTitleProps) {
 	return (
 		<Text
-			className={cn("font-semibold text-base text-foreground", className)}
+			className={cn("text-foreground text-base font-semibold", className)}
 			{...props}
 		/>
 	);
@@ -258,7 +258,7 @@ export function CardAction({ className, ...props }: CardActionProps) {
 	return (
 		<Pressable
 			className={cn(
-				"items-center justify-center rounded-full border border-panel-border bg-white/70 px-3 py-1",
+				"border-panel-border items-center justify-center rounded-full border bg-white/70 px-3 py-1",
 				className,
 			)}
 			style={pressableFeedback(style)}

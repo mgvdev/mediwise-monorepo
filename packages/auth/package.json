@@ -10,17 +10,17 @@
 		}
 	},
 	"scripts": {},
-	"devDependencies": {
-		"typescript": "^6.0.3",
-		"@mediwise-monorepo/config": "workspace:*"
-	},
 	"dependencies": {
-		"better-auth": "^1.6.19",
 		"@better-auth/expo": "^1.6.19",
-		"dotenv": "^17.4.2",
-		"zod": "^4.4.3",
+		"@mediwise-monorepo/db": "workspace:*",
 		"@mediwise-monorepo/domain": "workspace:*",
 		"@mediwise-monorepo/env": "workspace:*",
-		"@mediwise-monorepo/db": "workspace:*"
+		"better-auth": "^1.6.19",
+		"dotenv": "^17.4.2",
+		"zod": "^4.4.3"
+	},
+	"devDependencies": {
+		"@mediwise-monorepo/config": "workspace:*",
+		"typescript": "^6.0.3"
 	}
 }

@@ -45,10 +45,10 @@ export function UnifiedPrescriptionEmpty({
 			>
 				<Ionicons name="leaf-outline" size={20} color={accent} />
 			</View>
-			<BodyMedium className="mt-3 text-center text-foreground">
+			<BodyMedium className="text-foreground mt-3 text-center">
 				{title}
 			</BodyMedium>
-			<Caption className="mt-1 text-center text-muted">{description}</Caption>
+			<Caption className="text-muted mt-1 text-center">{description}</Caption>
 		</View>
 	);
 }

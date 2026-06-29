@@ -14,7 +14,7 @@ type Story = StoryObj<typeof DotChip>;
 
 export const States: Story = {
 	render: () => (
-		<View className="flex-1 gap-3 bg-background p-6">
+		<View className="bg-background flex-1 gap-3 p-6">
 			<DotChip status="normal" label="Normal" />
 			<DotChip status="warning" label="Warning" />
 			<DotChip status="danger" label="Danger" />

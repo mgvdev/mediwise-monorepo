@@ -10,11 +10,11 @@ export default meta;
 
 export const GettingStarted: StoryObj<typeof View> = {
 	render: () => (
-		<View className="flex-1 items-center justify-center bg-background p-6">
-			<Text className="font-semibold text-foreground text-lg">
+		<View className="bg-background flex-1 items-center justify-center p-6">
+			<Text className="text-foreground text-lg font-semibold">
 				Storybook is ready
 			</Text>
-			<Text className="mt-2 text-center text-muted-foreground text-sm">
+			<Text className="text-muted-foreground mt-2 text-center text-sm">
 				Test
 			</Text>
 		</View>

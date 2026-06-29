@@ -18,7 +18,7 @@ export const Default: Story = {
 		const [selected, setSelected] = React.useState("other");
 
 		return (
-			<View className="flex-1 gap-3 bg-background p-6">
+			<View className="bg-background flex-1 gap-3 p-6">
 				{[
 					{ value: "male", label: "I am Male" },
 					{ value: "female", label: "I am Female" },
@@ -31,7 +31,7 @@ export const Default: Story = {
 					>
 						<View className="flex-row items-center justify-between">
 							<RadioStart>
-								<Text className="font-semibold text-base text-foreground">
+								<Text className="text-foreground text-base font-semibold">
 									{option.label}
 								</Text>
 							</RadioStart>

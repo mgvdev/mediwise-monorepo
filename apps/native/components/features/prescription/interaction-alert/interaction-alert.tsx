@@ -1,4 +1,5 @@
 import { View } from "react-native";
+
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/base/card";
 import { DotChip, type DotChipStatus } from "@/components/base/dot-chip";
 import { Body, BodyStrong, Caption } from "@/components/base/typography";

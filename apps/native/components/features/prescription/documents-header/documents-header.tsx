@@ -45,7 +45,7 @@ function ActionTile({
 		>
 			<Ionicons name={icon} size={22} color={accent} />
 			<Text
-				className="mt-2 text-center font-semibold text-base"
+				className="mt-2 text-center text-base font-semibold"
 				style={{ color: labelColor }}
 			>
 				{label}

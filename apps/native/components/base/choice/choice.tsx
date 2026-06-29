@@ -47,7 +47,7 @@ export function ChoiceInput({
 	return (
 		<View className={cn("gap-3", className)} {...props}>
 			{label ? (
-				<Text className="font-semibold text-base text-foreground">{label}</Text>
+				<Text className="text-foreground text-base font-semibold">{label}</Text>
 			) : null}
 			{description ? (
 				<Text className="text-muted text-xs">{description}</Text>
@@ -106,7 +106,7 @@ export function ChoiceOption({
 	return (
 		<Pressable
 			className={cn(
-				"flex-row items-center gap-3 rounded-2xl border border-panel-border bg-panel-background px-4 py-3",
+				"border-panel-border bg-panel-background flex-row items-center gap-3 rounded-2xl border px-4 py-3",
 				layout === "horizontal" ? "flex-1" : "w-full",
 				selected && "border-primary bg-primary/10",
 				className,
@@ -120,7 +120,7 @@ export function ChoiceOption({
 			<Text
 				className={cn(
 					"text-muted text-sm",
-					selected && "font-semibold text-primary",
+					selected && "text-primary font-semibold",
 				)}
 			>
 				{label}
@@ -141,7 +141,7 @@ export function ChoiceIndicator({
 	return (
 		<View
 			className={cn(
-				"h-5 w-5 items-center justify-center rounded-full border border-panel-border",
+				"border-panel-border h-5 w-5 items-center justify-center rounded-full border",
 				selected && "border-primary bg-primary/20",
 				className,
 			)}
@@ -201,7 +201,7 @@ type ChoiceLabelProps = TextProps & {
 export function ChoiceLabel({ className, ...props }: ChoiceLabelProps) {
 	return (
 		<Text
-			className={cn("font-semibold text-base text-foreground", className)}
+			className={cn("text-foreground text-base font-semibold", className)}
 			{...props}
 		/>
 	);

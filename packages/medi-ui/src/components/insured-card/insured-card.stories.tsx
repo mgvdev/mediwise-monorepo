@@ -29,7 +29,7 @@ export const Default: Story = {
 			<InsuredCard>
 				<InsuredHeader>
 					<div className="space-y-2">
-						<p className="font-semibold text-xl">Maya Hernandez</p>
+						<p className="text-xl font-semibold">Maya Hernandez</p>
 						<p className="text-muted-foreground text-sm">
 							Insured ID: MW-024-938
 						</p>
@@ -56,13 +56,13 @@ export const Default: Story = {
 					<InsuredActions>
 						<button
 							type="button"
-							className="rounded-full border border-border/60 px-3 py-1 text-sm"
+							className="border-border/60 rounded-full border px-3 py-1 text-sm"
 						>
 							Message
 						</button>
 						<button
 							type="button"
-							className="rounded-full bg-primary px-3 py-1 font-semibold text-primary-foreground text-sm"
+							className="bg-primary text-primary-foreground rounded-full px-3 py-1 text-sm font-semibold"
 						>
 							Open profile
 						</button>

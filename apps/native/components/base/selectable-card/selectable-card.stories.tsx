@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import type { Meta } from "@storybook/react-native";
 import { useThemeColor } from "heroui-native";
 import { View } from "react-native";
+
 import {
 	SelectableCard,
 	SelectableCardAction,
@@ -20,7 +21,7 @@ export const Default = () => {
 	const color = useThemeColor("background-inverse");
 
 	return (
-		<View className="flex-1 bg-background p-6">
+		<View className="bg-background flex-1 p-6">
 			<SelectableCard>
 				<SelectableCardIcon iconColor={color}>
 					<Ionicons name="leaf-outline" size={22} />
@@ -37,7 +38,7 @@ export const Selected = () => {
 	const color = useThemeColor("background-inverse");
 
 	return (
-		<View className="flex-1 bg-background p-6">
+		<View className="bg-background flex-1 p-6">
 			<SelectableCard selected>
 				<SelectableCardIcon selected iconColor={color}>
 					<Ionicons name="leaf-outline" size={22} />

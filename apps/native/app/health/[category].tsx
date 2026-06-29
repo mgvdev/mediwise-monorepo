@@ -10,6 +10,7 @@ import {
 } from "heroui-native";
 import * as React from "react";
 import { View } from "react-native";
+
 import { BloodGroupInput } from "@/components/base/blood-group-input";
 import { BloodPressureInput } from "@/components/base/blood-pressure-input";
 import { ChoiceInput, type ChoiceValue } from "@/components/base/choice";
@@ -20,6 +21,7 @@ import { Caption } from "@/components/base/typography";
 import { WeightInput } from "@/components/base/weight-input/weight-input";
 import { Container } from "@/components/layout/container";
 import { trpc } from "@/utils/trpc";
+
 import { type HealthField, healthCategoryMap } from "./health-schema";
 
 type FormValue = string | string[] | null;
@@ -366,7 +368,7 @@ export default function HealthCategoryScreen() {
 					)}
 				</Button>
 				{saveMutation.isError ? (
-					<Caption className="mt-2 text-danger">
+					<Caption className="text-danger mt-2">
 						Something went wrong while saving.
 					</Caption>
 				) : null}

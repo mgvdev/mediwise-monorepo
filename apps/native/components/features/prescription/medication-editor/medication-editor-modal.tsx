@@ -1,6 +1,6 @@
 import { SafeAreaSheet } from "@/components/base/safe-area-sheet";
-
 import type { MedicationDraft } from "@/components/features/prescription/prescription-types";
+
 import { MedicationEditor } from "./medication-editor";
 
 type MedicationEditorModalProps = {

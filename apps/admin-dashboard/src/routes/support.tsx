@@ -25,7 +25,7 @@ function RouteComponent() {
 				title="Help & Support"
 				description="Resources and contact options for the backoffice team."
 			/>
-			<div className="rounded-3xl border border-border/60 bg-card/70 p-6 text-muted-foreground text-sm">
+			<div className="border-border/60 bg-card/70 text-muted-foreground rounded-3xl border p-6 text-sm">
 				Support tools will live here.
 			</div>
 		</div>

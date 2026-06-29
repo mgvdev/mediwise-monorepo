@@ -37,7 +37,7 @@ export function ManualPrescriptionForm({
 
 	const photoCard = (
 		<Surface variant="secondary" className="rounded-2xl p-4">
-			<Text className="font-semibold text-base text-foreground">
+			<Text className="text-foreground text-base font-semibold">
 				Prescription photo
 			</Text>
 			<Text className="text-muted text-xs">
@@ -71,12 +71,12 @@ export function ManualPrescriptionForm({
 		<View className="gap-4">
 			{photo.permissionError ? (
 				<Surface variant="secondary" className="rounded-2xl p-4">
-					<Text className="font-medium text-foreground text-sm">
+					<Text className="text-foreground text-sm font-medium">
 						{photo.permissionError === "camera"
 							? "Camera access needed"
 							: "Photo library access needed"}
 					</Text>
-					<Text className="mt-1 text-muted text-xs">
+					<Text className="text-muted mt-1 text-xs">
 						Enable access to continue. You can retry or open system settings.
 					</Text>
 					<View className="mt-3 flex-row gap-2">
@@ -152,10 +152,10 @@ export function PrescriptionDetailForm({
 		return (
 			<View className="gap-4">
 				<Surface variant="secondary" className="rounded-2xl p-4">
-					<Text className="font-semibold text-base text-foreground">
+					<Text className="text-foreground text-base font-semibold">
 						{isReport ? "Medical report detected" : "Unrecognized document"}
 					</Text>
-					<Text className="mt-1 text-muted text-xs">
+					<Text className="text-muted mt-1 text-xs">
 						{isReport
 							? "Report management is coming soon. We've saved this scan for you."
 							: "We couldn't recognize this document. You can still edit it as a prescription."}
@@ -195,7 +195,7 @@ export function PrescriptionDetailForm({
 		<View className="gap-4">
 			{isProcessing ? (
 				<Surface variant="secondary" className="rounded-2xl p-4">
-					<Text className="font-semibold text-foreground text-sm">
+					<Text className="text-foreground text-sm font-semibold">
 						Processing prescription
 					</Text>
 					<Text className="text-muted text-xs">
@@ -206,7 +206,7 @@ export function PrescriptionDetailForm({
 
 			{isFailed ? (
 				<Surface variant="secondary" className="rounded-2xl p-4">
-					<Text className="font-semibold text-danger text-sm">
+					<Text className="text-danger text-sm font-semibold">
 						Extraction failed
 					</Text>
 					<Text className="text-muted text-xs">
@@ -234,7 +234,7 @@ export function PrescriptionDetailForm({
 			<Dialog isOpen={confirmDelete} onOpenChange={setConfirmDelete}>
 				<Dialog.Portal>
 					<Dialog.Overlay className="bg-black/40" />
-					<Dialog.Content className="rounded-3xl border border-panel-border bg-panel-background px-5 pt-4 pb-6">
+					<Dialog.Content className="border-panel-border bg-panel-background rounded-3xl border px-5 pt-4 pb-6">
 						<Dialog.Title>Supprimer le traitement</Dialog.Title>
 						<Dialog.Description>
 							Vous allez supprimer {deleteTargetLabel}. Cette action est

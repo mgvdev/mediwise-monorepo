@@ -43,7 +43,7 @@ export function DotChip({ status, label, className, ...props }: DotChipProps) {
 			{...props}
 		>
 			<View className={cn("h-2 w-2 rounded-full", styles.dot)} />
-			<Text className={cn("font-medium text-xs", styles.text)}>{label}</Text>
+			<Text className={cn("text-xs font-medium", styles.text)}>{label}</Text>
 		</View>
 	);
 }

@@ -10,11 +10,11 @@ const meta: Meta = {
 export default meta;
 
 export const Gallery = () => (
-	<ScrollView className="flex-1 bg-background p-6">
+	<ScrollView className="bg-background flex-1 p-6">
 		<View className="gap-6">
 			{MEDICATION_SHAPE_GROUPS.map((group) => (
 				<View key={group.title} className="gap-3">
-					<Text className="font-semibold text-foreground text-sm">
+					<Text className="text-foreground text-sm font-semibold">
 						{group.title}
 					</Text>
 					<View className="flex-row flex-wrap gap-4">

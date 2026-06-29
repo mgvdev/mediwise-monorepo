@@ -10,12 +10,12 @@
 		}
 	},
 	"scripts": {},
-	"devDependencies": {
-		"typescript": "catalog:",
-		"@mediwise-monorepo/config": "workspace:*"
-	},
 	"dependencies": {
 		"@mediwise-monorepo/db": "workspace:*",
 		"@mediwise-monorepo/env": "workspace:*"
+	},
+	"devDependencies": {
+		"@mediwise-monorepo/config": "workspace:*",
+		"typescript": "catalog:"
 	}
 }

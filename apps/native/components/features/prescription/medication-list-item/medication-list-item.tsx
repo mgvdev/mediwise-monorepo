@@ -56,7 +56,7 @@ function buildDetailsLine({
 function MedicationIcon() {
 	const accent = useThemeColor("accent");
 	return (
-		<View className="h-11 w-11 items-center justify-center rounded-full border border-primary/30 bg-primary/10">
+		<View className="border-primary/30 bg-primary/10 h-11 w-11 items-center justify-center rounded-full border">
 			<Ionicons name="medkit-outline" size={20} color={accent} />
 		</View>
 	);
@@ -107,11 +107,11 @@ function MedicationEditorDialog({
 		<Dialog isOpen={open} onOpenChange={(next) => (!next ? onClose() : null)}>
 			<Dialog.Portal>
 				<Dialog.Overlay />
-				<Dialog.Content className="rounded-3xl border border-panel-border bg-panel-background px-5 pt-4 pb-6">
+				<Dialog.Content className="border-panel-border bg-panel-background rounded-3xl border px-5 pt-4 pb-6">
 					<View className="mb-3 flex-row items-center justify-between">
 						<Dialog.Title>Edit medication</Dialog.Title>
 						<Dialog.Close asChild>
-							<Pressable className="h-8 w-8 items-center justify-center rounded-full border border-panel-border">
+							<Pressable className="border-panel-border h-8 w-8 items-center justify-center rounded-full border">
 								<Ionicons name="close" size={16} className="text-muted" />
 							</Pressable>
 						</Dialog.Close>
@@ -161,7 +161,12 @@ export function MedicationListItem({
 					display?.instructions ?? Boolean(instructions),
 				),
 			}),
-		[display?.instructions, instructions, medication.dosage, medication.instructions],
+		[
+			display?.instructions,
+			instructions,
+			medication.dosage,
+			medication.instructions,
+		],
 	);
 	const showSubtitle = display?.subtitle ?? Boolean(subtitle);
 	const showSchedule = display?.schedule ?? Boolean(schedule);
@@ -195,7 +200,7 @@ export function MedicationListItem({
 				>
 					{showIcon ? <MedicationIcon /> : null}
 					<View className="flex-1 gap-1">
-						<Text className="font-semibold text-foreground text-lg">
+						<Text className="text-foreground text-lg font-semibold">
 							{medication.name}
 						</Text>
 						{showSubtitle ? (
@@ -221,7 +226,7 @@ export function MedicationListItem({
 							event.stopPropagation();
 							onEditPage();
 						}}
-						className="mt-1 h-9 w-9 items-center justify-center rounded-full border border-panel-border bg-panel-background"
+						className="border-panel-border bg-panel-background mt-1 h-9 w-9 items-center justify-center rounded-full border"
 						accessibilityRole="button"
 						accessibilityLabel="Edit medication in full page"
 					>

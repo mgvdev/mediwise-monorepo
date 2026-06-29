@@ -59,7 +59,7 @@ export function TenantCreate({ onCreate, isSubmitting }: TenantCreateProps) {
 		<Card className={cardVariants()}>
 			<Card.Header>
 				<div>
-					<p className="font-semibold text-sm">Create insurance plan</p>
+					<p className="text-sm font-semibold">Create insurance plan</p>
 					<p className="text-muted-foreground text-xs">
 						Add insurer metadata and the domains allowed to sign in.
 					</p>

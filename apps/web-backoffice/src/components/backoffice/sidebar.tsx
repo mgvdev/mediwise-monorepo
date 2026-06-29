@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
+
 import { LogoutSection } from "./logout-section";
 
 const navItems = [
@@ -22,9 +23,9 @@ export function Sidebar() {
 	const isSignedIn = Boolean(session?.user);
 
 	return (
-		<aside className="flex h-full flex-col border-border/60 border-r bg-background px-5 py-6 lg:sticky lg:top-0 lg:min-h-svh">
+		<aside className="border-border/60 bg-background flex h-full flex-col border-r px-5 py-6 lg:sticky lg:top-0 lg:min-h-svh">
 			<div className="flex items-center gap-2">
-				<div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+				<div className="bg-primary/10 text-primary flex h-9 w-9 items-center justify-center rounded-2xl">
 					<svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
 						<path
 							fill="currentColor"
@@ -54,7 +55,7 @@ export function Sidebar() {
 						to={item.to}
 						className={({ isActive }) =>
 							cn(
-								"flex items-center justify-between rounded-xl px-3 py-2 text-foreground/80 text-sm transition hover:bg-foreground/5 hover:text-foreground",
+								"text-foreground/80 hover:bg-foreground/5 hover:text-foreground flex items-center justify-between rounded-xl px-3 py-2 text-sm transition",
 								isActive &&
 									"bg-primary/15 text-primary shadow-[0_0_0_1px_hsl(var(--primary)/0.1)]",
 							)
@@ -73,9 +74,9 @@ export function Sidebar() {
 				))}
 			</nav>
 
-			<Card className="mt-6 rounded-2xl border border-success/20 bg-success/5 p-4">
-				<p className="font-semibold text-sm">Unlimited access</p>
-				<p className="mt-1 text-muted-foreground text-xs">
+			<Card className="border-success/20 bg-success/5 mt-6 rounded-2xl border p-4">
+				<p className="text-sm font-semibold">Unlimited access</p>
+				<p className="text-muted-foreground mt-1 text-xs">
 					Unlock the full patient insights toolkit.
 				</p>
 				<Button className="mt-3 w-full" size="sm">

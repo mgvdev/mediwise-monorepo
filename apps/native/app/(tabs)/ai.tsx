@@ -1,4 +1,5 @@
 import { View } from "react-native";
+
 import { BodyMuted, Caption, H1 } from "@/components/base/typography";
 import { TabScreen } from "@/components/layout/tab-screen";
 

@@ -1,6 +1,7 @@
 import { router, Stack } from "expo-router";
 import { Button } from "heroui-native";
 import { View } from "react-native";
+
 import { healthCategories } from "@/app/health/health-schema";
 import { Body, Caption, H1 } from "@/components/base/typography";
 import { Container } from "@/components/layout/container";

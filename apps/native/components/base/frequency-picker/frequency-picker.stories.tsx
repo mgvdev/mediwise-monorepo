@@ -17,7 +17,7 @@ export const Default = () => {
 	});
 
 	return (
-		<View className="flex-1 bg-background p-6">
+		<View className="bg-background flex-1 p-6">
 			<FrequencyPicker value={value} onChange={setValue} />
 		</View>
 	);

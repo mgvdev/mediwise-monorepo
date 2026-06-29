@@ -48,7 +48,7 @@ export function BloodGroupInput({
 					/>
 				</TextField>
 				{helperText ? (
-					<Text className="mt-1 text-muted text-xs">{helperText}</Text>
+					<Text className="text-muted mt-1 text-xs">{helperText}</Text>
 				) : null}
 			</Dialog.Trigger>
 			<Dialog.Portal>
@@ -76,18 +76,11 @@ export function BloodGroupInput({
 						})}
 					</View>
 					<View className="mt-5 flex-row justify-end">
-						<Button
-							variant="primary"
-							size="sm"
-							onPress={() => setOpen(false)}
-						>
+						<Button variant="primary" size="sm" onPress={() => setOpen(false)}>
 							<Button.Label>Done</Button.Label>
 						</Button>
 					</View>
-					<Text
-						className="mt-3 text-muted text-xs"
-						style={{ color: muted }}
-					>
+					<Text className="text-muted mt-3 text-xs" style={{ color: muted }}>
 						Tip: You can update this later if you are unsure.
 					</Text>
 				</Dialog.Content>

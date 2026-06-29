@@ -1,4 +1,5 @@
 import { describe, expect, it } from "bun:test";
+
 import { matchCuratedInteractions, normalizeName } from "./matcher";
 
 describe("normalizeName", () => {

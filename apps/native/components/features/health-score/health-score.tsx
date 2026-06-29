@@ -94,7 +94,7 @@ export function HealthScore({
 					</Svg>
 				</Animated.View>
 				<View
-					className="absolute items-center justify-center rounded-full bg-background"
+					className="bg-background absolute items-center justify-center rounded-full"
 					style={{
 						width: 168,
 						height: 168,
@@ -102,7 +102,7 @@ export function HealthScore({
 						borderColor: ringColor,
 					}}
 				>
-					<Text className="text-4xl text-foreground" style={{ color: accent }}>
+					<Text className="text-foreground text-4xl" style={{ color: accent }}>
 						{safeScore}
 					</Text>
 					<Text className="text-muted text-sm">out of {max}</Text>
@@ -117,7 +117,7 @@ export function HealthScore({
 			) : null}
 
 			{summary ? (
-				<Text className="text-center text-base text-foreground">{summary}</Text>
+				<Text className="text-foreground text-center text-base">{summary}</Text>
 			) : null}
 		</View>
 	);

@@ -14,7 +14,7 @@ type Story = StoryObj<typeof LogoutButton>;
 
 export const Default: Story = {
 	render: () => (
-		<View className="flex-1 bg-background p-6">
+		<View className="bg-background flex-1 p-6">
 			<LogoutButton onPress={() => {}} />
 		</View>
 	),

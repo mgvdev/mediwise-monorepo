@@ -10,7 +10,7 @@ const meta: Meta = {
 export default meta;
 
 export const Default = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<HealthScore
 			score={88}
 			updatedLabel="Last updated: 3s ago"
@@ -20,7 +20,7 @@ export const Default = () => (
 );
 
 export const Variants = () => (
-	<ScrollView className="flex-1 bg-background p-6">
+	<ScrollView className="bg-background flex-1 p-6">
 		<View className="gap-10">
 			<HealthScore
 				score={92}

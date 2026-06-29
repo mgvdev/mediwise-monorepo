@@ -9,7 +9,7 @@ type TypographyProps = TextProps & {
 export function Display({ className, ...props }: TypographyProps) {
 	return (
 		<Text
-			className={cn("font-semibold text-3xl text-foreground", className)}
+			className={cn("text-foreground text-3xl font-semibold", className)}
 			{...props}
 		/>
 	);
@@ -18,7 +18,7 @@ export function Display({ className, ...props }: TypographyProps) {
 export function H1({ className, ...props }: TypographyProps) {
 	return (
 		<Text
-			className={cn("font-semibold text-2xl text-foreground", className)}
+			className={cn("text-foreground text-2xl font-semibold", className)}
 			{...props}
 		/>
 	);
@@ -27,7 +27,7 @@ export function H1({ className, ...props }: TypographyProps) {
 export function H2({ className, ...props }: TypographyProps) {
 	return (
 		<Text
-			className={cn("font-semibold text-foreground text-xl", className)}
+			className={cn("text-foreground text-xl font-semibold", className)}
 			{...props}
 		/>
 	);
@@ -36,7 +36,7 @@ export function H2({ className, ...props }: TypographyProps) {
 export function H3({ className, ...props }: TypographyProps) {
 	return (
 		<Text
-			className={cn("font-semibold text-foreground text-lg", className)}
+			className={cn("text-foreground text-lg font-semibold", className)}
 			{...props}
 		/>
 	);
@@ -45,7 +45,7 @@ export function H3({ className, ...props }: TypographyProps) {
 export function Title({ className, ...props }: TypographyProps) {
 	return (
 		<Text
-			className={cn("font-semibold text-base text-foreground", className)}
+			className={cn("text-foreground text-base font-semibold", className)}
 			{...props}
 		/>
 	);
@@ -54,7 +54,7 @@ export function Title({ className, ...props }: TypographyProps) {
 export function Subtitle({ className, ...props }: TypographyProps) {
 	return (
 		<Text
-			className={cn("font-medium text-muted text-sm", className)}
+			className={cn("text-muted text-sm font-medium", className)}
 			{...props}
 		/>
 	);
@@ -69,7 +69,7 @@ export function Body({ className, ...props }: TypographyProps) {
 export function BodyMedium({ className, ...props }: TypographyProps) {
 	return (
 		<Text
-			className={cn("font-medium text-foreground text-sm", className)}
+			className={cn("text-foreground text-sm font-medium", className)}
 			{...props}
 		/>
 	);
@@ -82,7 +82,7 @@ export function BodyMuted({ className, ...props }: TypographyProps) {
 export function BodyStrong({ className, ...props }: TypographyProps) {
 	return (
 		<Text
-			className={cn("font-semibold text-foreground text-sm", className)}
+			className={cn("text-foreground text-sm font-semibold", className)}
 			{...props}
 		/>
 	);
@@ -95,7 +95,7 @@ export function Caption({ className, ...props }: TypographyProps) {
 export function CaptionStrong({ className, ...props }: TypographyProps) {
 	return (
 		<Text
-			className={cn("font-semibold text-muted text-xs", className)}
+			className={cn("text-muted text-xs font-semibold", className)}
 			{...props}
 		/>
 	);
@@ -103,14 +103,14 @@ export function CaptionStrong({ className, ...props }: TypographyProps) {
 
 export function Micro({ className, ...props }: TypographyProps) {
 	return (
-		<Text className={cn("text-[11px] text-muted", className)} {...props} />
+		<Text className={cn("text-muted text-[11px]", className)} {...props} />
 	);
 }
 
 export function MicroStrong({ className, ...props }: TypographyProps) {
 	return (
 		<Text
-			className={cn("font-semibold text-[11px] text-muted", className)}
+			className={cn("text-muted text-[11px] font-semibold", className)}
 			{...props}
 		/>
 	);
@@ -120,7 +120,7 @@ export function Overline({ className, ...props }: TypographyProps) {
 	return (
 		<Text
 			className={cn(
-				"font-semibold text-muted text-xs uppercase tracking-wide",
+				"text-muted text-xs font-semibold tracking-wide uppercase",
 				className,
 			)}
 			{...props}
@@ -131,7 +131,7 @@ export function Overline({ className, ...props }: TypographyProps) {
 export function Link({ className, ...props }: TypographyProps) {
 	return (
 		<Text
-			className={cn("font-semibold text-primary text-sm", className)}
+			className={cn("text-primary text-sm font-semibold", className)}
 			{...props}
 		/>
 	);

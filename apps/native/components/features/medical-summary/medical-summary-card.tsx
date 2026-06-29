@@ -1,4 +1,5 @@
 import { View } from "react-native";
+
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/base/card";
 import { BodyStrong, Caption } from "@/components/base/typography";
 
@@ -70,10 +71,7 @@ export function MedicalSummaryCard({ data }: { data: HealthDataMap }) {
 	const height = asString(personal.height_cm);
 	const weight = asString(personal.weight_kg);
 	const measurements =
-		[
-			height ? `${height} cm` : null,
-			weight ? `${weight} kg` : null,
-		]
+		[height ? `${height} cm` : null, weight ? `${weight} kg` : null]
 			.filter(Boolean)
 			.join(" · ") || "—";
 

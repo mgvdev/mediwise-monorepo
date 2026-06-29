@@ -3,6 +3,7 @@ import { Redirect, router, Stack, useLocalSearchParams } from "expo-router";
 import { Button, Input, Label, Spinner, TextField } from "heroui-native";
 import * as React from "react";
 import { View } from "react-native";
+
 import {
 	type HealthField,
 	healthCategories,

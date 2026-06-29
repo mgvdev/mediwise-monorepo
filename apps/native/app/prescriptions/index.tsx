@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Surface, useThemeColor } from "heroui-native";
 import { Pressable, RefreshControl, TextInput, View } from "react-native";
+
 import {
 	BodyMedium,
 	Caption,
@@ -79,7 +80,7 @@ export default function PrescriptionsListScreen() {
 									<Pressable
 										key={item.id}
 										onPress={() => openPrescription(targetId)}
-										className="rounded-xl border border-border/60 bg-surface/40 p-3"
+										className="border-border/60 bg-surface/40 rounded-xl border p-3"
 									>
 										<BodyMedium>{item.filename}</BodyMedium>
 										<Micro>{new Date(item.createdAt).toLocaleString()}</Micro>

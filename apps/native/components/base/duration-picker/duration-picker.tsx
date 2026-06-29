@@ -41,16 +41,16 @@ export function DurationPicker({
 			<Text className="text-muted text-xs">{label}</Text>
 			<View className="flex-row items-start gap-3">
 				<View className="flex-1">
-					<View className="relative rounded-2xl border border-panel-border bg-panel-background px-4 py-3">
+					<View className="border-panel-border bg-panel-background relative rounded-2xl border px-4 py-3">
 						<TextInput
 							value={String(value.duration ?? 0)}
 							onChangeText={handleChangeCount}
 							keyboardType="number-pad"
-							className="pr-10 text-foreground"
+							className="text-foreground pr-10"
 							placeholder="0"
 							editable={isEditable}
 						/>
-						<Text className="absolute top-3 right-4 text-muted text-xs">
+						<Text className="text-muted absolute top-3 right-4 text-xs">
 							for
 						</Text>
 					</View>
@@ -66,7 +66,7 @@ export function DurationPicker({
 									onChange({ ...value, durationUnit: unit });
 								}}
 								className={cn(
-									"items-center rounded-full border border-panel-border px-3 py-2",
+									"border-panel-border items-center rounded-full border px-3 py-2",
 									selected && "border-primary bg-primary/10",
 									!isEditable && "opacity-60",
 								)}

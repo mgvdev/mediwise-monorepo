@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
+
 import { authClient } from "@/lib/auth-client";
 import { queryClient, trpc, trpcClient } from "@/utils/trpc";
 
@@ -98,14 +99,14 @@ function RouteComponent() {
 
 	return (
 		<div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
-			<div className="rounded-3xl border border-border/70 bg-card/70 p-6">
-				<h1 className="font-semibold text-xl">Documents</h1>
-				<p className="mt-1 text-muted-foreground text-sm">
+			<div className="border-border/70 bg-card/70 rounded-3xl border p-6">
+				<h1 className="text-xl font-semibold">Documents</h1>
+				<p className="text-muted-foreground mt-1 text-sm">
 					Upload a prescription photo to start the unified extraction.
 				</p>
 
 				<div className="mt-5 flex flex-col gap-3 md:flex-row md:items-center">
-					<label className="flex-1 rounded-2xl border border-border/70 border-dashed bg-background/60 px-4 py-3 text-muted-foreground text-sm">
+					<label className="border-border/70 bg-background/60 text-muted-foreground flex-1 rounded-2xl border border-dashed px-4 py-3 text-sm">
 						<input
 							type="file"
 							accept="image/*"
@@ -117,21 +118,21 @@ function RouteComponent() {
 					</label>
 					<button
 						type="button"
-						className="rounded-2xl bg-primary px-5 py-3 font-semibold text-primary-foreground text-sm transition disabled:opacity-60"
+						className="bg-primary text-primary-foreground rounded-2xl px-5 py-3 text-sm font-semibold transition disabled:opacity-60"
 						disabled={!file || isUploading}
 						onClick={handleUpload}
 					>
 						{isUploading ? "Uploading..." : "Upload"}
 					</button>
 				</div>
-				<p className="mt-3 text-muted-foreground text-xs">
+				<p className="text-muted-foreground mt-3 text-xs">
 					Accepted formats: JPG, PNG, HEIC. Processing runs in the background.
 				</p>
 			</div>
 
-			<div className="rounded-3xl border border-border/70 bg-card/70 p-6">
+			<div className="border-border/70 bg-card/70 rounded-3xl border p-6">
 				<div className="flex items-center justify-between">
-					<h2 className="font-semibold text-lg">Recent uploads</h2>
+					<h2 className="text-lg font-semibold">Recent uploads</h2>
 					<button
 						type="button"
 						className="text-muted-foreground text-xs"
@@ -156,7 +157,7 @@ function RouteComponent() {
 										<ListAction>First med: {item.medicationSummary}</ListAction>
 									) : null}
 									<span
-										className={`rounded-full px-3 py-1 font-semibold text-[11px] uppercase tracking-wide ${statusStyles(item.status)}`}
+										className={`rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide uppercase ${statusStyles(item.status)}`}
 									>
 										{item.status}
 									</span>

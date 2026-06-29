@@ -35,7 +35,7 @@ export const Default: Story = {
 					</ListContent>
 					<ListActions>
 						<ListAction>First med: Atorvastatin</ListAction>
-						<span className="rounded-full bg-emerald-500/15 px-3 py-1 font-semibold text-[11px] text-emerald-200 uppercase tracking-wide">
+						<span className="rounded-full bg-emerald-500/15 px-3 py-1 text-[11px] font-semibold tracking-wide text-emerald-200 uppercase">
 							completed
 						</span>
 					</ListActions>
@@ -46,7 +46,7 @@ export const Default: Story = {
 						<ListDescription>06/09/2024, 06:18 PM</ListDescription>
 					</ListContent>
 					<ListActions>
-						<span className="rounded-full bg-blue-500/15 px-3 py-1 font-semibold text-[11px] text-blue-200 uppercase tracking-wide">
+						<span className="rounded-full bg-blue-500/15 px-3 py-1 text-[11px] font-semibold tracking-wide text-blue-200 uppercase">
 							processing
 						</span>
 					</ListActions>
@@ -57,7 +57,7 @@ export const Default: Story = {
 						<ListDescription>06/08/2024, 02:03 PM</ListDescription>
 					</ListContent>
 					<ListActions>
-						<span className="rounded-full bg-rose-500/15 px-3 py-1 font-semibold text-[11px] text-rose-200 uppercase tracking-wide">
+						<span className="rounded-full bg-rose-500/15 px-3 py-1 text-[11px] font-semibold tracking-wide text-rose-200 uppercase">
 							failed
 						</span>
 					</ListActions>
@@ -73,7 +73,7 @@ export const WithPictures: Story = {
 			<List>
 				<ListItem>
 					<ListPicture>
-						<div className="flex h-full w-full items-center justify-center text-muted-foreground text-xs">
+						<div className="text-muted-foreground flex h-full w-full items-center justify-center text-xs">
 							PDF
 						</div>
 					</ListPicture>
@@ -93,7 +93,7 @@ export const WithPictures: Story = {
 					</ListContent>
 					<ListActions>
 						<Chip variant="secondary">Test</Chip>
-						<span className="rounded-full bg-amber-500/15 px-3 py-1 font-semibold text-[11px] text-amber-200 uppercase tracking-wide">
+						<span className="rounded-full bg-amber-500/15 px-3 py-1 text-[11px] font-semibold tracking-wide text-amber-200 uppercase">
 							pending
 						</span>
 					</ListActions>

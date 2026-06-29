@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { cn } from "heroui-native";
 import { Text, View } from "react-native";
+
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/base/card";
 import { DotChip } from "@/components/base/dot-chip";
 import { Caption } from "@/components/base/typography";
@@ -84,7 +85,7 @@ function Pill({
 		>
 			<Text
 				className={cn(
-					"font-medium text-xs",
+					"text-xs font-medium",
 					tone === "accent" ? "text-primary" : "text-muted",
 				)}
 			>

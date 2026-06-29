@@ -14,7 +14,7 @@ export const Default = () => {
 	const [checked, setChecked] = useState(false);
 
 	return (
-		<View className="flex-1 bg-background p-6">
+		<View className="bg-background flex-1 p-6">
 			<Checkbox
 				checked={checked}
 				onCheckedChange={setChecked}

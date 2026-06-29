@@ -18,9 +18,9 @@ export function Sidebar() {
 	const navigate = useNavigate();
 
 	return (
-		<aside className="flex h-full flex-col border-border/60 border-r bg-background px-5 py-6 lg:sticky lg:top-0 lg:min-h-svh">
+		<aside className="border-border/60 bg-background flex h-full flex-col border-r px-5 py-6 lg:sticky lg:top-0 lg:min-h-svh">
 			<div className="flex items-center gap-2">
-				<div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+				<div className="bg-primary/10 text-primary flex h-9 w-9 items-center justify-center rounded-2xl">
 					<svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
 						<path
 							fill="currentColor"
@@ -41,7 +41,7 @@ export function Sidebar() {
 						to={item.to}
 						className={({ isActive }) =>
 							cn(
-								"flex items-center justify-between rounded-xl px-3 py-2 text-sm transition hover:bg-foreground/5",
+								"hover:bg-foreground/5 flex items-center justify-between rounded-xl px-3 py-2 text-sm transition",
 								isActive && "bg-primary/10 text-primary",
 							)
 						}
@@ -54,18 +54,18 @@ export function Sidebar() {
 				))}
 			</nav>
 
-			<Card className="mt-6 rounded-2xl border border-border/60 bg-card/50 p-4">
-				<p className="font-semibold text-sm">Admin scope</p>
-				<p className="mt-1 text-muted-foreground text-xs">
+			<Card className="border-border/60 bg-card/50 mt-6 rounded-2xl border p-4">
+				<p className="text-sm font-semibold">Admin scope</p>
+				<p className="text-muted-foreground mt-1 text-xs">
 					Manage insurers, domains, and member access from one place.
 				</p>
 			</Card>
 
-			<div className="mt-6 flex items-center justify-between rounded-2xl border border-border/60 bg-card/50 p-3">
+			<div className="border-border/60 bg-card/50 mt-6 flex items-center justify-between rounded-2xl border p-3">
 				<div className="flex items-center gap-3">
 					<Avatar size="sm" name={session?.user.email ?? "Backoffice"} />
 					<div>
-						<p className="font-medium text-sm">
+						<p className="text-sm font-medium">
 							{session?.user.email ?? "Signed out"}
 						</p>
 						<p className="text-muted-foreground text-xs">Super admin</p>

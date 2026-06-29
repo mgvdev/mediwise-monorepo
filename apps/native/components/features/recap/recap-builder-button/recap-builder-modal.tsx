@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
 import { SafeAreaSheet } from "@/components/base/safe-area-sheet";
+
 import { RecapEmailForm } from "./recap-email-form";
 import { RecapQRCode } from "./recap-qr-code";
 import { RecapSectionPicker } from "./recap-section-picker";
@@ -54,13 +55,13 @@ export function RecapBuilderModal({
 
 	return (
 		<SafeAreaSheet visible={open} onClose={onClose}>
-			<View className="h-full border border-panel-border bg-panel-background px-6 pt-5">
+			<View className="border-panel-border bg-panel-background h-full border px-6 pt-5">
 				<View className="mb-4 flex-row items-center justify-between">
-					<Text className="font-semibold text-foreground text-lg">
+					<Text className="text-foreground text-lg font-semibold">
 						Build your recap
 					</Text>
 					<Pressable
-						className="h-9 w-9 items-center justify-center rounded-full bg-surface/60"
+						className="bg-surface/60 h-9 w-9 items-center justify-center rounded-full"
 						onPress={onClose}
 					>
 						<Ionicons name="close" size={18} className="text-foreground" />

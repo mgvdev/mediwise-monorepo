@@ -4,7 +4,7 @@ import { BackofficeLoginForm } from "@/components/backoffice/login-form";
 
 export function BackofficeLoginScreen() {
 	return (
-		<div className="relative min-h-svh overflow-hidden bg-background text-foreground">
+		<div className="bg-background text-foreground relative min-h-svh overflow-hidden">
 			<div className="pointer-events-none absolute inset-0">
 				<div className="absolute top-[-15%] -left-24 h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(14,165,233,0.2),transparent_70%)]" />
 				<div className="absolute -right-20 bottom-[-20%] h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle,rgba(245,158,11,0.18),transparent_65%)]" />
@@ -17,37 +17,37 @@ export function BackofficeLoginScreen() {
 						<Chip size="sm" variant="soft" color="warning">
 							Mediwise Admin
 						</Chip>
-						<h1 className="text-balance font-semibold text-4xl leading-tight md:text-5xl">
+						<h1 className="text-4xl leading-tight font-semibold text-balance md:text-5xl">
 							Super-admin console for Mediwise operations.
 						</h1>
-						<p className="max-w-xl text-base text-muted-foreground">
+						<p className="text-muted-foreground max-w-xl text-base">
 							Create insurers, approve dashboard domains, and keep core member
 							workflows aligned from a single command center.
 						</p>
 					</div>
 
 					<div className="grid gap-4 md:grid-cols-2">
-						<Card className="rounded-2xl border border-border/60 bg-card/80 p-4 shadow-sm">
-							<p className="text-muted-foreground text-xs uppercase tracking-wide">
+						<Card className="border-border/60 bg-card/80 rounded-2xl border p-4 shadow-sm">
+							<p className="text-muted-foreground text-xs tracking-wide uppercase">
 								Insurer onboarding
 							</p>
-							<p className="mt-2 text-foreground text-sm">
+							<p className="text-foreground mt-2 text-sm">
 								Activate plans, assign domains, and unlock insurer workspaces.
 							</p>
 						</Card>
-						<Card className="rounded-2xl border border-border/60 bg-card/80 p-4 shadow-sm">
-							<p className="text-muted-foreground text-xs uppercase tracking-wide">
+						<Card className="border-border/60 bg-card/80 rounded-2xl border p-4 shadow-sm">
+							<p className="text-muted-foreground text-xs tracking-wide uppercase">
 								Targeted actions
 							</p>
-							<p className="mt-2 text-foreground text-sm">
+							<p className="text-foreground mt-2 text-sm">
 								Search members, validate insurer assignment, and update access.
 							</p>
 						</Card>
-						<Card className="rounded-2xl border border-border/60 bg-card/80 p-4 shadow-sm">
-							<p className="text-muted-foreground text-xs uppercase tracking-wide">
+						<Card className="border-border/60 bg-card/80 rounded-2xl border p-4 shadow-sm">
+							<p className="text-muted-foreground text-xs tracking-wide uppercase">
 								Questionnaire control
 							</p>
-							<p className="mt-2 text-foreground text-sm">
+							<p className="text-foreground mt-2 text-sm">
 								Ship new intake logic across all insurers in one publish.
 							</p>
 						</Card>

@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+
 import { Tenant, TenantDomain } from "@mediwise-monorepo/db";
 import { extractEmailDomain, normalizeDomain } from "@mediwise-monorepo/domain";
 import { TRPCError } from "@trpc/server";

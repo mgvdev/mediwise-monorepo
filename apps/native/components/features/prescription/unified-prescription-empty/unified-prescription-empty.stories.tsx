@@ -14,7 +14,7 @@ type Story = StoryObj<typeof UnifiedPrescriptionEmpty>;
 
 export const Default: Story = {
 	render: () => (
-		<View className="flex-1 bg-background p-6">
+		<View className="bg-background flex-1 p-6">
 			<UnifiedPrescriptionEmpty />
 		</View>
 	),

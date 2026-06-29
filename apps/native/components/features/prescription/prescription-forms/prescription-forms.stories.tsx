@@ -14,7 +14,7 @@ type Story = StoryObj<typeof ManualPrescriptionForm>;
 
 export const Placeholder: Story = {
 	render: () => (
-		<View className="flex-1 items-center justify-center bg-background p-6">
+		<View className="bg-background flex-1 items-center justify-center p-6">
 			<Text className="text-muted text-sm">
 				ManualPrescriptionForm requires an authenticated session.
 			</Text>

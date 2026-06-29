@@ -1,6 +1,7 @@
 import { BottomSheet, Button, Input, Label, TextField } from "heroui-native";
 import * as React from "react";
 import { Pressable, Text, View } from "react-native";
+
 import { H3 } from "@/components/base/typography";
 import { BloodPressurePicker } from "@/components/medical-pickers/blood-pressure-picker";
 
@@ -59,14 +60,10 @@ export function BloodPressureInput({
 				<Pressable>
 					<TextField>
 						<Label>{label}</Label>
-						<Input
-							value={valueLabel}
-							editable={false}
-							pointerEvents="none"
-						/>
+						<Input value={valueLabel} editable={false} pointerEvents="none" />
 					</TextField>
 					{helperText ? (
-						<Text className="mt-1 text-muted text-xs">{helperText}</Text>
+						<Text className="text-muted mt-1 text-xs">{helperText}</Text>
 					) : null}
 				</Pressable>
 			</BottomSheet.Trigger>

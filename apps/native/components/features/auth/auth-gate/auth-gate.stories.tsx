@@ -14,9 +14,9 @@ type Story = StoryObj<typeof AuthGate>;
 
 export const Placeholder: Story = {
 	render: () => (
-		<View className="flex-1 items-center justify-center bg-background p-6">
+		<View className="bg-background flex-1 items-center justify-center p-6">
 			<Text className="text-foreground text-sm">AuthGate is router-bound.</Text>
-			<Text className="mt-2 text-muted text-xs">
+			<Text className="text-muted mt-2 text-xs">
 				Use it inside the app navigation tree.
 			</Text>
 		</View>

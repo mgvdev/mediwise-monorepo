@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { cn, Dialog } from "heroui-native";
 import * as React from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
+
 import {
 	MedicationShape,
 	type MedicationShapeId,
@@ -33,7 +34,7 @@ export function MedicationShapePicker({
 			<Dialog.Trigger asChild>
 				<Pressable
 					className={cn(
-						"self-start rounded-2xl border border-panel-border bg-panel-background px-3 py-3",
+						"border-panel-border bg-panel-background self-start rounded-2xl border px-3 py-3",
 						className,
 					)}
 					onPress={() => setOpen(true)}
@@ -50,7 +51,7 @@ export function MedicationShapePicker({
 								size={56}
 								iconSize={28}
 							/>
-							<View className="absolute -top-1 -right-1 rounded-full border border-panel-border bg-panel-background p-1">
+							<View className="border-panel-border bg-panel-background absolute -top-1 -right-1 rounded-full border p-1">
 								<Ionicons
 									name="chevron-down"
 									size={14}
@@ -64,7 +65,7 @@ export function MedicationShapePicker({
 
 			<Dialog.Portal>
 				<Dialog.Overlay />
-				<Dialog.Content className="rounded-3xl border border-panel-border bg-panel-background px-5 pt-4 pb-6">
+				<Dialog.Content className="border-panel-border bg-panel-background rounded-3xl border px-5 pt-4 pb-6">
 					<View className="mb-3 flex-row items-center justify-between">
 						<View className="gap-1">
 							<Dialog.Title>Select a shape</Dialog.Title>
@@ -73,7 +74,7 @@ export function MedicationShapePicker({
 							</Dialog.Description>
 						</View>
 						<Dialog.Close asChild>
-							<Pressable className="h-8 w-8 items-center justify-center rounded-full border border-panel-border">
+							<Pressable className="border-panel-border h-8 w-8 items-center justify-center rounded-full border">
 								<Ionicons name="close" size={16} className="text-muted" />
 							</Pressable>
 						</Dialog.Close>
@@ -88,7 +89,7 @@ export function MedicationShapePicker({
 							<View className="gap-5">
 								{MEDICATION_SHAPE_GROUPS_EN.map((group) => (
 									<View key={group.title} className="gap-3">
-										<Text className="font-semibold text-foreground text-sm">
+										<Text className="text-foreground text-sm font-semibold">
 											{group.title}
 										</Text>
 										<View className="flex-row flex-wrap gap-4">
@@ -101,7 +102,7 @@ export function MedicationShapePicker({
 													}}
 													hitSlop={8}
 													className={cn(
-														"rounded-2xl border border-panel-border bg-panel-background px-2 py-2",
+														"border-panel-border bg-panel-background rounded-2xl border px-2 py-2",
 														shape === value && "border-primary bg-primary/10",
 													)}
 												>

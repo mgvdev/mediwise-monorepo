@@ -1,6 +1,7 @@
 import { Button } from "heroui-native";
 import * as React from "react";
 import { FlatList, Text, View } from "react-native";
+
 import { RollingNumber } from "@/components/base/rolling-number";
 
 const CM_RANGE = Array.from({ length: 131 }, (_, i) => i + 120);
@@ -70,7 +71,7 @@ export function HeightPicker({ value, unit, onChange }: HeightPickerProps) {
 
 	return (
 		<View className="gap-6">
-			<View className="flex-row items-center justify-center rounded-full border border-border/60 p-1">
+			<View className="border-border/60 flex-row items-center justify-center rounded-full border p-1">
 				<Button
 					size="sm"
 					variant={unit === "cm" ? "solid" : "ghost"}
@@ -90,9 +91,9 @@ export function HeightPicker({ value, unit, onChange }: HeightPickerProps) {
 			<View className="items-center">
 				<View className="flex-row items-end">
 					<RollingNumber value={displayValue} />
-					<Text className="self-end pb-2 text-base text-muted"> {unit}</Text>
+					<Text className="text-muted self-end pb-2 text-base"> {unit}</Text>
 				</View>
-				<Text className="mt-1 text-muted text-xs">Scroll to adjust</Text>
+				<Text className="text-muted mt-1 text-xs">Scroll to adjust</Text>
 			</View>
 
 			<View
@@ -102,7 +103,7 @@ export function HeightPicker({ value, unit, onChange }: HeightPickerProps) {
 				}
 			>
 				<View
-					className="absolute right-0 left-0 rounded-2xl border border-primary bg-primary/10"
+					className="border-primary bg-primary/10 absolute right-0 left-0 rounded-2xl border"
 					style={{
 						top:
 							containerHeight > 0
@@ -116,11 +117,11 @@ export function HeightPicker({ value, unit, onChange }: HeightPickerProps) {
 				/>
 				<View
 					pointerEvents="none"
-					className="absolute top-0 right-0 left-0 h-8 bg-background/90"
+					className="bg-background/90 absolute top-0 right-0 left-0 h-8"
 				/>
 				<View
 					pointerEvents="none"
-					className="absolute right-0 bottom-0 left-0 h-8 bg-background/90"
+					className="bg-background/90 absolute right-0 bottom-0 left-0 h-8"
 				/>
 				<FlatList
 					ref={listRef}
@@ -154,7 +155,7 @@ export function HeightPicker({ value, unit, onChange }: HeightPickerProps) {
 							className="items-center justify-center"
 							style={{ height: itemHeight }}
 						>
-							<Text className="text-base text-muted">{item}</Text>
+							<Text className="text-muted text-base">{item}</Text>
 						</View>
 					)}
 				/>

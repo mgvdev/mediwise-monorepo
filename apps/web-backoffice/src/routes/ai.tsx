@@ -19,7 +19,7 @@ export const Route = createFileRoute("/ai")({
 function RouteComponent() {
 	return (
 		<div className="flex min-h-[60svh] items-center justify-center">
-			<p className="font-medium text-lg">AI Assistant</p>
+			<p className="text-lg font-medium">AI Assistant</p>
 		</div>
 	);
 }

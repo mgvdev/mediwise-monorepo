@@ -22,7 +22,7 @@ const meta: Meta = {
 export default meta;
 
 export const Default = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<Card>
 			<CardHeader>
 				<CardTitle>Upcoming appointment</CardTitle>
@@ -43,7 +43,7 @@ export const Default = () => (
 );
 
 export const WithIconAction = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<Card>
 			<CardHeader>
 				<CardTitle>Lab results</CardTitle>
@@ -65,15 +65,15 @@ export const WithIconAction = () => (
 );
 
 export const Dense = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<Card className="p-3">
 			<CardHeader className="items-start">
 				<View className="gap-1">
 					<CardTitle className="text-sm">Daily summary</CardTitle>
-					<Text className="text-[11px] text-muted">4 updates</Text>
+					<Text className="text-muted text-[11px]">4 updates</Text>
 				</View>
 				<CardAction onPress={() => undefined} className="px-2 py-1">
-					<Text className="text-[11px] text-muted">Open</Text>
+					<Text className="text-muted text-[11px]">Open</Text>
 				</CardAction>
 			</CardHeader>
 		</Card>
@@ -81,7 +81,7 @@ export const Dense = () => (
 );
 
 export const AiBorder = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<Card variant="ai">
 			<CardHeader>
 				<CardTitle>AI Summary</CardTitle>
@@ -102,11 +102,11 @@ export const AiBorder = () => (
 );
 
 export const Rows = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<Card className="p-0">
 			<CardBody className="mt-0">
 				<CardRow>
-					<CardRowIcon className="border border-panel-border bg-primary/10">
+					<CardRowIcon className="border-panel-border bg-primary/10 border">
 						<Ionicons
 							name="person-outline"
 							size={18}
@@ -127,7 +127,7 @@ export const Rows = () => (
 );
 
 export const Inverse = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<Card variant="inverse">
 			<CardHeader>
 				<CardTitle className="text-white">Coverage status</CardTitle>
@@ -139,12 +139,12 @@ export const Inverse = () => (
 				</CardAction>
 			</CardHeader>
 			<CardBody>
-				<Text className="text-white/70 text-xs">
+				<Text className="text-xs text-white/70">
 					Priority claims are active and processing.
 				</Text>
 			</CardBody>
 			<CardFooter>
-				<Text className="text-white/60 text-xs">Updated 5 minutes ago</Text>
+				<Text className="text-xs text-white/60">Updated 5 minutes ago</Text>
 			</CardFooter>
 		</Card>
 	</View>

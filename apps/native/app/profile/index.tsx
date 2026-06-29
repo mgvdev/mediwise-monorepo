@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { View } from "react-native";
+
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/base/card";
 import { LogoutButton } from "@/components/base/logout-button/logout-button";
 import {

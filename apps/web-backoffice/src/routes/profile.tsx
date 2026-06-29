@@ -21,7 +21,7 @@ function RouteComponent() {
 
 	return (
 		<div className="flex min-h-[60svh] items-center justify-center">
-			<p className="font-medium text-lg">
+			<p className="text-lg font-medium">
 				Profile{session.data?.user.email ? ` — ${session.data.user.email}` : ""}
 			</p>
 		</div>

@@ -6,13 +6,13 @@
 		"dev": "bun run --hot src/index.ts"
 	},
 	"dependencies": {
-		"dotenv": "^17.4.2",
-		"@mediwise-monorepo/env": "workspace:*",
 		"@mediwise-monorepo/db": "workspace:*",
-		"@mediwise-monorepo/infrastructure": "workspace:*"
+		"@mediwise-monorepo/env": "workspace:*",
+		"@mediwise-monorepo/infrastructure": "workspace:*",
+		"dotenv": "^17.4.2"
 	},
 	"devDependencies": {
-		"typescript": "^6.0.3",
-		"@mediwise-monorepo/config": "workspace:*"
+		"@mediwise-monorepo/config": "workspace:*",
+		"typescript": "^6.0.3"
 	}
 }

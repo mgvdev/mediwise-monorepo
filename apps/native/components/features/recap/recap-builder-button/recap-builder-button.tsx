@@ -39,7 +39,7 @@ export function RecapBuilderButton({
 				<Button.Label>{buttonLabel}</Button.Label>
 			</Button>
 			{lastSelection ? (
-				<Text className="mt-3 text-muted text-xs">
+				<Text className="text-muted mt-3 text-xs">
 					Shared {lastSelection.sectionIds.length} sections via{" "}
 					{lastSelection.method}.
 				</Text>

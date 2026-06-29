@@ -18,7 +18,9 @@ export type UnifiedViewLike = {
 	updatedAt?: Date | string | null;
 };
 
-export function selectCurrentTreatments(medications: CurrentTreatmentMedication[]) {
+export function selectCurrentTreatments(
+	medications: CurrentTreatmentMedication[],
+) {
 	return medications.filter((medication) => medication.status === "active");
 }
 

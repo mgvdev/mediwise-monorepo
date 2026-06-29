@@ -1,5 +1,4 @@
 import type { AppRouter } from "@mediwise-monorepo/api/routers/index";
-
 import { env } from "@mediwise-monorepo/env/web";
 import { QueryCache, QueryClient } from "@tanstack/react-query";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";

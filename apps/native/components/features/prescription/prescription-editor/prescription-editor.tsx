@@ -73,7 +73,7 @@ export function PrescriptionEditor({
 		<View className="gap-5">
 			{showHeader ? (
 				<View className="gap-1">
-					<Text className="font-semibold text-2xl text-foreground">
+					<Text className="text-foreground text-2xl font-semibold">
 						{title}
 					</Text>
 					{subtitle ? (
@@ -85,7 +85,7 @@ export function PrescriptionEditor({
 			{topContent}
 
 			<Surface variant="secondary" className="rounded-2xl p-4">
-				<Text className="font-semibold text-base text-foreground">
+				<Text className="text-foreground text-base font-semibold">
 					General Info
 				</Text>
 				<View className="mt-3 gap-3">
@@ -120,7 +120,7 @@ export function PrescriptionEditor({
 
 			<Surface variant="secondary" className="rounded-2xl p-4">
 				<View className="flex-row items-center justify-between">
-					<Text className="font-semibold text-base text-foreground">
+					<Text className="text-foreground text-base font-semibold">
 						Medication list
 					</Text>
 					<Pressable
@@ -128,7 +128,7 @@ export function PrescriptionEditor({
 						className="flex-row items-center"
 					>
 						<Ionicons name="add" size={16} color={accent} />
-						<Text className="font-semibold text-primary text-sm">
+						<Text className="text-primary text-sm font-semibold">
 							Add another medication
 						</Text>
 					</Pressable>
@@ -167,7 +167,7 @@ export function PrescriptionEditor({
 					variant="secondary"
 					onPress={onDelete}
 					isDisabled={isDeleting}
-					className="mt-1 border-danger/40"
+					className="border-danger/40 mt-1"
 				>
 					<Button.Label className="text-danger">
 						{isDeleting ? "Suppression..." : deleteLabel}

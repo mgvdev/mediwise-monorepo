@@ -1,6 +1,8 @@
 import type { Meta } from "@storybook/react-native";
 import { ScrollView, View } from "react-native";
+
 import { createMedicationDraft } from "@/components/features/prescription/prescription-types";
+
 import { MedicationListItem } from "./medication-list-item";
 
 const meta: Meta = {
@@ -17,7 +19,7 @@ const baseMedication = createMedicationDraft({
 });
 
 export const Default = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<MedicationListItem
 			medication={baseMedication}
 			subtitle="Daily treatment"
@@ -28,7 +30,7 @@ export const Default = () => (
 );
 
 export const Card = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<MedicationListItem
 			medication={baseMedication}
 			subtitle="Daily treatment"
@@ -40,7 +42,7 @@ export const Card = () => (
 );
 
 export const Compact = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<MedicationListItem
 			medication={baseMedication}
 			subtitle="Daily treatment"
@@ -52,7 +54,7 @@ export const Compact = () => (
 );
 
 export const Stack = () => (
-	<ScrollView className="flex-1 bg-background p-6">
+	<ScrollView className="bg-background flex-1 p-6">
 		<View className="gap-4">
 			<MedicationListItem
 				medication={baseMedication}

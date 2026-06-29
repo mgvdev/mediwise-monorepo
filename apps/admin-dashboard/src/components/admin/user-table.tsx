@@ -42,14 +42,14 @@ export function UserTable({
 
 	return (
 		<Card className={cardVariants()}>
-			<div className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-4 text-muted-foreground text-xs uppercase tracking-[0.2em]">
+			<div className="text-muted-foreground grid grid-cols-[2fr_1fr_1fr_1fr] gap-4 text-xs tracking-[0.2em] uppercase">
 				<span>Member</span>
 				<span>Insurer</span>
 				<span>Status</span>
 				<span>Actions</span>
 			</div>
 
-			<div className="mt-4 divide-y divide-border/60">
+			<div className="divide-border/60 mt-4 divide-y">
 				{users.length ? (
 					users.map((user) => {
 						const selectedTenant = selection[user.id] ?? "";
@@ -62,7 +62,7 @@ export function UserTable({
 								className="grid grid-cols-1 gap-4 py-4 md:grid-cols-[2fr_1fr_1fr_1fr]"
 							>
 								<div>
-									<p className="font-medium text-sm">{user.email}</p>
+									<p className="text-sm font-medium">{user.email}</p>
 									{user.tenantName ? (
 										<p className="text-muted-foreground text-xs">
 											Current insurer: {user.tenantName}
@@ -75,7 +75,7 @@ export function UserTable({
 								</div>
 								<div>
 									<select
-										className="h-9 w-full rounded-xl border border-border/60 bg-background px-3 text-foreground text-sm"
+										className="border-border/60 bg-background text-foreground h-9 w-full rounded-xl border px-3 text-sm"
 										value={selectedTenant}
 										onChange={(event) => {
 											setSelection((previous) => ({
@@ -123,7 +123,7 @@ export function UserTable({
 						);
 					})
 				) : (
-					<p className="py-6 text-muted-foreground text-sm">
+					<p className="text-muted-foreground py-6 text-sm">
 						No users found for this search.
 					</p>
 				)}

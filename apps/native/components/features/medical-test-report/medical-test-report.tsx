@@ -58,7 +58,7 @@ export function MedicalTestReport({
 		<MedicalTestReportContext.Provider value={{ isOpen: open, toggle }}>
 			<View
 				className={cn(
-					"rounded-3xl border border-panel-border bg-panel-background p-5",
+					"border-panel-border bg-panel-background rounded-3xl border p-5",
 					className,
 				)}
 				{...props}
@@ -101,13 +101,13 @@ export function MedicalTestReportHeader({
 		>
 			<View className="flex-row items-center gap-4">
 				{leading ? (
-					<View className="h-12 w-12 items-center justify-center rounded-full border border-panel-border bg-panel-background">
+					<View className="border-panel-border bg-panel-background h-12 w-12 items-center justify-center rounded-full border">
 						{leading}
 					</View>
 				) : null}
 				<View className="gap-2">
 					<Text className="text-muted text-sm">{timestamp}</Text>
-					<Text className="font-semibold text-foreground text-lg">{title}</Text>
+					<Text className="text-foreground text-lg font-semibold">{title}</Text>
 					<DotChip status={status} label={statusLabel} />
 				</View>
 			</View>
@@ -136,7 +136,7 @@ export function MedicalTestReportBody({
 
 	return (
 		<View
-			className={cn("mt-4 border-border/60 border-t pt-4", className)}
+			className={cn("border-border/60 mt-4 border-t pt-4", className)}
 			{...props}
 		>
 			{children}
@@ -163,7 +163,7 @@ export function MedicalTestReportFooter({
 	return (
 		<View
 			className={cn(
-				"mt-4 items-center border-border/60 border-t pt-4",
+				"border-border/60 mt-4 items-center border-t pt-4",
 				className,
 			)}
 			{...props}

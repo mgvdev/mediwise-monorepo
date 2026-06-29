@@ -8,6 +8,7 @@ import {
 	findRawById,
 	updateRawStatus,
 } from "@mediwise-monorepo/infrastructure/prescriptions";
+
 import type { JobHandler } from "./types";
 import { JobHandlerError } from "./types";
 
@@ -31,8 +32,9 @@ export function createPrescriptionHandler({
 			}
 
 			await updateRawStatus({ rawId: raw._id, status: "processing" });
-			const storageKeys =
-				raw.storageKeys?.length ? raw.storageKeys : [raw.storageKey];
+			const storageKeys = raw.storageKeys?.length
+				? raw.storageKeys
+				: [raw.storageKey];
 			const images = await Promise.all(
 				storageKeys.map((key) => storage.getFileBuffer(key)),
 			);

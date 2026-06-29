@@ -57,7 +57,7 @@ export function ListInput({
 					</View>
 					<Pressable
 						onPress={handleAdd}
-						className="items-center justify-center rounded-full border border-panel-border px-3 py-2"
+						className="border-panel-border items-center justify-center rounded-full border px-3 py-2"
 						style={pressableFeedback()}
 						accessibilityRole="button"
 						accessibilityLabel="Add item"
@@ -71,12 +71,12 @@ export function ListInput({
 					{value.map((item, index) => (
 						<View
 							key={`${item}`}
-							className="flex-row items-center justify-between rounded-2xl border border-panel-border bg-panel-background px-4 py-3"
+							className="border-panel-border bg-panel-background flex-row items-center justify-between rounded-2xl border px-4 py-3"
 						>
-							<Text className="flex-1 text-foreground text-sm">{item}</Text>
+							<Text className="text-foreground flex-1 text-sm">{item}</Text>
 							<Pressable
 								onPress={() => handleRemove(index)}
-								className="ml-3 h-8 w-8 items-center justify-center rounded-full border border-panel-border bg-white/70"
+								className="border-panel-border ml-3 h-8 w-8 items-center justify-center rounded-full border bg-white/70"
 								style={pressableFeedback()}
 								accessibilityRole="button"
 								accessibilityLabel={`Remove ${item}`}

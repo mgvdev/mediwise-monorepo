@@ -18,7 +18,7 @@ export const Default: Story = {
 		const [items, setItems] = React.useState(["Peanuts", "Penicillin"]);
 
 		return (
-			<View className="flex-1 bg-background p-6">
+			<View className="bg-background flex-1 p-6">
 				<ListInput
 					label="Allergies"
 					value={items}

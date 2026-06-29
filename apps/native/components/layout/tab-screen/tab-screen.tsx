@@ -2,6 +2,7 @@ import { cn } from "heroui-native";
 import type { PropsWithChildren } from "react";
 import type { ScrollViewProps } from "react-native";
 import { View } from "react-native";
+
 import { SoftHealthBackground } from "@/components/base/backgrounds";
 import { Container } from "@/components/layout/container";
 
@@ -23,7 +24,7 @@ export function TabScreen({
 	scroll,
 }: PropsWithChildren<TabScreenProps>) {
 	return (
-		<View className="flex-1 bg-background">
+		<View className="bg-background flex-1">
 			<SoftHealthBackground heightRatio={1} />
 			<Container
 				tabScreen

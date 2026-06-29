@@ -33,7 +33,7 @@ export function Checkbox({
 		>
 			<View
 				className={cn(
-					"h-5 w-5 items-center justify-center rounded border border-panel-border",
+					"border-panel-border h-5 w-5 items-center justify-center rounded border",
 					checked && "border-primary bg-primary",
 				)}
 			>
@@ -43,7 +43,7 @@ export function Checkbox({
 				<View className="flex-1">
 					<Text className="text-foreground text-sm">{label}</Text>
 					{description ? (
-						<Text className="mt-1 text-muted text-xs">{description}</Text>
+						<Text className="text-muted mt-1 text-xs">{description}</Text>
 					) : null}
 				</View>
 			) : null}

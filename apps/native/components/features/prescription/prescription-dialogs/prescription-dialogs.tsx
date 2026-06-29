@@ -26,11 +26,11 @@ export function ManualPrescriptionDialog({
 			<Dialog.Portal className="justify-end p-0">
 				<Dialog.Overlay className="bg-black/40" />
 				<Dialog.Content
-					className="rounded-t-3xl border-0 bg-background p-0"
+					className="bg-background rounded-t-3xl border-0 p-0"
 					style={{ maxHeight: height * 0.9 }}
 				>
 					<View className="items-center pt-3">
-						<View className="h-1 w-12 rounded-full bg-border/60" />
+						<View className="bg-border/60 h-1 w-12 rounded-full" />
 					</View>
 					<View className="px-6 pt-3">
 						<Dialog.Title>Manual prescription</Dialog.Title>
@@ -84,11 +84,11 @@ export function PrescriptionDetailDialog({
 			<Dialog.Portal className="justify-end p-0">
 				<Dialog.Overlay className="bg-black/40" />
 				<Dialog.Content
-					className="rounded-t-3xl border-0 bg-background p-0"
+					className="bg-background rounded-t-3xl border-0 p-0"
 					style={{ maxHeight: height * 0.9 }}
 				>
 					<View className="items-center pt-3">
-						<View className="h-1 w-12 rounded-full bg-border/60" />
+						<View className="bg-border/60 h-1 w-12 rounded-full" />
 					</View>
 					<View className="px-6 pt-3">
 						<Dialog.Title>Unified prescription</Dialog.Title>

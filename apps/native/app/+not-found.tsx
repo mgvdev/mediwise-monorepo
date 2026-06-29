@@ -1,6 +1,7 @@
 import { Link, Stack } from "expo-router";
 import { Button, Surface } from "heroui-native";
 import { View } from "react-native";
+
 import { BodyMuted, Emoji, H3 } from "@/components/base/typography";
 import { Container } from "@/components/layout/container";
 

@@ -3,6 +3,7 @@ import { Button, cn, Input, Label, Surface, TextField } from "heroui-native";
 import { useEffect, useRef } from "react";
 import { Animated, Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import { ChoiceInput } from "@/components/base/choice";
 import { DurationPicker } from "@/components/base/duration-picker";
 import { FrequencyPicker } from "@/components/base/frequency-picker";
@@ -74,7 +75,7 @@ export function MedicationEditor({
 		<Wrapper
 			className={cn(
 				variant === "surface"
-					? "rounded-t-3xl bg-background px-6 pt-5"
+					? "bg-background rounded-t-3xl px-6 pt-5"
 					: "bg-transparent px-6 pt-5",
 				isSheet && "min-h-0 flex-1",
 			)}
@@ -82,12 +83,12 @@ export function MedicationEditor({
 		>
 			{showHeader ? (
 				<View className="mb-4 flex-row items-center justify-between">
-					<Text className="font-semibold text-foreground text-lg">
+					<Text className="text-foreground text-lg font-semibold">
 						Edit Medication
 					</Text>
 					{showClose ? (
 						<Pressable
-							className="h-9 w-9 items-center justify-center rounded-full bg-surface/60"
+							className="bg-surface/60 h-9 w-9 items-center justify-center rounded-full"
 							accessibilityRole="button"
 							accessibilityLabel="Close medication editor"
 							onPress={onClose}

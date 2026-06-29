@@ -111,19 +111,19 @@ export function BackofficeLoginForm() {
 
 	if (isPending) {
 		return (
-			<Card className="w-full max-w-md rounded-3xl border border-border/60 bg-card p-6 shadow-lg">
+			<Card className="border-border/60 bg-card w-full max-w-md rounded-3xl border p-6 shadow-lg">
 				<p className="text-muted-foreground text-sm">Checking session...</p>
 			</Card>
 		);
 	}
 
 	return (
-		<Card className="w-full max-w-md rounded-3xl border border-border/60 bg-card p-6 shadow-lg">
+		<Card className="border-border/60 bg-card w-full max-w-md rounded-3xl border p-6 shadow-lg">
 			<Card.Header className="flex flex-col items-start gap-2">
-				<p className="text-muted-foreground text-xs uppercase tracking-[0.3em]">
+				<p className="text-muted-foreground text-xs tracking-[0.3em] uppercase">
 					Backoffice Access
 				</p>
-				<h2 className="font-semibold text-2xl">Sign in</h2>
+				<h2 className="text-2xl font-semibold">Sign in</h2>
 				<p className="text-muted-foreground text-sm">
 					Use your corporate email to receive a one-time login code.
 				</p>

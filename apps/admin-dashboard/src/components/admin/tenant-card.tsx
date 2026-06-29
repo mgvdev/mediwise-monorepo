@@ -82,7 +82,7 @@ export function TenantCard({
 						size="sm"
 					/>
 					<div>
-						<p className="font-semibold text-lg">{tenant.name}</p>
+						<p className="text-lg font-semibold">{tenant.name}</p>
 						<p className="text-muted-foreground text-xs">
 							Created {formatDate(tenant.createdAt)}
 						</p>
@@ -98,7 +98,7 @@ export function TenantCard({
 
 			<Card.Content className="mt-4 space-y-4">
 				<div>
-					<p className="text-muted-foreground text-xs uppercase tracking-[0.2em]">
+					<p className="text-muted-foreground text-xs tracking-[0.2em] uppercase">
 						Authorized domains
 					</p>
 					{tenant.domains.length ? (
@@ -106,7 +106,7 @@ export function TenantCard({
 							{tenant.domains.map((domain) => (
 								<div
 									key={domain.id}
-									className="flex items-center justify-between rounded-xl border border-border/60 bg-background/40 px-3 py-2 text-sm"
+									className="border-border/60 bg-background/40 flex items-center justify-between rounded-xl border px-3 py-2 text-sm"
 								>
 									<span>{domain.domain}</span>
 									<Button
@@ -121,7 +121,7 @@ export function TenantCard({
 							))}
 						</div>
 					) : (
-						<p className="mt-2 text-muted-foreground text-sm">
+						<p className="text-muted-foreground mt-2 text-sm">
 							No domains yet.
 						</p>
 					)}

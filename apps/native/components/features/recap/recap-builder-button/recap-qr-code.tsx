@@ -34,7 +34,7 @@ export function RecapQRCode({ value, className }: RecapQRCodeProps) {
 
 	return (
 		<View className={cn("items-center gap-3", className)}>
-			<View className="rounded-2xl border border-panel-border bg-white p-3">
+			<View className="border-panel-border rounded-2xl border bg-white p-3">
 				<View className="gap-1">
 					{matrix.map(({ key, row }) => (
 						<View key={key} className="flex-row gap-1">

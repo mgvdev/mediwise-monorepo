@@ -19,7 +19,7 @@ export const Centimeters: Story = {
 		const [value, setValue] = React.useState(172);
 
 		return (
-			<View className="flex-1 bg-background p-6">
+			<View className="bg-background flex-1 p-6">
 				<HeightPicker
 					unit={unit}
 					value={value}
@@ -39,7 +39,7 @@ export const Inches: Story = {
 		const [value, setValue] = React.useState(68);
 
 		return (
-			<View className="flex-1 bg-background p-6">
+			<View className="bg-background flex-1 p-6">
 				<HeightPicker
 					unit={unit}
 					value={value}

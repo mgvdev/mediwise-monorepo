@@ -15,14 +15,14 @@
 		"db:stop": "docker compose stop",
 		"db:down": "docker compose down"
 	},
-	"devDependencies": {
-		"typescript": "^6.0.3",
-		"@mediwise-monorepo/config": "workspace:*"
-	},
 	"dependencies": {
-		"mongoose": "^8.24.0",
+		"@mediwise-monorepo/env": "workspace:*",
 		"dotenv": "^17.4.2",
-		"zod": "^4.4.3",
-		"@mediwise-monorepo/env": "workspace:*"
+		"mongoose": "^8.24.0",
+		"zod": "^4.4.3"
+	},
+	"devDependencies": {
+		"@mediwise-monorepo/config": "workspace:*",
+		"typescript": "^6.0.3"
 	}
 }

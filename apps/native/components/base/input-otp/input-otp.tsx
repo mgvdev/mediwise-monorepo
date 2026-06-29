@@ -67,13 +67,13 @@ export function InputOtp({
 						<View
 							key={cell.id}
 							className={cn(
-								"h-12 w-12 items-center justify-center rounded-xl border bg-panel-background",
+								"bg-panel-background h-12 w-12 items-center justify-center rounded-xl border",
 								isActive ? "border-primary" : "border-panel-border",
 								isDisabled && "opacity-60",
 								cellClassName,
 							)}
 						>
-							<Text className="font-semibold text-foreground text-lg">
+							<Text className="text-foreground text-lg font-semibold">
 								{digit}
 							</Text>
 						</View>

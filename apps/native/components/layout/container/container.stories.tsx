@@ -16,8 +16,8 @@ export const Default: Story = {
 	render: () => (
 		<Container scroll={false} className="items-center justify-center">
 			<View className="items-center">
-				<Text className="text-base text-foreground">Container content</Text>
-				<Text className="mt-2 text-muted text-xs">Safe area aware</Text>
+				<Text className="text-foreground text-base">Container content</Text>
+				<Text className="text-muted mt-2 text-xs">Safe area aware</Text>
 			</View>
 		</Container>
 	),

@@ -1,5 +1,6 @@
 import { cn } from "heroui-native";
 import { ScrollView, View } from "react-native";
+
 import { Checkbox } from "@/components/base/checkbox";
 
 import type { RecapSection } from "./recap-types";

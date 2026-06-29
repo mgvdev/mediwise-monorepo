@@ -14,7 +14,7 @@ export const Default = () => {
 	const [value, setValue] = useState<PainLevel>(0);
 
 	return (
-		<View className="flex-1 bg-background p-6">
+		<View className="bg-background flex-1 p-6">
 			<PainPicker value={value} onChange={setValue} />
 		</View>
 	);

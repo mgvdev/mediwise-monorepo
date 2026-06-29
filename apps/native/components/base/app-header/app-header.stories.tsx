@@ -4,6 +4,7 @@ import { ScrollView, View } from "react-native";
 
 import { Checkbox } from "@/components/base/checkbox";
 import { ChoiceInput, type ChoiceValue } from "@/components/base/choice";
+
 import { AppHeader } from "./app-header";
 
 const meta: Meta = {
@@ -25,7 +26,7 @@ export const Playground = () => {
 	const [showNotifications, setShowNotifications] = useState(true);
 
 	return (
-		<ScrollView className="flex-1 bg-background p-6">
+		<ScrollView className="bg-background flex-1 p-6">
 			<AppHeader
 				title="Home"
 				subtitle="Your health snapshot"
@@ -88,7 +89,7 @@ export const Playground = () => {
 };
 
 export const DarkScore = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<AppHeader
 			title="Home"
 			subtitle="Nightingale Score"
@@ -103,7 +104,7 @@ export const DarkScore = () => (
 );
 
 export const LightMinimal = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<AppHeader
 			title="Good afternoon"
 			subtitle="Your tasks are up to date"
@@ -116,7 +117,7 @@ export const LightMinimal = () => (
 );
 
 export const GradientMember = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<AppHeader
 			title="My health"
 			subtitle="Weekly overview"
@@ -131,7 +132,7 @@ export const GradientMember = () => (
 );
 
 export const SoftFocus = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<AppHeader
 			title="Vitals"
 			subtitle="Morning check-in"
@@ -144,7 +145,7 @@ export const SoftFocus = () => (
 );
 
 export const OutlineCompact = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<AppHeader
 			title="Documents"
 			subtitle="Updated today"

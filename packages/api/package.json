@@ -10,20 +10,20 @@
 		}
 	},
 	"scripts": {},
-	"devDependencies": {
-		"typescript": "^6.0.3",
-		"@mediwise-monorepo/config": "workspace:*"
-	},
 	"dependencies": {
-		"@trpc/server": "^11.17.0",
-		"@trpc/client": "^11.17.0",
-		"hono": "^4.12.25",
-		"dotenv": "^17.4.2",
-		"zod": "^4.4.3",
-		"@mediwise-monorepo/infrastructure": "workspace:*",
-		"@mediwise-monorepo/env": "workspace:*",
 		"@mediwise-monorepo/auth": "workspace:*",
 		"@mediwise-monorepo/db": "workspace:*",
-		"@mediwise-monorepo/domain": "workspace:*"
+		"@mediwise-monorepo/domain": "workspace:*",
+		"@mediwise-monorepo/env": "workspace:*",
+		"@mediwise-monorepo/infrastructure": "workspace:*",
+		"@trpc/client": "^11.17.0",
+		"@trpc/server": "^11.17.0",
+		"dotenv": "^17.4.2",
+		"hono": "^4.12.25",
+		"zod": "^4.4.3"
+	},
+	"devDependencies": {
+		"@mediwise-monorepo/config": "workspace:*",
+		"typescript": "^6.0.3"
 	}
 }

@@ -14,12 +14,12 @@ export function ProfileActionRow({
 }: ProfileActionRowProps) {
 	return (
 		<Pressable
-			className="flex-row items-center justify-between rounded-2xl border border-border/60 px-4 py-3"
+			className="border-border/60 flex-row items-center justify-between rounded-2xl border px-4 py-3"
 			onPress={onPress}
 		>
 			<View className="flex-1">
-				<Text className="font-semibold text-foreground text-sm">{label}</Text>
-				<Text className="mt-1 text-muted text-xs">
+				<Text className="text-foreground text-sm font-semibold">{label}</Text>
+				<Text className="text-muted mt-1 text-xs">
 					{value?.trim().length ? value : "Not set"}
 				</Text>
 			</View>

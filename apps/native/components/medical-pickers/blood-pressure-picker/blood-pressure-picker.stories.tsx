@@ -19,7 +19,7 @@ export const Normal: Story = {
 		const [diastolic, setDiastolic] = React.useState(76);
 
 		return (
-			<View className="flex-1 bg-background p-6">
+			<View className="bg-background flex-1 p-6">
 				<BloodPressurePicker
 					systolic={systolic}
 					diastolic={diastolic}
@@ -39,7 +39,7 @@ export const Hypertension: Story = {
 		const [diastolic, setDiastolic] = React.useState(95);
 
 		return (
-			<View className="flex-1 bg-background p-6">
+			<View className="bg-background flex-1 p-6">
 				<BloodPressurePicker
 					systolic={systolic}
 					diastolic={diastolic}

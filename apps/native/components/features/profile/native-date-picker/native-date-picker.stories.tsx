@@ -18,7 +18,7 @@ export const Default: Story = {
 		const [value, setValue] = React.useState("1990-01-01");
 
 		return (
-			<View className="flex-1 bg-background p-6">
+			<View className="bg-background flex-1 p-6">
 				<NativeDatePicker value={value} onChange={setValue} />
 			</View>
 		);

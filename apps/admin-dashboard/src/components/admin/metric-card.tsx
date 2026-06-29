@@ -12,12 +12,12 @@ type MetricCardProps = {
 export function MetricCard({ label, value, description }: MetricCardProps) {
 	return (
 		<Card className={cardVariants()}>
-			<p className="text-muted-foreground text-xs uppercase tracking-[0.2em]">
+			<p className="text-muted-foreground text-xs tracking-[0.2em] uppercase">
 				{label}
 			</p>
-			<p className="mt-3 font-semibold text-3xl">{value}</p>
+			<p className="mt-3 text-3xl font-semibold">{value}</p>
 			{description ? (
-				<p className="mt-2 text-muted-foreground text-xs">{description}</p>
+				<p className="text-muted-foreground mt-2 text-xs">{description}</p>
 			) : null}
 		</Card>
 	);

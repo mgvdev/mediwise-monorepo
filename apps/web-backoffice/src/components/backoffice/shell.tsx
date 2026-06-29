@@ -11,11 +11,11 @@ export function BackofficeShell({
 	contentClassName,
 }: PropsWithChildren<BackofficeShellProps>) {
 	return (
-		<div className="min-h-svh bg-background text-foreground">
+		<div className="bg-background text-foreground min-h-svh">
 			<div className="mx-auto grid min-h-svh w-full max-w-[1400px] grid-cols-1 lg:grid-cols-[260px_1fr]">
 				<Sidebar />
 				<main
-					className={`min-h-svh bg-background px-6 py-8 lg:px-10 ${contentClassName ?? ""}`}
+					className={`bg-background min-h-svh px-6 py-8 lg:px-10 ${contentClassName ?? ""}`}
 				>
 					{children}
 				</main>

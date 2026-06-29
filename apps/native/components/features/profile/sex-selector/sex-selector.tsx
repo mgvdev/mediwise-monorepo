@@ -60,7 +60,7 @@ export function SexSelector({
 									size={20}
 									className={cn("text-muted", isSelected && "text-primary")}
 								/>
-								<Text className="font-semibold text-base text-foreground">
+								<Text className="text-foreground text-base font-semibold">
 									{option.label}
 								</Text>
 							</RadioStart>

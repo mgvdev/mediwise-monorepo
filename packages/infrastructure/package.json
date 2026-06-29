@@ -25,15 +25,15 @@
 		}
 	},
 	"scripts": {},
-	"devDependencies": {
-		"typescript": "^6.0.3",
-		"@mediwise-monorepo/config": "workspace:*"
-	},
 	"dependencies": {
+		"@aws-sdk/client-s3": "^3.1069.0",
 		"@mediwise-monorepo/db": "workspace:*",
 		"@mediwise-monorepo/domain": "workspace:*",
 		"@mediwise-monorepo/env": "workspace:*",
-		"@aws-sdk/client-s3": "^3.1069.0",
 		"zod": "^4.4.3"
+	},
+	"devDependencies": {
+		"@mediwise-monorepo/config": "workspace:*",
+		"typescript": "^6.0.3"
 	}
 }

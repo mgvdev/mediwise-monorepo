@@ -1,5 +1,6 @@
 import { analyzeAndPersistInteractions } from "@mediwise-monorepo/infrastructure/interactions";
 import type { JobDoc, JobTypes } from "@mediwise-monorepo/infrastructure/jobs";
+
 import type { JobHandler } from "./types";
 
 type InteractionJob = JobDoc<typeof JobTypes.interactionAnalysis>;

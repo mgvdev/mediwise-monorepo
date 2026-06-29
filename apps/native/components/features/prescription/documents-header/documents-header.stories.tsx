@@ -15,7 +15,7 @@ type Story = StoryObj<typeof DocumentsHeader>;
 export const Default: Story = {
 	render: () => {
 		return (
-			<View className="flex-1 bg-background">
+			<View className="bg-background flex-1">
 				<DocumentsHeader
 					className="m-6"
 					onPickFromLibrary={() => undefined}

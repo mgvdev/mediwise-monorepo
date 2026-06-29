@@ -9,28 +9,29 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 
 ## Vue d'ensemble
 
-| # | Fonctionnalité (brief) | État |
-|---|------------------------|------|
-| 6.1 | Fiche médicale | ✅ |
-| 6.2 | Menu de modification fiche | 🟡 |
-| 6.3 | Ordonnance unique | ✅ |
-| 6.3 | Alerte interaction médicamenteuse | 🟡 |
-| 6.4 | Modification ordonnance (add/edit/delete) | 🟡 |
-| 6.5 | Scan de document | 🟡 |
-| 6.6 | Liste examens / comptes rendus | ❌ |
-| 6.7 | Rendez-vous médicaux | ❌ |
-| 6.8 | Annuaire professionnels de santé | ❌ |
-| 6.9 | Calendrier de suivi personnalisé | ❌ |
-| 6.10 | Rappels de prise | ❌ |
-| — | Onboarding | ✅ |
-| — | Auth / Sign-in | ✅ |
-| — | Health score | 🟡 |
+| #    | Fonctionnalité (brief)                    | État |
+| ---- | ----------------------------------------- | ---- |
+| 6.1  | Fiche médicale                            | ✅   |
+| 6.2  | Menu de modification fiche                | 🟡   |
+| 6.3  | Ordonnance unique                         | ✅   |
+| 6.3  | Alerte interaction médicamenteuse         | 🟡   |
+| 6.4  | Modification ordonnance (add/edit/delete) | 🟡   |
+| 6.5  | Scan de document                          | 🟡   |
+| 6.6  | Liste examens / comptes rendus            | ❌   |
+| 6.7  | Rendez-vous médicaux                      | ❌   |
+| 6.8  | Annuaire professionnels de santé          | ❌   |
+| 6.9  | Calendrier de suivi personnalisé          | ❌   |
+| 6.10 | Rappels de prise                          | ❌   |
+| —    | Onboarding                                | ✅   |
+| —    | Auth / Sign-in                            | ✅   |
+| —    | Health score                              | 🟡   |
 
 ---
 
 ## 6.1 Fiche médicale — ✅
 
 **Fait**
+
 - Schéma data complet couvre tous les champs du brief : `apps/native/app/health/health-schema.ts`
   - Infos perso : nom, prénom, date naissance, sexe bio, groupe sanguin, taille, poids
   - Allergies (liste), antécédents familiaux, antécédents chirurgicaux
@@ -48,17 +49,20 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 ## 6.2 Menu modification fiche — 🟡
 
 **Fait**
+
 - Édition par catégorie : `apps/native/app/health/[category].tsx`
 - Inputs : texte, date picker, groupe sanguin, taille/poids, choix, listes
 - Save/cancel
 
 **À faire**
+
 - [ ] Champ **texte libre** "ajouter une information manuelle" par section
 - [ ] Regrouper en menu "Modifier vos infos persos" tel que décrit (sections : perso, allergies, habitudes, antécédents médicaux/chir/familiaux)
 
 ## 6.3 Ordonnance unique — ✅
 
 **Fait**
+
 - Écran traitements actifs unifiés : `apps/native/app/prescriptions/current.tsx`
 - Carte "Ordonnance unifiée" : `apps/native/app/(tabs)/documents.tsx`
 - Modèles : `PrescriptionUnified`, `PrescriptionUnifiedView` (`packages/db/src/models/prescriptions.model.ts`)
@@ -71,6 +75,7 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 ## 6.3 Alerte interaction médicamenteuse — 🟡 (MVP hybride)
 
 **Fait**
+
 - [x] Source/référentiel **hybride** : ruleset curé déterministe (`packages/infrastructure/src/interactions/ruleset.ts` + `matcher.ts`) + couche LLM Ollama informative (`interactions/ai.ts`)
 - [x] Moteur détection sur l'ordonnance unique : job async `interaction.analysis` recalculé après `recomputeUnifiedView`, persisté dans `PrescriptionInteractionsView` (`interactions/service.ts`, `apps/queue/src/handlers/interaction.ts`)
 - [x] Détection conflit **allergie ↔ médicament** (règles de classe : bêta-lactamines, sulfamides, AINS, opioïdes ; allergies lues via `getHealthData`)
@@ -79,6 +84,7 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 - API : `prescriptions.unified.interactions`. Test unitaire matcher : `interactions/matcher.test.ts`.
 
 **À faire (durcissement)**
+
 - [ ] Étendre le ruleset curé (couverture limitée — MVP volontairement petit, paires haute sévérité)
 - [ ] Normalisation médicaments (texte libre → principe actif/ATC) pour fiabiliser le matching
 - [ ] Badge danger sur la carte ordonnance unifiée (`app/(tabs)/documents.tsx`)
@@ -87,6 +93,7 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 ## 6.4 Modification ordonnance — 🟡 (bloqué seulement par 6.10)
 
 **Fait**
+
 - Créer manuel : `apps/native/app/prescriptions/new.tsx`
 - Éditer existant : `apps/native/app/prescriptions/[id].tsx`, `prescription-editor/`, `medication-editor/`
 - Hooks : `use-manual-prescription-form.ts`, `use-prescription-detail-form.ts`, `use-prescription-draft.ts`
@@ -95,11 +102,13 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 - [x] Écran de **vérification** des infos extraites avant validation : `PrescriptionDetailForm` affiche l'extraction (états processing/failed/report), info éditable, « Review the extracted info and make any corrections » avant save
 
 **À faire**
+
 - [ ] MAJ **rappels associés** après edit/delete — **bloqué : dépend de 6.10** (feature rappels inexistante)
 
 ## 6.5 Scan de document — 🟢 (compte-rendu UI = 6.6)
 
 **Fait**
+
 - Caméra + galerie : `apps/native/features/prescriptions/use-prescription-photo.ts` (permissions iOS gérées)
 - Upload base64 : `use-prescription-upload.ts`
 - **IA locale fiabilisée** : provider Ollama `gemma3:4b` avec sortie structurée (`format` JSON schema), timeout, prompt classification — `packages/infrastructure/src/prescriptions/ai.ts` + `parser.ts` (`UNIFIED_JSON_SCHEMA`)
@@ -113,11 +122,13 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 - [x] Reports exclus de l'ordonnance unifiée (`recomputeUnifiedView` filtre `documentType==="report"`)
 
 **À faire (dépend 6.6)**
+
 - [ ] Cas compte rendu : router vers liste examens + écran dédié (modèle Exam = 6.6). Aujourd'hui : classification persistée + placeholder « gestion à venir »
 
 ## 6.6 Liste examens / comptes rendus — ❌
 
 **À faire** (rien n'existe)
+
 - [ ] Modèle data examen (date, intitulé, conclusion courte, médecin, scan lié)
 - [ ] Liste **chronologique groupée par année/mois**, récent → ancien
 - [ ] Item : date — nom — conclusion courte
@@ -129,6 +140,7 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 ## 6.7 Rendez-vous médicaux — ❌
 
 **À faire** (rien n'existe)
+
 - [ ] Modèle data RDV (pro, spécialité, date, heure, lieu, notes, rappel)
 - [ ] Liste RDV groupée par année
 - [ ] Ajouter / modifier / supprimer RDV
@@ -138,6 +150,7 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 ## 6.8 Annuaire professionnels de santé — ❌
 
 **À faire** (rien n'existe)
+
 - [ ] Modèle data pro (nom, prénom, profession, spécialité, tél, adresse, email, notes)
 - [ ] Liste groupée par spécialité
 - [ ] CRUD fiche pro
@@ -146,6 +159,7 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 ## 6.9 Calendrier de suivi personnalisé — ❌
 
 **À faire** (rien n'existe — fonctionnalité centrale)
+
 - [ ] Moteur recommandations (fiche médicale + examens passés + référentiel)
 - [ ] **Référentiel configurable par pays** (brief = recos USA, à généraliser)
 - [ ] Calcul échéances suivis récurrents (ex : post-cancer sein, tous les 6 mois / 5 ans, basé sur dernière date connue)
@@ -157,6 +171,7 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 ## 6.10 Rappels de prise — ❌
 
 **À faire** (rien n'existe — champs fréquence/horaires présents mais pas exploités)
+
 - [ ] Intégration **notifications** (expo-notifications + permissions)
 - [ ] Logique de planification (fréquence, nb prises/jour, heures, durée)
 - [ ] **Vue calendrier hebdomadaire** des prises
@@ -176,14 +191,14 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 
 ## Parcours utilisateurs (brief §7) — couverture
 
-| Parcours | État |
-|----------|------|
-| 1 — Créer fiche médicale | 🟡 (via onboarding + édition) |
-| 2 — Ajouter traitement manuel | 🟡 (manque proposition rappel à la fin) |
-| 3 — Scanner ordonnance | 🟡 (manque crop + écran vérif) |
-| 4 — Scanner compte rendu | ❌ (dépend 6.6) |
-| 5 — Ajouter rendez-vous | ❌ (dépend 6.7 + 6.8) |
-| 6 — Suivre examens recommandés | ❌ (dépend 6.9) |
+| Parcours                       | État                                    |
+| ------------------------------ | --------------------------------------- |
+| 1 — Créer fiche médicale       | 🟡 (via onboarding + édition)           |
+| 2 — Ajouter traitement manuel  | 🟡 (manque proposition rappel à la fin) |
+| 3 — Scanner ordonnance         | 🟡 (manque crop + écran vérif)          |
+| 4 — Scanner compte rendu       | ❌ (dépend 6.6)                         |
+| 5 — Ajouter rendez-vous        | ❌ (dépend 6.7 + 6.8)                   |
+| 6 — Suivre examens recommandés | ❌ (dépend 6.9)                         |
 
 ---
 

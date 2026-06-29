@@ -1,6 +1,7 @@
 import { router } from "expo-router";
 import { Button, Spinner, Surface } from "heroui-native";
 import { Image, Linking, Pressable, RefreshControl, View } from "react-native";
+
 import {
 	Card,
 	CardBody,
@@ -127,7 +128,7 @@ export default function DocumentsScreen() {
 											className="h-16 w-16 rounded-lg"
 											resizeMode="cover"
 										/>
-										<Micro className="text-center text-danger">Remove</Micro>
+										<Micro className="text-danger text-center">Remove</Micro>
 									</Pressable>
 								))}
 							</View>
@@ -207,7 +208,7 @@ export default function DocumentsScreen() {
 								<Pressable
 									key={item.id}
 									onPress={() => openPrescription(targetId)}
-									className="rounded-xl border border-border/60 bg-surface/40 p-3"
+									className="border-border/60 bg-surface/40 rounded-xl border p-3"
 									style={pressableFeedback()}
 								>
 									<BodyMedium>{item.filename}</BodyMedium>

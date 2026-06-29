@@ -35,7 +35,7 @@ export function TagEditor({
 
 	return (
 		<View className="gap-3">
-			<Text className="font-semibold text-base text-foreground">{label}</Text>
+			<Text className="text-foreground text-base font-semibold">{label}</Text>
 			<View className="flex-row items-end gap-3">
 				<View className="flex-1">
 					<TextField>
@@ -59,7 +59,7 @@ export function TagEditor({
 						<Pressable key={tag} onPress={() => removeTag(tag)}>
 							<Chip className="text-foreground text-xs">
 								<Chip.Label>{tag}</Chip.Label>
-								<Ionicons name="close" size={12} className="ml-1 text-muted" />
+								<Ionicons name="close" size={12} className="text-muted ml-1" />
 							</Chip>
 						</Pressable>
 					))

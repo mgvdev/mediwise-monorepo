@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { cn, useThemeColor } from "heroui-native";
 import type { ReactNode } from "react";
 import { Image, Pressable, View } from "react-native";
+
 import {
 	Body,
 	BodyMuted,
@@ -92,7 +93,7 @@ const variantStyles: Record<
 function NotificationBadge({ count }: { count: number }) {
 	if (!count) return null;
 	return (
-		<View className="absolute -top-1 -right-1 h-5 min-w-[20px] items-center justify-center rounded-full bg-danger px-1">
+		<View className="bg-danger absolute -top-1 -right-1 h-5 min-w-[20px] items-center justify-center rounded-full px-1">
 			<Micro className="text-white">{count}</Micro>
 		</View>
 	);
@@ -108,7 +109,7 @@ function ScoreRing({
 	textClassName?: string;
 }) {
 	const ring = (
-		<View className="h-16 w-16 items-center justify-center rounded-full border-2 border-primary/70 bg-primary/10">
+		<View className="border-primary/70 bg-primary/10 h-16 w-16 items-center justify-center rounded-full border-2">
 			<BodyStrong className={cn("text-xl", textClassName)}>
 				{Math.round(score)}
 			</BodyStrong>
@@ -175,7 +176,7 @@ function AppHeaderAvatar({ avatarUri }: { avatarUri?: string }) {
 	return avatarUri ? (
 		<Image source={{ uri: avatarUri }} className="h-10 w-10 rounded-full" />
 	) : (
-		<View className="h-10 w-10 rounded-full bg-panel-border/60" />
+		<View className="bg-panel-border/60 h-10 w-10 rounded-full" />
 	);
 }
 
@@ -273,7 +274,7 @@ function AppHeaderStatus({
 				</>
 			) : null}
 			{statusLabel && memberLabel ? (
-				<View className="mx-1 h-1 w-1 rounded-full bg-muted" />
+				<View className="bg-muted mx-1 h-1 w-1 rounded-full" />
 			) : null}
 			{memberLabel ? (
 				<View className="flex-row items-center gap-1">

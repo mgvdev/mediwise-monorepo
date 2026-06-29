@@ -2,8 +2,10 @@ import type { Meta } from "@storybook/react-native";
 import { Button } from "heroui-native";
 import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
+
 import { MedicationListItem } from "@/components/features/prescription/medication-list-item";
 import { createMedicationDraft } from "@/components/features/prescription/prescription-types";
+
 import { MedicationPrescriptionCard } from "./medication-prescription";
 
 const meta: Meta = {
@@ -20,7 +22,7 @@ const baseMedication = createMedicationDraft({
 });
 
 export const CardDefault = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<MedicationPrescriptionCard
 			medication={baseMedication}
 			subtitle="Pain Relief"
@@ -33,7 +35,7 @@ export const CardEditable = () => {
 	const [medication, setMedication] = useState(baseMedication);
 
 	return (
-		<View className="flex-1 bg-background p-6">
+		<View className="bg-background flex-1 p-6">
 			<MedicationPrescriptionCard
 				medication={medication}
 				subtitle="Pain Relief"
@@ -47,7 +49,7 @@ export const CardEditable = () => {
 };
 
 export const ListItemDefault = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<MedicationListItem
 			medication={baseMedication}
 			subtitle="Levothyroxine Sodium - Tablet"
@@ -72,7 +74,7 @@ export const ListItemStack = () => {
 	});
 
 	return (
-		<ScrollView className="flex-1 bg-background p-6">
+		<ScrollView className="bg-background flex-1 p-6">
 			<View className="gap-6">
 				<MedicationListItem
 					medication={primary}
@@ -120,7 +122,7 @@ export const ListItemStack = () => {
 };
 
 export const ListItemEditPageAction = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<MedicationListItem
 			medication={baseMedication}
 			subtitle="Levothyroxine Sodium - Tablet"

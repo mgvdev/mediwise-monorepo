@@ -20,7 +20,7 @@ type Story = StoryObj<typeof MedicalTestReport>;
 
 export const Default: Story = {
 	render: () => (
-		<View className="flex-1 bg-background p-6">
+		<View className="bg-background flex-1 p-6">
 			<MedicalTestReport defaultOpen>
 				<MedicalTestReportHeader
 					timestamp="March 12, 10:30 AM"
@@ -32,24 +32,24 @@ export const Default: Story = {
 				/>
 				<MedicalTestReportBody>
 					<View className="flex-row gap-6">
-						<Text className="w-20 font-semibold text-foreground text-sm">
+						<Text className="text-foreground w-20 text-sm font-semibold">
 							Type
 						</Text>
-						<Text className="flex-1 text-muted text-sm">
+						<Text className="text-muted flex-1 text-sm">
 							Checking for blocked arteries & heart function
 						</Text>
 					</View>
 					<View className="mt-4 flex-row gap-6">
-						<Text className="w-20 font-semibold text-foreground text-sm">
+						<Text className="text-foreground w-20 text-sm font-semibold">
 							Purpose
 						</Text>
-						<Text className="flex-1 text-muted text-sm">
+						<Text className="text-muted flex-1 text-sm">
 							Mild narrowing in the left coronary artery — requires monitoring
 						</Text>
 					</View>
 				</MedicalTestReportBody>
 				<MedicalTestReportFooter>
-					<Text className="font-semibold text-primary text-sm">
+					<Text className="text-primary text-sm font-semibold">
 						View full report
 					</Text>
 				</MedicalTestReportFooter>
@@ -60,7 +60,7 @@ export const Default: Story = {
 
 export const Collapsed: Story = {
 	render: () => (
-		<View className="flex-1 bg-background p-6">
+		<View className="bg-background flex-1 p-6">
 			<MedicalTestReport>
 				<MedicalTestReportHeader
 					timestamp="March 12, 10:30 AM"

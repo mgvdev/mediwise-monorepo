@@ -54,7 +54,7 @@ export const Default = () => {
 	}, [refill]);
 
 	return (
-		<View className="flex-1 bg-background p-6">
+		<View className="bg-background flex-1 p-6">
 			<View className="gap-6">
 				<View className="gap-3">
 					<ChoiceInput
@@ -100,7 +100,7 @@ export const CommentOnlyOnYes = () => {
 	const [comment, setComment] = useState("");
 
 	return (
-		<View className="flex-1 bg-background p-6">
+		<View className="bg-background flex-1 p-6">
 			<View className="gap-3">
 				<ChoiceInput
 					label="Have you ever experienced side effects?"
@@ -127,7 +127,7 @@ export const TwoChoices = () => {
 	const [comment, setComment] = useState("");
 
 	return (
-		<View className="flex-1 bg-background p-6">
+		<View className="bg-background flex-1 p-6">
 			<View className="gap-3">
 				<ChoiceInput
 					label="Do you consent to share vitals?"
@@ -154,7 +154,7 @@ export const ThreeChoices = () => {
 	const [comment, setComment] = useState("");
 
 	return (
-		<View className="flex-1 bg-background p-6">
+		<View className="bg-background flex-1 p-6">
 			<View className="gap-3">
 				<ChoiceInput
 					label="Do you suspect any medication intolerance?"
@@ -181,7 +181,7 @@ export const CommentOnNoOrSuspected = () => {
 	const [comment, setComment] = useState("");
 
 	return (
-		<View className="flex-1 bg-background p-6">
+		<View className="bg-background flex-1 p-6">
 			<View className="gap-3">
 				<ChoiceInput
 					label="Is your prescription current?"
@@ -208,7 +208,7 @@ export const VerticalChoices = () => {
 	const [comment, setComment] = useState("");
 
 	return (
-		<View className="flex-1 bg-background p-6">
+		<View className="bg-background flex-1 p-6">
 			<View className="gap-3">
 				<ChoiceInput
 					label="Do you suspect any medication intolerance?"
@@ -236,7 +236,7 @@ export const AutoLayout = () => {
 	const [comment, setComment] = useState("");
 
 	return (
-		<View className="flex-1 bg-background p-6">
+		<View className="bg-background flex-1 p-6">
 			<View className="gap-3">
 				<ChoiceInput
 					label="Do you suspect any medication intolerance?"

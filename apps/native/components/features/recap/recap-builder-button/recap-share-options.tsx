@@ -18,24 +18,24 @@ export function RecapShareOptions({
 		<View className={cn("gap-3", className)}>
 			<Pressable
 				className={cn(
-					"rounded-2xl border border-panel-border bg-panel-background px-4 py-3",
+					"border-panel-border bg-panel-background rounded-2xl border px-4 py-3",
 					value === "qr" && "border-primary bg-primary/10",
 				)}
 				onPress={() => onChange("qr")}
 			>
-				<Text className="font-semibold text-foreground text-sm">Share QR</Text>
+				<Text className="text-foreground text-sm font-semibold">Share QR</Text>
 				<Text className="text-muted text-xs">
 					Generate a QR code for your doctor to scan.
 				</Text>
 			</Pressable>
 			<Pressable
 				className={cn(
-					"rounded-2xl border border-panel-border bg-panel-background px-4 py-3",
+					"border-panel-border bg-panel-background rounded-2xl border px-4 py-3",
 					value === "pdf" && "border-primary bg-primary/10",
 				)}
 				onPress={() => onChange("pdf")}
 			>
-				<Text className="font-semibold text-foreground text-sm">Email PDF</Text>
+				<Text className="text-foreground text-sm font-semibold">Email PDF</Text>
 				<Text className="text-muted text-xs">
 					Send a PDF recap to a contact.
 				</Text>

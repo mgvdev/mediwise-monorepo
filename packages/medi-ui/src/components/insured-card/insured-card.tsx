@@ -50,10 +50,10 @@ export function InsuredScore({
 			className={cx("flex min-w-[120px] flex-col gap-1", className)}
 			{...props}
 		>
-			<span className="text-muted-foreground text-xs uppercase tracking-wide">
+			<span className="text-muted-foreground text-xs tracking-wide uppercase">
 				{label}
 			</span>
-			<span className="font-semibold text-3xl">{score}</span>
+			<span className="text-3xl font-semibold">{score}</span>
 		</div>
 	);
 }
@@ -71,10 +71,10 @@ export function InsuredInfo({
 }: InsuredInfoProps) {
 	return (
 		<div className={cx("min-w-[140px] space-y-1", className)} {...props}>
-			<p className="text-muted-foreground text-xs uppercase tracking-wide">
+			<p className="text-muted-foreground text-xs tracking-wide uppercase">
 				{label}
 			</p>
-			<p className="font-medium text-foreground text-sm">{value}</p>
+			<p className="text-foreground text-sm font-medium">{value}</p>
 		</div>
 	);
 }

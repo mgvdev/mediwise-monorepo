@@ -20,7 +20,7 @@ export function SelectableCard({
 	return (
 		<Pressable
 			className={cn(
-				"relative rounded-3xl border border-panel-border bg-panel-background p-6",
+				"border-panel-border bg-panel-background relative rounded-3xl border p-6",
 				selected && "border-primary bg-primary/5",
 				className,
 			)}
@@ -53,7 +53,7 @@ export function SelectableCardIcon({
 	return (
 		<View
 			className={cn(
-				"mb-5 h-12 w-12 items-center justify-center rounded-full border border-panel-border",
+				"border-panel-border mb-5 h-12 w-12 items-center justify-center rounded-full border",
 				selected && "border-primary bg-primary/10",
 				className,
 			)}
@@ -74,7 +74,7 @@ export function SelectableCardTitle({
 }: SelectableCardTitleProps) {
 	return (
 		<Text
-			className={cn("font-semibold text-base text-foreground", className)}
+			className={cn("text-foreground text-base font-semibold", className)}
 			{...props}
 		/>
 	);
@@ -109,7 +109,7 @@ export function SelectableCardAction({
 			{children ?? (
 				<View
 					className={cn(
-						"h-7 w-7 items-center justify-center rounded-full border border-panel-border",
+						"border-panel-border h-7 w-7 items-center justify-center rounded-full border",
 						selected && "border-primary bg-primary",
 					)}
 				>

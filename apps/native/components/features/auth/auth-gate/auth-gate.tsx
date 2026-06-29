@@ -4,6 +4,7 @@ import { Spinner } from "heroui-native";
 import type { PropsWithChildren } from "react";
 import { useEffect, useRef } from "react";
 import { View } from "react-native";
+
 import { Caption } from "@/components/base/typography";
 import { authClient } from "@/lib/auth-client";
 import { trpc } from "@/utils/trpc";
@@ -83,7 +84,7 @@ export function AuthGate({ children }: PropsWithChildren) {
 
 	if ((isPending || (session?.user && healthQuery.isPending)) && !inAuthGroup) {
 		return (
-			<View className="flex-1 items-center justify-center bg-background px-6">
+			<View className="bg-background flex-1 items-center justify-center px-6">
 				<Spinner size="lg" color="default" />
 				<Caption className="mt-3">Checking your session...</Caption>
 			</View>

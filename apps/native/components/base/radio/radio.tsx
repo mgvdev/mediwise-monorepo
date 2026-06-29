@@ -19,7 +19,7 @@ export function Radio({
 	return (
 		<Pressable
 			className={cn(
-				"rounded-2xl border border-panel-border bg-panel-background px-4 py-3",
+				"border-panel-border bg-panel-background rounded-2xl border px-4 py-3",
 				selected && "border-primary bg-primary/10",
 				className,
 			)}
@@ -47,7 +47,7 @@ export function RadioSelect({
 	return (
 		<View
 			className={cn(
-				"h-6 w-6 items-center justify-center rounded-full border border-panel-border",
+				"border-panel-border h-6 w-6 items-center justify-center rounded-full border",
 				selected && "border-primary bg-primary/20",
 				className,
 			)}

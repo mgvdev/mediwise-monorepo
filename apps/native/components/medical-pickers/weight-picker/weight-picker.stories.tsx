@@ -19,7 +19,7 @@ export const Kilograms: Story = {
 		const [value, setValue] = React.useState(72);
 
 		return (
-			<View className="flex-1 bg-background p-6">
+			<View className="bg-background flex-1 p-6">
 				<WeightPicker
 					unit={unit}
 					value={value}
@@ -39,7 +39,7 @@ export const Pounds: Story = {
 		const [value, setValue] = React.useState(165);
 
 		return (
-			<View className="flex-1 bg-background p-6">
+			<View className="bg-background flex-1 p-6">
 				<WeightPicker
 					unit={unit}
 					value={value}

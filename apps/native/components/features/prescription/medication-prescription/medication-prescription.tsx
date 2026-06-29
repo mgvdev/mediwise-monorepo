@@ -55,7 +55,7 @@ function buildDetailsLine({
 function MedicationIcon() {
 	const accent = useThemeColor("accent");
 	return (
-		<View className="h-14 w-14 items-center justify-center rounded-full border border-primary/30 bg-primary/10">
+		<View className="border-primary/30 bg-primary/10 h-14 w-14 items-center justify-center rounded-full border">
 			<Ionicons name="medkit-outline" size={24} color={accent} />
 		</View>
 	);
@@ -106,11 +106,11 @@ function MedicationEditorDialog({
 		<Dialog isOpen={open} onOpenChange={(next) => (!next ? onClose() : null)}>
 			<Dialog.Portal>
 				<Dialog.Overlay />
-				<Dialog.Content className="rounded-3xl border border-panel-border bg-panel-background px-5 pt-4 pb-6">
+				<Dialog.Content className="border-panel-border bg-panel-background rounded-3xl border px-5 pt-4 pb-6">
 					<View className="mb-3 flex-row items-center justify-between">
 						<Dialog.Title>Edit medication</Dialog.Title>
 						<Dialog.Close asChild>
-							<Pressable className="h-8 w-8 items-center justify-center rounded-full border border-panel-border">
+							<Pressable className="border-panel-border h-8 w-8 items-center justify-center rounded-full border">
 								<Ionicons name="close" size={16} className="text-muted" />
 							</Pressable>
 						</Dialog.Close>
@@ -182,15 +182,15 @@ export function MedicationPrescriptionCard({
 							editor.setOpen(true);
 						}
 					}}
-					className="flex-1 items-center gap-4 rounded-3xl border border-panel-border bg-panel-background px-6 py-6"
+					className="border-panel-border bg-panel-background flex-1 items-center gap-4 rounded-3xl border px-6 py-6"
 				>
 					<MedicationIcon />
 					<View className="items-center gap-2">
-						<Text className="font-semibold text-foreground text-xl">
+						<Text className="text-foreground text-xl font-semibold">
 							{medication.name}
 						</Text>
 						{showSubtitle ? (
-							<Text className="text-base text-muted">{subtitle}</Text>
+							<Text className="text-muted text-base">{subtitle}</Text>
 						) : null}
 						{showSchedule ? (
 							<Text className="text-primary text-sm">{schedule}</Text>
@@ -211,7 +211,7 @@ export function MedicationPrescriptionCard({
 							event.stopPropagation();
 							onEditPage();
 						}}
-						className="mt-2 h-9 w-9 items-center justify-center rounded-full border border-panel-border bg-panel-background"
+						className="border-panel-border bg-panel-background mt-2 h-9 w-9 items-center justify-center rounded-full border"
 						accessibilityRole="button"
 						accessibilityLabel="Edit medication in full page"
 					>
@@ -297,7 +297,7 @@ export function MedicationPrescriptionListItem({
 				>
 					<MedicationIcon />
 					<View className="flex-1 gap-1">
-						<Text className="font-semibold text-foreground text-lg">
+						<Text className="text-foreground text-lg font-semibold">
 							{medication.name}
 						</Text>
 						{showSubtitle ? (
@@ -321,7 +321,7 @@ export function MedicationPrescriptionListItem({
 							event.stopPropagation();
 							onEditPage();
 						}}
-						className="mt-1 h-9 w-9 items-center justify-center rounded-full border border-panel-border bg-panel-background"
+						className="border-panel-border bg-panel-background mt-1 h-9 w-9 items-center justify-center rounded-full border"
 						accessibilityRole="button"
 						accessibilityLabel="Edit medication in full page"
 					>

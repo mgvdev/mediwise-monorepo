@@ -45,6 +45,8 @@
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {
+		"@mediwise-monorepo/config": "workspace:*",
+		"@tanstack/react-query-devtools": "^5.101.0",
 		"@tanstack/react-router-devtools": "^1.167.0",
 		"@tanstack/router-plugin": "^1.168.18",
 		"@types/node": "^22.19.21",
@@ -53,9 +55,7 @@
 		"@vitejs/plugin-react": "^6.0.2",
 		"postcss": "^8.5.15",
 		"tailwindcss": "^4.3.1",
-		"vite": "^8.0.16",
-		"@tanstack/react-query-devtools": "^5.101.0",
 		"typescript": "^6.0.3",
-		"@mediwise-monorepo/config": "workspace:*"
+		"vite": "^8.0.16"
 	}
 }

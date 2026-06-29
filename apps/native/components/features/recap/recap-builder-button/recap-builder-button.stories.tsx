@@ -39,13 +39,13 @@ const sections: RecapSection[] = [
 ];
 
 export const Default = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<RecapBuilderButton sections={sections} />
 	</View>
 );
 
 export const Preselected = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<RecapBuilderButton
 			sections={sections}
 			buttonLabel="Share recap"
@@ -55,7 +55,7 @@ export const Preselected = () => (
 );
 
 export const FlowDemo = () => (
-	<View className="flex-1 bg-background p-6">
+	<View className="bg-background flex-1 p-6">
 		<RecapBuilderButton sections={sections} buttonLabel="Generate recap" />
 	</View>
 );

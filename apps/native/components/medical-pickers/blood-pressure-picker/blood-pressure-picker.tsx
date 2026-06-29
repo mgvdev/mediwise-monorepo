@@ -1,5 +1,6 @@
 import * as React from "react";
 import { FlatList, Text, View } from "react-native";
+
 import { RollingNumber } from "@/components/base/rolling-number";
 
 const ITEM_HEIGHT = 36;
@@ -38,9 +39,7 @@ function WheelColumn({ label, values, value, onChange }: WheelColumnProps) {
 	const lastValueRef = React.useRef(value);
 	const [containerHeight, setContainerHeight] = React.useState(0);
 	const padding =
-		containerHeight > 0
-			? (containerHeight - ITEM_HEIGHT) / 2
-			: ITEM_HEIGHT * 2;
+		containerHeight > 0 ? (containerHeight - ITEM_HEIGHT) / 2 : ITEM_HEIGHT * 2;
 
 	React.useEffect(() => {
 		const index = Math.max(0, values.indexOf(value));
@@ -75,7 +74,7 @@ function WheelColumn({ label, values, value, onChange }: WheelColumnProps) {
 
 	return (
 		<View className="flex-1 gap-2">
-			<Text className="text-center text-muted text-xs">{label}</Text>
+			<Text className="text-muted text-center text-xs">{label}</Text>
 			<View
 				className="relative h-48"
 				onLayout={(event) =>
@@ -83,7 +82,7 @@ function WheelColumn({ label, values, value, onChange }: WheelColumnProps) {
 				}
 			>
 				<View
-					className="absolute right-0 left-0 rounded-2xl border border-primary bg-primary/10"
+					className="border-primary bg-primary/10 absolute right-0 left-0 rounded-2xl border"
 					style={{
 						top:
 							containerHeight > 0
@@ -97,11 +96,11 @@ function WheelColumn({ label, values, value, onChange }: WheelColumnProps) {
 				/>
 				<View
 					pointerEvents="none"
-					className="absolute top-0 right-0 left-0 h-8 bg-background/90"
+					className="bg-background/90 absolute top-0 right-0 left-0 h-8"
 				/>
 				<View
 					pointerEvents="none"
-					className="absolute right-0 bottom-0 left-0 h-8 bg-background/90"
+					className="bg-background/90 absolute right-0 bottom-0 left-0 h-8"
 				/>
 				<FlatList
 					ref={listRef}
@@ -113,9 +112,7 @@ function WheelColumn({ label, values, value, onChange }: WheelColumnProps) {
 					snapToAlignment="center"
 					decelerationRate="normal"
 					contentContainerStyle={{ paddingVertical: padding }}
-					onScroll={(event) =>
-						handleScroll(event.nativeEvent.contentOffset.y)
-					}
+					onScroll={(event) => handleScroll(event.nativeEvent.contentOffset.y)}
 					scrollEventThrottle={16}
 					onScrollBeginDrag={() => {
 						isUserScrollRef.current = true;
@@ -137,7 +134,7 @@ function WheelColumn({ label, values, value, onChange }: WheelColumnProps) {
 							className="items-center justify-center"
 							style={{ height: ITEM_HEIGHT }}
 						>
-							<Text className="text-base text-muted">{item}</Text>
+							<Text className="text-muted text-base">{item}</Text>
 						</View>
 					)}
 				/>
@@ -164,9 +161,9 @@ export function BloodPressurePicker({
 			<View className="items-center">
 				<View className="flex-row items-center">
 					<RollingNumber value={systolic} />
-					<Text className="px-1 font-semibold text-4xl text-muted">/</Text>
+					<Text className="text-muted px-1 text-4xl font-semibold">/</Text>
 					<RollingNumber value={diastolic} />
-					<Text className="self-end pb-2 text-base text-muted"> mmHg</Text>
+					<Text className="text-muted self-end pb-2 text-base"> mmHg</Text>
 				</View>
 				<View className="mt-2 flex-row items-center gap-2">
 					<View
@@ -175,7 +172,7 @@ export function BloodPressurePicker({
 					/>
 					<Text className="text-foreground text-sm">{category.label}</Text>
 				</View>
-				<Text className="mt-1 text-muted text-xs">
+				<Text className="text-muted mt-1 text-xs">
 					For information only — not a diagnosis.
 				</Text>
 			</View>

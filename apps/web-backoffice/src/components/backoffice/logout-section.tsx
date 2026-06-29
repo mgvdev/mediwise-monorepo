@@ -12,11 +12,11 @@ export function LogoutSection({
 	onLogout,
 }: LogoutSectionProps) {
 	return (
-		<div className="mt-6 flex items-center justify-between rounded-2xl border border-border/60 bg-card/50 p-3">
+		<div className="border-border/60 bg-card/50 mt-6 flex items-center justify-between rounded-2xl border p-3">
 			<div className="flex items-center gap-3">
 				<Avatar size="sm" name={email ?? "Backoffice"} />
 				<div>
-					<p className="font-medium text-sm">{email ?? "Signed out"}</p>
+					<p className="text-sm font-medium">{email ?? "Signed out"}</p>
 					<p className="text-muted-foreground text-xs">Admin</p>
 				</div>
 			</div>

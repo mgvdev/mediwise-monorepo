@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import * as React from "react";
 import { Button } from "heroui-native";
+import * as React from "react";
 import { View } from "react-native";
 
 import { RollingNumber } from "./rolling-number";
@@ -19,7 +19,7 @@ export const Interactive: Story = {
 		const [value, setValue] = React.useState(120);
 
 		return (
-			<View className="flex-1 items-center justify-center gap-8 bg-background p-6">
+			<View className="bg-background flex-1 items-center justify-center gap-8 p-6">
 				<RollingNumber value={value} />
 				<View className="flex-row gap-2">
 					<Button variant="secondary" onPress={() => setValue((v) => v - 1)}>
@@ -50,7 +50,7 @@ export const AutoScroll: Story = {
 		}, []);
 
 		return (
-			<View className="flex-1 items-center justify-center bg-background p-6">
+			<View className="bg-background flex-1 items-center justify-center p-6">
 				<RollingNumber value={value} />
 			</View>
 		);

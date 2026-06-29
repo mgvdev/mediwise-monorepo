@@ -45,10 +45,10 @@ function RouteComponent() {
 				/>
 			</div>
 
-			<Card className="rounded-3xl border border-border/60 bg-card/70 p-6 shadow-sm">
+			<Card className="border-border/60 bg-card/70 rounded-3xl border p-6 shadow-sm">
 				<div className="flex flex-wrap items-center justify-between gap-4">
 					<div>
-						<p className="font-semibold text-sm">Today’s highlights</p>
+						<p className="text-sm font-semibold">Today’s highlights</p>
 						<p className="text-muted-foreground text-xs">
 							Member activity and document processing summary.
 						</p>

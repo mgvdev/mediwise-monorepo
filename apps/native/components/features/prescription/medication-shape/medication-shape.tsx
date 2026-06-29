@@ -509,7 +509,7 @@ export function MedicationShape({
 			{...props}
 		>
 			<View
-				className="items-center justify-center rounded-full border border-panel-border bg-panel-background"
+				className="border-panel-border bg-panel-background items-center justify-center rounded-full border"
 				style={{ width: size, height: size }}
 			>
 				<View style={{ width: iconSize, height: iconSize }}>
@@ -517,7 +517,7 @@ export function MedicationShape({
 				</View>
 			</View>
 			{showLabel ? (
-				<Text className="text-center text-muted text-xs">{displayLabel}</Text>
+				<Text className="text-muted text-center text-xs">{displayLabel}</Text>
 			) : null}
 		</View>
 	);

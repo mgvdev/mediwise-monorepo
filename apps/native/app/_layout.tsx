@@ -1,12 +1,14 @@
-import { AuthGate } from "@/components/features/auth/auth-gate";
-import { AppThemeProvider } from "@/contexts/app-theme-context";
-import "@/global.css";
-import "@/polyfills";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
+
+import "@/global.css";
+import "@/polyfills";
 import { HeroUINativeProvider, ToastProvider } from "heroui-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
+
+import { AuthGate } from "@/components/features/auth/auth-gate";
+import { AppThemeProvider } from "@/contexts/app-theme-context";
 import { queryClient } from "@/utils/trpc";
 
 export const unstable_settings = {
@@ -39,7 +41,7 @@ export default function Layout() {
 					<AppThemeProvider>
 						<HeroUINativeProvider>
 							<ToastProvider>
-									<StorybookUIRoot />
+								<StorybookUIRoot />
 							</ToastProvider>
 						</HeroUINativeProvider>
 					</AppThemeProvider>

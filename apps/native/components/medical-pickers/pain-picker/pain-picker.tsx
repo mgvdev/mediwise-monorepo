@@ -213,7 +213,7 @@ export function PainPicker({ value, onChange, className }: PainPickerProps) {
 					/>
 				</View>
 			</View>
-			<Text className="text-center text-base text-muted">
+			<Text className="text-muted text-center text-base">
 				{current?.label ?? ""}
 			</Text>
 		</View>

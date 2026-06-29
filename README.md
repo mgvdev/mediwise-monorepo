@@ -28,6 +28,7 @@ First, install the dependencies:
 ```bash
 bun install
 ```
+
 ## Database Setup
 
 This project uses MongoDB with Mongoose.
@@ -36,10 +37,10 @@ This project uses MongoDB with Mongoose.
 2. Update your `apps/server/.env` file with your MongoDB connection URI.
 
 3. Apply the schema to your database:
+
 ```bash
 bun run db:push
 ```
-
 
 Then, run the development server:
 
@@ -50,12 +51,6 @@ bun run dev
 Open [http://localhost:3001](http://localhost:3001) in your browser to see the web application.
 Use the Expo Go app to run the mobile application.
 The API is running at [http://localhost:3000](http://localhost:3000).
-
-
-
-
-
-
 
 ## Project Structure
 

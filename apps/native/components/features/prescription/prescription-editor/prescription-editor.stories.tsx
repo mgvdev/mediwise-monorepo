@@ -19,7 +19,7 @@ export const Default: Story = {
 		const [draft, setDraft] = React.useState(createPrescriptionDraft());
 
 		return (
-			<View className="flex-1 bg-background p-6">
+			<View className="bg-background flex-1 p-6">
 				<PrescriptionEditor
 					title="Add Prescription"
 					subtitle="Enter prescription details and medications."

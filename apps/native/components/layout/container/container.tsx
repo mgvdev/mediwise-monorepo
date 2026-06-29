@@ -41,7 +41,7 @@ export function Container({
 
 	return (
 		<AnimatedView
-			className={cn("flex-1 bg-background", className)}
+			className={cn("bg-background flex-1", className)}
 			style={{
 				paddingBottom: tabScreen ? 0 : insets.bottom,
 			}}

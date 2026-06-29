@@ -18,7 +18,7 @@ export const Default: Story = {
 		const [value, setValue] = React.useState<string | null>(null);
 
 		return (
-			<View className="flex-1 bg-background p-6">
+			<View className="bg-background flex-1 p-6">
 				<BloodPressureInput value={value} onChange={setValue} />
 			</View>
 		);
@@ -30,7 +30,7 @@ export const Prefilled: Story = {
 		const [value, setValue] = React.useState<string | null>("120/80");
 
 		return (
-			<View className="flex-1 bg-background p-6">
+			<View className="bg-background flex-1 p-6">
 				<BloodPressureInput value={value} onChange={setValue} />
 			</View>
 		);
@@ -42,7 +42,7 @@ export const WithHelperText: Story = {
 		const [value, setValue] = React.useState<string | null>(null);
 
 		return (
-			<View className="flex-1 bg-background p-6">
+			<View className="bg-background flex-1 p-6">
 				<BloodPressureInput
 					value={value}
 					onChange={setValue}
