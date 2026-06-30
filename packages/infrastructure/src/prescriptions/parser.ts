@@ -28,6 +28,15 @@ const unifiedSchema = z.object({
 	issuedDate: z.string().nullable().optional(),
 	validUntil: z.string().nullable().optional(),
 	medications: z.array(medicationSchema).default([]),
+	report: z
+		.object({
+			title: z.string().nullable().optional(),
+			examDate: z.string().nullable().optional(),
+			conclusion: z.string().nullable().optional(),
+			doctor: z.string().nullable().optional(),
+		})
+		.nullable()
+		.optional(),
 	notes: z.string().nullable().optional(),
 });
 
@@ -66,6 +75,15 @@ export const UNIFIED_JSON_SCHEMA = {
 					form: { type: ["string", "null"] },
 				},
 				required: ["name"],
+			},
+		},
+		report: {
+			type: ["object", "null"],
+			properties: {
+				title: { type: ["string", "null"] },
+				examDate: { type: ["string", "null"] },
+				conclusion: { type: ["string", "null"] },
+				doctor: { type: ["string", "null"] },
 			},
 		},
 	},

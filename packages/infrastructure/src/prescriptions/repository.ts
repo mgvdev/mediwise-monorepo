@@ -132,6 +132,7 @@ export async function updateRawStatus(input: {
 	rawId: string;
 	status: PrescriptionStatus;
 	error?: string | null;
+	documentType?: "prescription" | "report" | "unknown" | null;
 }) {
 	await PrescriptionRaw.updateOne(
 		{ _id: input.rawId },
@@ -139,6 +140,9 @@ export async function updateRawStatus(input: {
 			$set: {
 				status: input.status,
 				error: input.error ?? null,
+				...(input.documentType !== undefined
+					? { documentType: input.documentType }
+					: {}),
 				updatedAt: new Date(),
 			},
 		},

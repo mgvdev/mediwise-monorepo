@@ -1,3 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
+import { router } from "expo-router";
 import { Button, Dialog, Surface } from "heroui-native";
 import { useState } from "react";
 import { Image, Linking, Text, View } from "react-native";
@@ -6,6 +8,7 @@ import { MedicationEditor } from "@/components/features/prescription/medication-
 import { PrescriptionEditor } from "@/components/features/prescription/prescription-editor";
 import { useManualPrescriptionForm } from "@/features/prescriptions/use-manual-prescription-form";
 import { usePrescriptionDetailForm } from "@/features/prescriptions/use-prescription-detail-form";
+import { trpc } from "@/utils/trpc";
 
 export function ManualPrescriptionForm({
 	onSaved,
@@ -134,6 +137,12 @@ export function PrescriptionDetailForm({
 	const [forceEdit, setForceEdit] = useState(false);
 	const [confirmDelete, setConfirmDelete] = useState(false);
 
+	// Reports become Exams (6.6); resolve the linked exam to route there.
+	const examByRaw = useQuery({
+		...trpc.exams.getByRaw.queryOptions({ rawId: prescriptionId }),
+		enabled: Boolean(prescriptionId) && documentType === "report",
+	});
+
 	const medicationNames = draftState.draft.medications
 		.map((medication) => medication.name.trim())
 		.filter(Boolean);
@@ -153,22 +162,34 @@ export function PrescriptionDetailForm({
 			<View className="gap-4">
 				<Surface variant="secondary" className="rounded-2xl p-4">
 					<Text className="text-foreground text-base font-semibold">
-						{isReport ? "Medical report detected" : "Unrecognized document"}
+						{isReport ? "Compte rendu détecté" : "Document non reconnu"}
 					</Text>
 					<Text className="text-muted mt-1 text-xs">
 						{isReport
-							? "Report management is coming soon. We've saved this scan for you."
-							: "We couldn't recognize this document. You can still edit it as a prescription."}
+							? "Ce document a été ajouté à vos examens & comptes rendus."
+							: "Document non reconnu. Vous pouvez l'éditer comme une ordonnance."}
 					</Text>
 					<View className="mt-3 flex-row gap-2">
-						{!isReport ? (
-							<Button variant="secondary" onPress={() => setForceEdit(true)}>
-								<Button.Label>Edit as prescription</Button.Label>
+						{isReport ? (
+							<Button
+								onPress={() => {
+									const examId = examByRaw.data?.id;
+									onSaved?.();
+									router.push(examId ? `/exams/${examId}` : "/exams");
+								}}
+							>
+								<Button.Label>Voir le compte rendu</Button.Label>
 							</Button>
-						) : null}
-						<Button onPress={() => onSaved?.()}>
-							<Button.Label>Done</Button.Label>
-						</Button>
+						) : (
+							<>
+								<Button variant="secondary" onPress={() => setForceEdit(true)}>
+									<Button.Label>Éditer comme ordonnance</Button.Label>
+								</Button>
+								<Button onPress={() => onSaved?.()}>
+									<Button.Label>Terminé</Button.Label>
+								</Button>
+							</>
+						)}
 					</View>
 				</Surface>
 			</View>

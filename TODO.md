@@ -17,7 +17,7 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 | 6.3  | Alerte interaction médicamenteuse         | 🟡   |
 | 6.4  | Modification ordonnance (add/edit/delete) | 🟡   |
 | 6.5  | Scan de document                          | 🟡   |
-| 6.6  | Liste examens / comptes rendus            | ❌   |
+| 6.6  | Liste examens / comptes rendus            | ✅   |
 | 6.7  | Rendez-vous médicaux                      | ❌   |
 | 6.8  | Annuaire professionnels de santé          | ❌   |
 | 6.9  | Calendrier de suivi personnalisé          | ❌   |
@@ -121,21 +121,23 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 - [x] **Multi-pages** : `storageKeys[]` sur le raw, `images[]` en un appel Ollama, UI « Add page »
 - [x] Reports exclus de l'ordonnance unifiée (`recomputeUnifiedView` filtre `documentType==="report"`)
 
-**À faire (dépend 6.6)**
+**Fait (via 6.6)**
 
-- [ ] Cas compte rendu : router vers liste examens + écran dédié (modèle Exam = 6.6). Aujourd'hui : classification persistée + placeholder « gestion à venir »
+- [x] Cas compte rendu : le scan classé `report` crée un Exam et le placeholder route vers l'écran Examens (« Voir le compte rendu ») — `prescription-forms.tsx` + `apps/queue/src/handlers/prescription.ts`
 
-## 6.6 Liste examens / comptes rendus — ❌
+## 6.6 Liste examens / comptes rendus — ✅
 
-**À faire** (rien n'existe)
+**Fait**
 
-- [ ] Modèle data examen (date, intitulé, conclusion courte, médecin, scan lié)
-- [ ] Liste **chronologique groupée par année/mois**, récent → ancien
-- [ ] Item : date — nom — conclusion courte
-- [ ] Accès au scan complet au clic
-- [ ] Recherche par mot-clé
-- [ ] Ajouter / modifier / corriger un examen
-- [ ] Extraction IA : intitulé, date, conclusion (réutiliser pipeline scan)
+- [x] Modèle data examen : `Exam` (`packages/db/src/models/exams.model.ts`) — userId, rawId (scan lié), title, examDate, conclusion, doctor, source
+- [x] Liste **chronologique groupée par année/mois**, récent → ancien : `apps/native/app/exams/index.tsx` (tri serveur `examDate desc`, regroupement client)
+- [x] Item : date — intitulé — conclusion courte
+- [x] Accès au scan complet au clic : `exams.scan` renvoie les pages en base64 (auth + ownership), affichées en plein écran (`exams/[id].tsx`)
+- [x] Recherche par mot-clé : param `search` sur `exams.list` (regex titre/conclusion/médecin)
+- [x] Ajouter / modifier / corriger : `exams/new.tsx`, `exams/[id].tsx`, `ExamForm`, mutations `exams.save` / `exams.delete`
+- [x] Extraction IA : champ `report` (title/examDate/conclusion/doctor) extrait quand `documentType=report` (`ai.ts`/`parser.ts`), persisté via `upsertExamFromScan` dans le handler queue
+
+**Accès** : carte « Examens & comptes rendus » dans l'onglet Documents → `/exams`.
 
 ## 6.7 Rendez-vous médicaux — ❌
 
@@ -196,7 +198,7 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 | 1 — Créer fiche médicale       | 🟡 (via onboarding + édition)           |
 | 2 — Ajouter traitement manuel  | 🟡 (manque proposition rappel à la fin) |
 | 3 — Scanner ordonnance         | 🟡 (manque crop + écran vérif)          |
-| 4 — Scanner compte rendu       | ❌ (dépend 6.6)                         |
+| 4 — Scanner compte rendu       | ✅ (scan → exam + liste/détail)         |
 | 5 — Ajouter rendez-vous        | ❌ (dépend 6.7 + 6.8)                   |
 | 6 — Suivre examens recommandés | ❌ (dépend 6.9)                         |
 

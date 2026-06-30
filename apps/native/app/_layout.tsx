@@ -26,6 +26,7 @@ function StackLayout() {
 			<Stack.Screen name="profile" />
 			<Stack.Screen name="health" />
 			<Stack.Screen name="prescriptions" />
+			<Stack.Screen name="exams" />
 			<Stack.Screen name="modal" options={{ presentation: "modal" }} />
 		</Stack>
 	);

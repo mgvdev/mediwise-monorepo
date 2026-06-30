@@ -5,6 +5,12 @@
 		".": {
 			"default": "./src/index.ts"
 		},
+		"./exams": {
+			"default": "./src/exams/index.ts"
+		},
+		"./exams/*": {
+			"default": "./src/exams/*.ts"
+		},
 		"./interactions": {
 			"default": "./src/interactions/index.ts"
 		},

@@ -49,6 +49,15 @@ export type UnifiedMedication = {
 	intakeMoments?: string[] | null;
 };
 
+// Fields extracted when the scanned document is a medical report / compte-rendu
+// (documentType === "report"). Used to build an Exam (6.6).
+export type ReportData = {
+	title?: string | null;
+	examDate?: string | null;
+	conclusion?: string | null;
+	doctor?: string | null;
+};
+
 export type UnifiedPrescriptionData = {
 	documentType?: DocumentType | null;
 	patientName?: string | null;
@@ -56,6 +65,7 @@ export type UnifiedPrescriptionData = {
 	issuedDate?: string | null;
 	validUntil?: string | null;
 	medications: UnifiedMedication[];
+	report?: ReportData | null;
 	notes?: string | null;
 };
 

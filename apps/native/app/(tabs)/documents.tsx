@@ -187,6 +187,24 @@ export default function DocumentsScreen() {
 				</CardFooter>
 			</Card>
 
+			<Pressable
+				onPress={() => router.push("/exams")}
+				className="mx-6"
+				style={pressableFeedback()}
+			>
+				<Card>
+					<CardHeader>
+						<CardTitle>Examens & comptes rendus</CardTitle>
+						<Link>Ouvrir</Link>
+					</CardHeader>
+					<CardBody>
+						<BodyMuted>
+							Résultats d'examens et comptes rendus, classés par date.
+						</BodyMuted>
+					</CardBody>
+				</Card>
+			</Pressable>
+
 			<Card className="mx-6">
 				<CardHeader>
 					<CardTitle>Recent uploads</CardTitle>

@@ -1,3 +1,4 @@
+import { upsertExamFromScan } from "@mediwise-monorepo/infrastructure/exams";
 import type { JobDoc, JobTypes } from "@mediwise-monorepo/infrastructure/jobs";
 import type {
 	AiProvider,
@@ -43,9 +44,9 @@ export function createPrescriptionHandler({
 				mimeType: raw.contentType,
 			});
 
-			// documentType ("prescription" | "report" | "unknown") rides along in
-			// `data`. Reports are persisted here but filtered out of the unified
-			// prescription view; full compte-rendu handling is TODO (6.6).
+			// Persist the unified doc for every document (reports are kept but
+			// filtered out of the prescription view). A medical report also
+			// becomes an Exam (6.6) so it shows in the exams list with the scan.
 			await createUnified({
 				raw,
 				provider: aiProvider.provider,
@@ -53,7 +54,29 @@ export function createPrescriptionHandler({
 				data,
 			});
 
-			await updateRawStatus({ rawId: raw._id, status: "completed" });
+			if (data.documentType === "report") {
+				await upsertExamFromScan({
+					userId: raw.userId,
+					tenantId: raw.tenantId,
+					rawId: raw._id,
+					source: raw.source,
+					fields: {
+						title:
+							data.report?.title?.trim() ||
+							raw.originalFilename ||
+							"Compte rendu",
+						examDate: data.report?.examDate ?? data.issuedDate ?? null,
+						conclusion: data.report?.conclusion ?? null,
+						doctor: data.report?.doctor ?? data.prescriberName ?? null,
+					},
+				});
+			}
+
+			await updateRawStatus({
+				rawId: raw._id,
+				status: "completed",
+				documentType: data.documentType ?? "unknown",
+			});
 		},
 		onFailure: async (job, error, shouldRetry) => {
 			const typedJob = job as PrescriptionJob;

@@ -9,6 +9,7 @@ import {
 	User,
 	Verification,
 } from "./models/auth.model";
+import { Exam } from "./models/exams.model";
 import { Job } from "./models/job.model";
 import {
 	PrescriptionInteractionsView,
@@ -25,6 +26,7 @@ await mongoose.connect(env.DATABASE_URL).catch((error) => {
 
 export {
 	Account,
+	Exam,
 	Job,
 	mongoose,
 	PrescriptionInteractionsView,

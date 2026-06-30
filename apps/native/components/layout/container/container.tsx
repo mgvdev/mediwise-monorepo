@@ -8,16 +8,13 @@ import {
 	type ViewProps,
 	type ViewStyle,
 } from "react-native";
-import Animated, { type AnimatedProps } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-const AnimatedView = Animated.createAnimatedComponent(View);
 
 // Approximate height of the floating native tab bar; scroll content needs this
 // much bottom clearance so the last items aren't hidden behind it.
 const FLOATING_TAB_BAR_HEIGHT = 88;
 
-type Props = AnimatedProps<ViewProps> & {
+type Props = ViewProps & {
 	className?: string;
 	scrollProps?: ScrollViewProps;
 	scroll?: boolean;
@@ -40,7 +37,7 @@ export function Container({
 	const { contentContainerStyle, ...restScrollProps } = scrollProps ?? {};
 
 	return (
-		<AnimatedView
+		<View
 			className={cn("bg-background flex-1", className)}
 			style={{
 				paddingBottom: tabScreen ? 0 : insets.bottom,
@@ -69,6 +66,6 @@ export function Container({
 			) : (
 				<View className="flex-1">{children}</View>
 			)}
-		</AnimatedView>
+		</View>
 	);
 }

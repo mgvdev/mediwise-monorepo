@@ -18,8 +18,9 @@ const SYSTEM_PROMPT =
 	"First classify the document: set documentType to 'prescription' for a medical prescription/ordonnance, " +
 	"'report' for a medical report / compte-rendu / lab or imaging result, otherwise 'unknown'. " +
 	"If documentType is not 'prescription', return medications: []. Return valid JSON only. " +
-	'Schema: { documentType: "prescription"|"report"|"unknown", patientName: string|null, prescriberName: string|null, issuedDate: string|null, validUntil: string|null, medications: [{ name: string, dosage?: string|null, frequency?: string|null, frequencyCount?: number|null, frequencyUnit?: "day"|"week"|"month"|null, route?: string|null, duration?: string|null, durationValue?: number|null, durationUnit?: "day"|"week"|"month"|null, refills?: string|null, instructions?: string|null, form?: string|null }], notes?: string|null }. ' +
+	'Schema: { documentType: "prescription"|"report"|"unknown", patientName: string|null, prescriberName: string|null, issuedDate: string|null, validUntil: string|null, medications: [{ name: string, dosage?: string|null, frequency?: string|null, frequencyCount?: number|null, frequencyUnit?: "day"|"week"|"month"|null, route?: string|null, duration?: string|null, durationValue?: number|null, durationUnit?: "day"|"week"|"month"|null, refills?: string|null, instructions?: string|null, form?: string|null }], report?: { title: string|null, examDate: string|null, conclusion: string|null, doctor: string|null }|null, notes?: string|null }. ' +
 	"form is the galenic form when stated (e.g. tablet, capsule, syrup, solution, injection, cream, drops, inhaler, patch, suppository); otherwise null. " +
+	"When documentType is 'report', fill report with: title (short exam name, e.g. 'Prise de sang', 'IRM genou'), examDate (ISO date YYYY-MM-DD when stated), conclusion (one short sentence summarizing the result/conclusion), doctor (signing physician). Otherwise report is null. " +
 	"If a field is unknown, use null. Do not wrap the JSON in markdown.";
 
 export function createAiProvider(): AiProvider {
