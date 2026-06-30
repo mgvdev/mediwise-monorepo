@@ -1,0 +1,77 @@
+{
+	"version": 1,
+	"targetFile": "AGENTS.md",
+	"categories": {
+		"backend": {
+			"service_topology": [],
+			"api_style": [],
+			"async_pattern": [],
+			"error_contract": [],
+			"idempotency_policy": [],
+			"service_discovery": []
+		},
+		"code-quality": {
+			"lint_format": [],
+			"typing_level": ["strict_ts"],
+			"commit_policy": ["conventional"],
+			"review_policy": ["single_approval"],
+			"static_analysis": ["minimal_sast"],
+			"technical_debt_policy": []
+		},
+		"frontend": {
+			"component_pattern": ["atomic", "compound"],
+			"styling_strategy": ["utility_first"],
+			"state_strategy": ["query_cache"],
+			"ui_library_packaging": [
+				"app_local_components",
+				"separate_package_storybook"
+			],
+			"component_library_standard": ["library_agnostic"],
+			"accessibility_standard": [],
+			"routing_strategy": []
+		},
+		"mobile": {
+			"architecture": ["feature_module"],
+			"sync_policy": ["hybrid_sync"],
+			"release_channels": ["single_channel"],
+			"crash_monitoring": ["block_on_crash_regression"],
+			"device_support": ["latest_two_os"],
+			"mobile_observability": ["errors_only"]
+		},
+		"security": {
+			"auth_model": [],
+			"authorization_model": [],
+			"secret_management": [],
+			"dependency_security": ["ci_scan_non_blocking"],
+			"threat_modeling": [],
+			"data_protection": ["encrypt_in_transit_and_rest"]
+		},
+		"testing": {
+			"pyramid": ["balanced"],
+			"integration_style": ["containerized_real"],
+			"e2e_scope": ["critical_journeys"],
+			"flakiness_policy": ["quarantine_and_fix"],
+			"coverage_policy": ["global_threshold"],
+			"test_data_strategy": ["golden_datasets"]
+		}
+	},
+	"customNotes": {
+		"backend": {
+			"api_style": "use tRPC",
+			"async_pattern": "Backend job queue: Mongo-backed jobs (prescription_job) processed by apps/queue via change streams with polling fallback"
+		},
+		"code-quality": {
+			"lint_format": "Run lint before commit (husky + lint-staged)"
+		},
+		"frontend": {
+			"state_strategy": "use ReactQuery with cache",
+			"ui_library_packaging": "Separate pacakge for web (packages/medi-ui) and app-local components for mobile app"
+		},
+		"mobile": {},
+		"security": {
+			"authorization_model": "Handled by better-auth (web-backoffice); no separate policy engine"
+		},
+		"testing": {}
+	},
+	"generatedAt": "2026-06-30T15:45:04.500Z"
+}
