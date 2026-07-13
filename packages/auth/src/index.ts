@@ -12,6 +12,7 @@ import {
 	isTenantDomainActive,
 	normalizeEmail,
 	resolveDisplayName,
+	type OtpPurpose,
 } from "@mediwise-monorepo/domain";
 import { adminDomains, corsOrigins, env } from "@mediwise-monorepo/env/server";
 import { betterAuth } from "better-auth";
@@ -182,7 +183,7 @@ async function sendOtpEmail({
 }: {
 	email: string;
 	otp: string;
-	type: "sign-in" | "email-verification" | "forget-password";
+	type: OtpPurpose;
 }) {
 	const content = buildOtpEmail({
 		email,

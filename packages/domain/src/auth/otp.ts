@@ -1,4 +1,8 @@
-export type OtpPurpose = "sign-in" | "email-verification" | "forget-password";
+export type OtpPurpose =
+	| "sign-in"
+	| "email-verification"
+	| "forget-password"
+	| "change-email";
 
 export type OtpEmailPayload = {
 	email: string;
@@ -27,7 +31,9 @@ export function buildOtpEmail({
 			? "sign-in"
 			: type === "email-verification"
 				? "verification"
-				: "reset";
+				: type === "change-email"
+					? "email-change"
+					: "reset";
 	const subject = `[${appName}] Your ${typeLabel} code`;
 	const text = [
 		`Your ${appName} ${typeLabel} code is: ${otp}`,

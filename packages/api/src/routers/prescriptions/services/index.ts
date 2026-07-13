@@ -146,7 +146,7 @@ export async function savePrescription(params: {
 	const tenantId = raw?.tenantId ?? existing?.tenantId ?? resolveTenantId(user);
 
 	const doc = await upsertUnifiedPrescription({
-		id: input.id,
+		id: input.id ?? undefined,
 		rawId: input.rawId ?? existing?.rawId ?? null,
 		userId,
 		tenantId,
