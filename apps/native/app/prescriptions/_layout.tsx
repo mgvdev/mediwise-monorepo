@@ -30,6 +30,14 @@ export default function PrescriptionsLayout() {
 				}}
 			/>
 			<Stack.Screen
+				name="treatment/[id]"
+				options={{
+					headerShown: true,
+					title: "Treatment details",
+					headerLeft: () => <HeaderBack />,
+				}}
+			/>
+			<Stack.Screen
 				name="[id]"
 				options={{
 					headerShown: true,

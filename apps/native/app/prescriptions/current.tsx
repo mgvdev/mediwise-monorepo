@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { View } from "react-native";
 
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/base/card";
@@ -48,6 +48,15 @@ function TreatmentList({
 						medication={medication}
 						schedule={formatSchedule(medication)}
 						dimmed={dimmed}
+						onPress={() =>
+							router.push({
+								pathname: "/prescriptions/treatment/[id]",
+								params: {
+									id: encodeURIComponent(medication.name),
+									dosage: encodeURIComponent(medication.dosage ?? ""),
+								},
+							})
+						}
 					/>
 				</View>
 			))}

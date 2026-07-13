@@ -14,6 +14,7 @@ export type TreatmentMedication = {
 	frequency?: string | null;
 	frequencyCount?: number | null;
 	frequencyUnit?: "day" | "week" | "month" | null;
+	route?: string | null;
 	durationType?: "one_off" | "chronic" | null;
 	durationValue?: number | null;
 	durationUnit?: "day" | "week" | "month" | null;

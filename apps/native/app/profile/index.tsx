@@ -11,7 +11,6 @@ import {
 	Caption,
 	H2,
 } from "@/components/base/typography";
-import { HealthScore } from "@/components/features/health-score/health-score";
 import { Container } from "@/components/layout/container";
 import { Stack as VerticalStack } from "@/components/layout/stack";
 import { authClient } from "@/lib/auth-client";
@@ -46,19 +45,6 @@ export default function ProfileScreen() {
 			</View>
 
 			<VerticalStack>
-				<Card>
-					<CardHeader>
-						<CardTitle>Health score</CardTitle>
-					</CardHeader>
-					<CardBody className="items-center">
-						<HealthScore
-							score={88}
-							updatedLabel="Updated today"
-							summary="Your health habits are on track."
-						/>
-					</CardBody>
-				</Card>
-
 				<Card>
 					<CardHeader>
 						<CardTitle>My information</CardTitle>
