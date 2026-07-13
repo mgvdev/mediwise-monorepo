@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 
 import { createPrescriptionDraft } from "@/components/features/prescription/prescription-types";
 import { authClient } from "@/lib/auth-client";
-import { queryClient, trpc } from "@/utils/trpc";
+import { queryClient, trpc, trpcClient } from "@/utils/trpc";
 
 import { usePrescriptionDraft } from "./use-prescription-draft";
 import { usePrescriptionPhoto } from "./use-prescription-photo";
@@ -11,6 +11,38 @@ import { usePrescriptionUpload } from "./use-prescription-upload";
 import { buildPrescriptionPayload } from "./utils";
 
 const REQUIRE_PRESCRIPTION_PHOTO = false;
+
+type SavedMedication = {
+	name: string;
+	dosage: string | null;
+	intakeMoments: string[] | null;
+};
+
+/**
+ * Seed a default reminder (enabled, from the medication's intake moments) for
+ * each saved medication that has intake moments. Failures are swallowed so a
+ * reminder hiccup never blocks the prescription save.
+ */
+async function seedReminders(medications: SavedMedication[]) {
+	const withMoments = medications.filter((m) => m.intakeMoments?.length);
+	if (!withMoments.length) return;
+	try {
+		await Promise.all(
+			withMoments.map((medication) =>
+				trpcClient.reminders.upsert.mutate({
+					medicationName: medication.name,
+					medicationDosage: medication.dosage,
+					enabled: true,
+					moments: medication.intakeMoments ?? [],
+				}),
+			),
+		);
+		queryClient.invalidateQueries(trpc.reminders.list.queryFilter());
+	} catch {
+		// Non-fatal: the medication is saved; the reminder can be set up later
+		// from the reminders screen.
+	}
+}
 
 type UseManualPrescriptionFormOptions = {
 	onSaved?: (id: string) => void;
@@ -82,6 +114,7 @@ export function useManualPrescriptionForm(
 				rawId: uploadedRawId ?? null,
 			});
 			await saveMutation.mutateAsync(payload);
+			await seedReminders(payload.medications);
 		} catch (saveError) {
 			setError(saveError instanceof Error ? saveError.message : "Save failed.");
 		}

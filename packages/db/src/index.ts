@@ -18,6 +18,7 @@ import {
 	PrescriptionUnifiedView,
 } from "./models/prescriptions.model";
 import { Questionnaire } from "./models/questionnaire.model";
+import { Reminder, ReminderSettings } from "./models/reminders.model";
 import { Tenant } from "./models/tenant.model";
 
 await mongoose.connect(env.DATABASE_URL).catch((error) => {
@@ -34,6 +35,8 @@ export {
 	PrescriptionUnified,
 	PrescriptionUnifiedView,
 	Questionnaire,
+	Reminder,
+	ReminderSettings,
 	Session,
 	Tenant,
 	TenantDomain,

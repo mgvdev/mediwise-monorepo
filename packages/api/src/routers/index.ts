@@ -4,6 +4,7 @@ import { examsRouter } from "./exams";
 import { healthDataRouter } from "./health-data";
 import { prescriptionsRouter } from "./prescriptions";
 import { questionnaireRouter } from "./questionnaire";
+import { remindersRouter } from "./reminders";
 import { viewerRouter } from "./viewer";
 
 export const appRouter = router({
@@ -20,6 +21,7 @@ export const appRouter = router({
 	prescriptions: prescriptionsRouter,
 	exams: examsRouter,
 	questionnaire: questionnaireRouter,
+	reminders: remindersRouter,
 	viewer: viewerRouter,
 	admin: adminRouter,
 });
