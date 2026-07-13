@@ -3,13 +3,7 @@ import { cn, useThemeColor } from "heroui-native";
 import type { ReactNode } from "react";
 import { Image, Pressable, View } from "react-native";
 
-import {
-	Body,
-	BodyMuted,
-	BodyStrong,
-	H2,
-	Micro,
-} from "@/components/base/typography";
+import { BodyMuted, H2, Micro } from "@/components/base/typography";
 import { pressableFeedback } from "@/components/utils";
 
 type AppHeaderVariant = "dark" | "light" | "gradient" | "soft" | "outline";
@@ -17,16 +11,14 @@ type AppHeaderVariant = "dark" | "light" | "gradient" | "soft" | "outline";
 type AppHeaderProps = {
 	title: string;
 	subtitle?: string;
-	score?: number | null;
-	statusLabel?: string;
-	memberLabel?: string;
+	insurerName?: string | null;
+	insurerLogoUrl?: string | null;
 	avatarUri?: string;
 	notificationCount?: number;
 	showChevron?: boolean;
 	variant?: AppHeaderVariant;
 	onPress?: () => void;
 	onPressNotification?: () => void;
-	onPressScore?: () => void;
 	rightAccessory?: ReactNode;
 	className?: string;
 };
@@ -38,9 +30,8 @@ const variantStyles: Record<
 		title: string;
 		subtitle: string;
 		row: string;
-		scoreText: string;
-		statusText: string;
-		memberText: string;
+		divider: string;
+		insurerText: string;
 	}
 > = {
 	dark: {
@@ -48,45 +39,40 @@ const variantStyles: Record<
 		title: "text-white",
 		subtitle: "text-white/70",
 		row: "text-white",
-		scoreText: "text-white",
-		statusText: "text-white",
-		memberText: "text-white/80",
+		divider: "border-white/10",
+		insurerText: "text-white/70",
 	},
 	light: {
 		container: "bg-background",
 		title: "text-foreground",
 		subtitle: "text-muted",
 		row: "text-foreground",
-		scoreText: "text-foreground",
-		statusText: "text-foreground",
-		memberText: "text-muted",
+		divider: "border-panel-border",
+		insurerText: "text-muted",
 	},
 	gradient: {
 		container: "bg-gradient-to-r from-[#0f172a] via-[#1f2937] to-[#111827]",
 		title: "text-white",
 		subtitle: "text-white/70",
 		row: "text-white",
-		scoreText: "text-white",
-		statusText: "text-white",
-		memberText: "text-white/80",
+		divider: "border-white/10",
+		insurerText: "text-white/70",
 	},
 	soft: {
 		container: "bg-primary/10",
 		title: "text-foreground",
 		subtitle: "text-muted",
 		row: "text-foreground",
-		scoreText: "text-foreground",
-		statusText: "text-foreground",
-		memberText: "text-muted",
+		divider: "border-panel-border",
+		insurerText: "text-muted",
 	},
 	outline: {
 		container: "bg-panel-background border border-panel-border",
 		title: "text-foreground",
 		subtitle: "text-muted",
 		row: "text-foreground",
-		scoreText: "text-foreground",
-		statusText: "text-foreground",
-		memberText: "text-muted",
+		divider: "border-panel-border",
+		insurerText: "text-muted",
 	},
 };
 
@@ -96,37 +82,6 @@ function NotificationBadge({ count }: { count: number }) {
 		<View className="bg-danger absolute -top-1 -right-1 h-5 min-w-[20px] items-center justify-center rounded-full px-1">
 			<Micro className="text-white">{count}</Micro>
 		</View>
-	);
-}
-
-function ScoreRing({
-	score,
-	onPress,
-	textClassName,
-}: {
-	score: number;
-	onPress?: () => void;
-	textClassName?: string;
-}) {
-	const ring = (
-		<View className="border-primary/70 bg-primary/10 h-16 w-16 items-center justify-center rounded-full border-2">
-			<BodyStrong className={cn("text-xl", textClassName)}>
-				{Math.round(score)}
-			</BodyStrong>
-		</View>
-	);
-
-	if (!onPress) return ring;
-
-	return (
-		<Pressable
-			onPress={onPress}
-			accessibilityRole="button"
-			accessibilityLabel="Open score details"
-			style={pressableFeedback()}
-		>
-			{ring}
-		</Pressable>
 	);
 }
 
@@ -226,70 +181,36 @@ function AppHeaderNotification({
 	);
 }
 
-function AppHeaderScore({
-	score,
-	variant = "dark",
-	onPress,
-}: {
-	score?: number | null;
-	variant?: AppHeaderVariant;
-	onPress?: () => void;
-}) {
-	const { styles } = useVariantTokens(variant);
-	if (score === null || score === undefined) return null;
-
-	return (
-		<ScoreRing
-			score={score}
-			onPress={onPress}
-			textClassName={styles.scoreText}
-		/>
-	);
-}
-
-function AppHeaderStatus({
-	statusLabel,
-	memberLabel,
+function AppHeaderInsurer({
+	insurerName,
+	insurerLogoUrl,
 	variant = "dark",
 }: {
-	statusLabel?: string;
-	memberLabel?: string;
+	insurerName: string;
+	insurerLogoUrl?: string | null;
 	variant?: AppHeaderVariant;
 }) {
-	const { accent, styles, iconColor } = useVariantTokens(variant);
-	if (!statusLabel && !memberLabel) return null;
+	const { styles, iconColor } = useVariantTokens(variant);
 
 	return (
-		<View className="flex-row items-center gap-2">
-			{statusLabel ? (
-				<>
-					<Ionicons
-						name="heart"
-						size={16}
-						color={
-							variant === "dark" || variant === "gradient" ? "#FCA5A5" : accent
-						}
-					/>
-					<Body className={styles.statusText}>{statusLabel}</Body>
-				</>
-			) : null}
-			{statusLabel && memberLabel ? (
-				<View className="bg-muted mx-1 h-1 w-1 rounded-full" />
-			) : null}
-			{memberLabel ? (
-				<View className="flex-row items-center gap-1">
-					<Ionicons
-						name="sparkles"
-						size={16}
-						color={
-							variant === "dark" || variant === "gradient"
-								? "#A78BFA"
-								: iconColor
-						}
-					/>
-					<Body className={styles.memberText}>{memberLabel}</Body>
-				</View>
-			) : null}
+		<View
+			className={cn(
+				"mt-4 flex-row items-center gap-2 border-t pt-3",
+				styles.divider,
+			)}
+		>
+			{insurerLogoUrl ? (
+				<Image
+					source={{ uri: insurerLogoUrl }}
+					className="h-6 w-6 rounded-md"
+					resizeMode="contain"
+				/>
+			) : (
+				<Ionicons name="shield-checkmark" size={16} color={iconColor} />
+			)}
+			<BodyMuted className={styles.insurerText}>
+				Provided by {insurerName}
+			</BodyMuted>
 		</View>
 	);
 }
@@ -306,16 +227,14 @@ function AppHeaderChevron({
 export function AppHeader({
 	title,
 	subtitle,
-	score,
-	statusLabel,
-	memberLabel,
+	insurerName,
+	insurerLogoUrl,
 	avatarUri,
 	notificationCount = 0,
-	showChevron = true,
+	showChevron = false,
 	variant = "dark",
 	onPress,
 	onPressNotification,
-	onPressScore,
 	rightAccessory,
 	className,
 }: AppHeaderProps) {
@@ -337,25 +256,16 @@ export function AppHeader({
 						variant={variant}
 						onPress={onPressNotification}
 					/>
+					{showChevron ? <AppHeaderChevron variant={variant} /> : null}
 				</View>
 			</View>
 
-			{score !== null || statusLabel || memberLabel ? (
-				<View className="mt-4 flex-row items-center gap-4">
-					<AppHeaderScore
-						score={score}
-						variant={variant}
-						onPress={onPressScore}
-					/>
-					<View className="flex-1">
-						<AppHeaderStatus
-							statusLabel={statusLabel}
-							memberLabel={memberLabel}
-							variant={variant}
-						/>
-					</View>
-					{showChevron ? <AppHeaderChevron variant={variant} /> : null}
-				</View>
+			{insurerName ? (
+				<AppHeaderInsurer
+					insurerName={insurerName}
+					insurerLogoUrl={insurerLogoUrl}
+					variant={variant}
+				/>
 			) : null}
 		</AppHeaderContainer>
 	);
@@ -366,8 +276,7 @@ export {
 	AppHeaderAvatar,
 	AppHeaderChevron,
 	AppHeaderContainer,
+	AppHeaderInsurer,
 	AppHeaderNotification,
-	AppHeaderScore,
-	AppHeaderStatus,
 	AppHeaderTitle,
 };

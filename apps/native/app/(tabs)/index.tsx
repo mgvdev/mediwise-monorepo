@@ -21,6 +21,7 @@ import {
 import { HorizontalStack, VerticalStack } from "@/components/layout/stack";
 import { TabScreen } from "@/components/layout/tab-screen";
 import { applyOpacity, pressableFeedback } from "@/components/utils";
+import { authClient } from "@/lib/auth-client";
 import { trpc } from "@/utils/trpc";
 
 const RECAP_SECTIONS: RecapSection[] = [
@@ -115,6 +116,12 @@ export default function Home() {
 	const healthQuery = useQuery({
 		...trpc.healthData.get.queryOptions(),
 	});
+	const viewerQuery = useQuery({
+		...trpc.viewer.me.queryOptions(),
+	});
+	const { data: session } = authClient.useSession();
+	const firstName = session?.user?.name?.trim().split(/\s+/)[0];
+	const greeting = firstName ? `Hi, ${firstName}` : "Hi";
 	const preview = buildMedicalPreview(healthQuery.data?.data ?? {});
 	const [recapSelectedIds, setRecapSelectedIds] = useState(
 		RECAP_SECTIONS.map((section) => section.id),
@@ -123,13 +130,11 @@ export default function Home() {
 	return (
 		<TabScreen className="px-6">
 			<AppHeader
-				title="Home"
+				title={greeting}
 				subtitle="Your health summary"
-				score={88}
-				statusLabel="Healthy"
-				memberLabel="plus Member"
+				insurerName={viewerQuery.data?.tenant?.name}
+				insurerLogoUrl={viewerQuery.data?.tenant?.logoUrl}
 				notificationCount={3}
-				showChevron={false}
 				variant="dark"
 				onPress={() => router.push("/profile")}
 			/>

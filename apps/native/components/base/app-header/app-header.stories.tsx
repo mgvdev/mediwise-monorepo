@@ -19,23 +19,17 @@ const avatarUri =
 export const Playground = () => {
 	const [variant, setVariant] = useState<ChoiceValue>("dark");
 	const [showAvatar, setShowAvatar] = useState(true);
-	const [showChevron, setShowChevron] = useState(true);
-	const [showScore, setShowScore] = useState(true);
-	const [showStatus, setShowStatus] = useState(true);
-	const [showMember, setShowMember] = useState(true);
+	const [showInsurer, setShowInsurer] = useState(true);
 	const [showNotifications, setShowNotifications] = useState(true);
 
 	return (
 		<ScrollView className="bg-background flex-1 p-6">
 			<AppHeader
-				title="Home"
-				subtitle="Your health snapshot"
-				score={showScore ? 88 : null}
-				statusLabel={showStatus ? "Healthy" : undefined}
-				memberLabel={showMember ? "plus Member" : undefined}
+				title="Hi, Maxence"
+				subtitle="Your health summary"
+				insurerName={showInsurer ? "Axa Health" : undefined}
 				avatarUri={showAvatar ? avatarUri : undefined}
 				notificationCount={showNotifications ? 3 : 0}
-				showChevron={showChevron}
 				variant={(variant as "dark") || "dark"}
 			/>
 
@@ -59,24 +53,9 @@ export const Playground = () => {
 					label="Show avatar"
 				/>
 				<Checkbox
-					checked={showScore}
-					onCheckedChange={setShowScore}
-					label="Show score ring"
-				/>
-				<Checkbox
-					checked={showStatus}
-					onCheckedChange={setShowStatus}
-					label="Show status"
-				/>
-				<Checkbox
-					checked={showMember}
-					onCheckedChange={setShowMember}
-					label="Show member badge"
-				/>
-				<Checkbox
-					checked={showChevron}
-					onCheckedChange={setShowChevron}
-					label="Show chevron"
+					checked={showInsurer}
+					onCheckedChange={setShowInsurer}
+					label="Show insurer line"
 				/>
 				<Checkbox
 					checked={showNotifications}
@@ -88,16 +67,26 @@ export const Playground = () => {
 	);
 };
 
-export const DarkScore = () => (
+export const DarkWithInsurer = () => (
 	<View className="bg-background flex-1 p-6">
 		<AppHeader
-			title="Home"
-			subtitle="Nightingale Score"
-			score={88}
-			statusLabel="Healthy"
-			memberLabel="plus Member"
+			title="Hi, Maxence"
+			subtitle="Your health summary"
+			insurerName="Axa Health"
 			avatarUri={avatarUri}
 			notificationCount={3}
+			variant="dark"
+		/>
+	</View>
+);
+
+export const DarkNoInsurer = () => (
+	<View className="bg-background flex-1 p-6">
+		<AppHeader
+			title="Hi, Maxence"
+			subtitle="Your health summary"
+			avatarUri={avatarUri}
+			notificationCount={0}
 			variant="dark"
 		/>
 	</View>
@@ -110,36 +99,20 @@ export const LightMinimal = () => (
 			subtitle="Your tasks are up to date"
 			avatarUri={avatarUri}
 			notificationCount={0}
-			showChevron={false}
 			variant="light"
 		/>
 	</View>
 );
 
-export const GradientMember = () => (
+export const GradientInsurer = () => (
 	<View className="bg-background flex-1 p-6">
 		<AppHeader
 			title="My health"
 			subtitle="Weekly overview"
-			score={76}
-			statusLabel="Balanced"
-			memberLabel="premium"
+			insurerName="Blue Shield"
 			avatarUri={avatarUri}
 			notificationCount={1}
 			variant="gradient"
-		/>
-	</View>
-);
-
-export const SoftFocus = () => (
-	<View className="bg-background flex-1 p-6">
-		<AppHeader
-			title="Vitals"
-			subtitle="Morning check-in"
-			score={92}
-			statusLabel="Great"
-			avatarUri={avatarUri}
-			variant="soft"
 		/>
 	</View>
 );

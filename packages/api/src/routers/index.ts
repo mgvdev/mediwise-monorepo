@@ -4,6 +4,7 @@ import { examsRouter } from "./exams";
 import { healthDataRouter } from "./health-data";
 import { prescriptionsRouter } from "./prescriptions";
 import { questionnaireRouter } from "./questionnaire";
+import { viewerRouter } from "./viewer";
 
 export const appRouter = router({
 	healthCheck: publicProcedure.query(() => {
@@ -19,6 +20,7 @@ export const appRouter = router({
 	prescriptions: prescriptionsRouter,
 	exams: examsRouter,
 	questionnaire: questionnaireRouter,
+	viewer: viewerRouter,
 	admin: adminRouter,
 });
 export type AppRouter = typeof appRouter;
