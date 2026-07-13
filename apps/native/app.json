@@ -12,7 +12,13 @@
 			"expo-font",
 			"@react-native-community/datetimepicker",
 			"expo-router",
-			"expo-secure-store"
+			"expo-secure-store",
+			[
+				"expo-notifications",
+				{
+					"color": "#0d9488"
+				}
+			]
 		],
 		"ios": {
 			"infoPlist": {

@@ -1,8 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
-import { Redirect, Stack, useLocalSearchParams } from "expo-router";
+import { Redirect, router, Stack, useLocalSearchParams } from "expo-router";
 import { cn } from "heroui-native";
-import { View, Text } from "react-native";
+import { Pressable, View, Text } from "react-native";
 
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/base/card";
 import { DotChip } from "@/components/base/dot-chip";
@@ -22,6 +22,8 @@ import {
 import { type TreatmentMedication } from "@/components/features/prescription/treatment-list-item";
 import { Container } from "@/components/layout/container";
 import { VerticalStack } from "@/components/layout/stack";
+import type { ScheduleEntry } from "@/features/reminders/notification-service";
+import { formatMomentLabel } from "@/features/reminders/utils";
 import { trpc } from "@/utils/trpc";
 
 const PRIMARY_ICON = "#0d9488";
@@ -166,6 +168,9 @@ export default function TreatmentDetailScreen() {
 	const unifiedQuery = useQuery({
 		...trpc.prescriptions.unified.get.queryOptions(),
 	});
+	const remindersQuery = useQuery({
+		...trpc.reminders.list.queryOptions(),
+	});
 	const medications = (unifiedQuery.data?.medications ??
 		[]) as TreatmentMedication[];
 	const medication = medications.find(
@@ -180,6 +185,18 @@ export default function TreatmentDetailScreen() {
 	const form = formatMedicationForm(medication.form);
 	const moments = formatIntakeMoments(medication.intakeMoments);
 	const isEnded = medication.status === "ended";
+
+	const reminder = (remindersQuery.data?.reminders ?? []).find(
+		(r) => r.medicationName === name && (r.medicationDosage ?? "") === dosage,
+	);
+	const reminderTimes = (
+		(remindersQuery.data?.schedule ?? []) as ScheduleEntry[]
+	)
+		.filter(
+			(e) => e.medicationName === name && (e.medicationDosage ?? "") === dosage,
+		)
+		.map((e) => `${formatMomentLabel(e.moment)} ${e.time}`);
+	const reminderOn = Boolean(reminder?.enabled) && reminderTimes.length > 0;
 
 	const frequencyValue = medication.frequencyCount
 		? `${medication.frequencyCount}x / ${medication.frequencyUnit}`
@@ -260,6 +277,36 @@ export default function TreatmentDetailScreen() {
 						<BodyMuted>No intake moments specified.</BodyMuted>
 					)}
 				</SectionCard>
+
+				<Pressable
+					onPress={() =>
+						router.push({
+							pathname: "/reminders/[med]",
+							params: {
+								med: encodeURIComponent(medication.name),
+								dosage: encodeURIComponent(medication.dosage ?? ""),
+							},
+						})
+					}
+				>
+					<SectionCard icon="notifications-outline" title="Reminder">
+						<View className="flex-row items-center justify-between">
+							<View className="flex-1 gap-1">
+								{reminderOn ? (
+									<>
+										<Body>{reminderTimes.join(" · ")}</Body>
+										<Caption>Reminders on</Caption>
+									</>
+								) : reminder && !reminder.enabled ? (
+									<BodyMuted>Reminders paused. Tap to turn on.</BodyMuted>
+								) : (
+									<BodyMuted>No reminder yet. Tap to set one up.</BodyMuted>
+								)}
+							</View>
+							<Ionicons name="chevron-forward" size={16} color={PRIMARY_ICON} />
+						</View>
+					</SectionCard>
+				</Pressable>
 
 				<SectionCard icon="information-circle-outline" title="Instructions">
 					{medication.instructions?.trim() ? (

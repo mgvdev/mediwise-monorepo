@@ -9,6 +9,8 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 
 import { AuthGate } from "@/components/features/auth/auth-gate";
 import { AppThemeProvider } from "@/contexts/app-theme-context";
+import { ReminderSync } from "@/features/reminders/reminder-sync";
+import { useReminderNotificationObserver } from "@/features/reminders/use-reminders";
 import { queryClient } from "@/utils/trpc";
 
 export const unstable_settings = {
@@ -18,6 +20,16 @@ export const unstable_settings = {
 const isStorybookEnabled = process.env.EXPO_PUBLIC_STORYBOOK === "1";
 
 function StackLayout() {
+	useReminderNotificationObserver();
+	return (
+		<>
+			<ReminderSync />
+			<StackScreens />
+		</>
+	);
+}
+
+function StackScreens() {
 	return (
 		<Stack screenOptions={{ headerShown: false }}>
 			<Stack.Screen name="(auth)" />
@@ -27,6 +39,7 @@ function StackLayout() {
 			<Stack.Screen name="health" />
 			<Stack.Screen name="prescriptions" />
 			<Stack.Screen name="exams" />
+			<Stack.Screen name="reminders" />
 			<Stack.Screen name="modal" options={{ presentation: "modal" }} />
 		</Stack>
 	);

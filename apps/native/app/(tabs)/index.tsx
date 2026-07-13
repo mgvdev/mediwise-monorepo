@@ -21,6 +21,8 @@ import {
 import { HorizontalStack, VerticalStack } from "@/components/layout/stack";
 import { TabScreen } from "@/components/layout/tab-screen";
 import { applyOpacity, pressableFeedback } from "@/components/utils";
+import type { ScheduleEntry } from "@/features/reminders/notification-service";
+import { reminderTileCaption } from "@/features/reminders/utils";
 import { authClient } from "@/lib/auth-client";
 import { trpc } from "@/utils/trpc";
 
@@ -111,7 +113,6 @@ function buildMedicalPreview(data: HealthDataMap) {
 
 export default function Home() {
 	const primary = useThemeColor("accent");
-	const muted = useThemeColor("muted");
 	const [recapOpen, setRecapOpen] = useState(false);
 	const healthQuery = useQuery({
 		...trpc.healthData.get.queryOptions(),
@@ -119,6 +120,12 @@ export default function Home() {
 	const viewerQuery = useQuery({
 		...trpc.viewer.me.queryOptions(),
 	});
+	const remindersQuery = useQuery({
+		...trpc.reminders.list.queryOptions(),
+	});
+	const reminderCaption = reminderTileCaption(
+		remindersQuery.data?.schedule as ScheduleEntry[] | undefined,
+	);
 	const { data: session } = authClient.useSession();
 	const firstName = session?.user?.name?.trim().split(/\s+/)[0];
 	const greeting = firstName ? `Hi, ${firstName}` : "Hi";
@@ -268,7 +275,7 @@ export default function Home() {
 
 				<HorizontalStack>
 					<Pressable
-						onPress={() => {}}
+						onPress={() => router.push("/reminders")}
 						className="flex-1 rounded-2xl"
 						style={pressableFeedback(undefined, {
 							opacity: 0.9,
@@ -279,16 +286,17 @@ export default function Home() {
 								<View
 									className="h-11 w-11 items-center justify-center rounded-full"
 									style={{
-										backgroundColor: applyOpacity(muted, 0.12) ?? "transparent",
-										borderColor: applyOpacity(muted, 0.35) ?? muted,
+										backgroundColor:
+											applyOpacity(primary, 0.12) ?? "transparent",
+										borderColor: applyOpacity(primary, 0.35) ?? primary,
 										borderWidth: 1,
 									}}
 								>
-									<Ionicons name="alarm-outline" size={18} color={muted} />
+									<Ionicons name="alarm-outline" size={18} color={primary} />
 								</View>
 								<View className="gap-1">
 									<BodyStrong>Treatment reminders</BodyStrong>
-									<Caption>Coming soon</Caption>
+									<Caption>{reminderCaption}</Caption>
 								</View>
 							</CardBody>
 						</Card>
