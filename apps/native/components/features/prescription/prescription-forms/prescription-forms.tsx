@@ -149,7 +149,7 @@ export function PrescriptionDetailForm({
 	const deleteTargetLabel =
 		medicationNames.length > 0
 			? medicationNames.join(", ")
-			: "cette ordonnance";
+			: "this prescription";
 
 	if (!session?.user) {
 		return null;
@@ -162,12 +162,12 @@ export function PrescriptionDetailForm({
 			<View className="gap-4">
 				<Surface variant="secondary" className="rounded-2xl p-4">
 					<Text className="text-foreground text-base font-semibold">
-						{isReport ? "Compte rendu détecté" : "Document non reconnu"}
+						{isReport ? "Report detected" : "Unrecognized document"}
 					</Text>
 					<Text className="text-muted mt-1 text-xs">
 						{isReport
-							? "Ce document a été ajouté à vos examens & comptes rendus."
-							: "Document non reconnu. Vous pouvez l'éditer comme une ordonnance."}
+							? "This document was added to your exams & reports."
+							: "Unrecognized document. You can edit it like a prescription."}
 					</Text>
 					<View className="mt-3 flex-row gap-2">
 						{isReport ? (
@@ -178,15 +178,15 @@ export function PrescriptionDetailForm({
 									router.push(examId ? `/exams/${examId}` : "/exams");
 								}}
 							>
-								<Button.Label>Voir le compte rendu</Button.Label>
+								<Button.Label>View report</Button.Label>
 							</Button>
 						) : (
 							<>
 								<Button variant="secondary" onPress={() => setForceEdit(true)}>
-									<Button.Label>Éditer comme ordonnance</Button.Label>
+									<Button.Label>Edit as prescription</Button.Label>
 								</Button>
 								<Button onPress={() => onSaved?.()}>
-									<Button.Label>Terminé</Button.Label>
+									<Button.Label>Done</Button.Label>
 								</Button>
 							</>
 						)}
@@ -256,10 +256,10 @@ export function PrescriptionDetailForm({
 				<Dialog.Portal>
 					<Dialog.Overlay className="bg-black/40" />
 					<Dialog.Content className="border-panel-border bg-panel-background rounded-3xl border px-5 pt-4 pb-6">
-						<Dialog.Title>Supprimer le traitement</Dialog.Title>
+						<Dialog.Title>Delete treatment</Dialog.Title>
 						<Dialog.Description>
-							Vous allez supprimer {deleteTargetLabel}. Cette action est
-							irréversible.
+							You're about to delete {deleteTargetLabel}. This action is
+							irreversible.
 						</Dialog.Description>
 						<View className="mt-4 flex-row justify-end gap-2">
 							<Button
@@ -267,7 +267,7 @@ export function PrescriptionDetailForm({
 								onPress={() => setConfirmDelete(false)}
 								isDisabled={isDeleting}
 							>
-								<Button.Label>Annuler</Button.Label>
+								<Button.Label>Cancel</Button.Label>
 							</Button>
 							<Button
 								variant="secondary"
@@ -279,7 +279,7 @@ export function PrescriptionDetailForm({
 								}}
 							>
 								<Button.Label className="text-danger">
-									{isDeleting ? "Suppression..." : "Supprimer"}
+									{isDeleting ? "Deleting..." : "Delete"}
 								</Button.Label>
 							</Button>
 						</View>

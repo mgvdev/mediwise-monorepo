@@ -9,7 +9,7 @@ export default function ExamsLayout() {
 				name="index"
 				options={{
 					headerShown: true,
-					title: "Examens & comptes rendus",
+					title: "Exams & reports",
 					headerLeft: () => <HeaderBack />,
 				}}
 			/>
@@ -17,7 +17,7 @@ export default function ExamsLayout() {
 				name="new"
 				options={{
 					headerShown: true,
-					title: "Nouvel examen",
+					title: "New exam",
 					headerLeft: () => <HeaderBack />,
 				}}
 			/>
@@ -25,7 +25,7 @@ export default function ExamsLayout() {
 				name="[id]"
 				options={{
 					headerShown: true,
-					title: "Examen",
+					title: "Exam",
 					headerLeft: () => <HeaderBack />,
 				}}
 			/>

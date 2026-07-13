@@ -37,7 +37,7 @@ export default function ExamDetailScreen() {
 				queryClient.invalidateQueries();
 				router.back();
 			},
-			onError: (e) => setError(e.message || "Impossible d'enregistrer."),
+			onError: (e) => setError(e.message || "Couldn't save."),
 		}),
 	);
 	const deleteMutation = useMutation(
@@ -46,7 +46,7 @@ export default function ExamDetailScreen() {
 				queryClient.invalidateQueries();
 				router.back();
 			},
-			onError: (e) => setError(e.message || "Impossible de supprimer."),
+			onError: (e) => setError(e.message || "Couldn't delete."),
 		}),
 	);
 
@@ -58,7 +58,7 @@ export default function ExamDetailScreen() {
 	if (!exam) {
 		return (
 			<Container className="px-6 pt-4 pb-12">
-				<Caption>Chargement…</Caption>
+				<Caption>Loading…</Caption>
 			</Container>
 		);
 	}
@@ -69,7 +69,7 @@ export default function ExamDetailScreen() {
 				{images.length ? (
 					<Card variant="outline">
 						<CardHeader>
-							<CardTitle>Document scanné</CardTitle>
+							<CardTitle>Scanned document</CardTitle>
 						</CardHeader>
 						<CardBody className="gap-2">
 							{images.map((image, index) => {
@@ -88,7 +88,7 @@ export default function ExamDetailScreen() {
 									</Pressable>
 								);
 							})}
-							<Caption>Touchez pour agrandir</Caption>
+							<Caption>Tap to enlarge</Caption>
 						</CardBody>
 					</Card>
 				) : null}
@@ -102,7 +102,7 @@ export default function ExamDetailScreen() {
 					}}
 					onSubmit={handleSubmit}
 					isSaving={saveMutation.isPending}
-					submitLabel="Enregistrer les modifications"
+					submitLabel="Save changes"
 					error={error}
 					onDelete={() => deleteMutation.mutate({ id })}
 					isDeleting={deleteMutation.isPending}
@@ -127,7 +127,7 @@ export default function ExamDetailScreen() {
 						/>
 					) : null}
 					<View className="absolute bottom-12">
-						<Body className="text-white">Touchez pour fermer</Body>
+						<Body className="text-white">Tap to close</Body>
 					</View>
 				</Pressable>
 			</Modal>

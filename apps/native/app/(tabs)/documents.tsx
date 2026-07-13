@@ -194,13 +194,11 @@ export default function DocumentsScreen() {
 			>
 				<Card>
 					<CardHeader>
-						<CardTitle>Examens & comptes rendus</CardTitle>
-						<Link>Ouvrir</Link>
+						<CardTitle>Exams & reports</CardTitle>
+						<Link>Open</Link>
 					</CardHeader>
 					<CardBody>
-						<BodyMuted>
-							Résultats d'examens et comptes rendus, classés par date.
-						</BodyMuted>
+						<BodyMuted>Exam results and reports, sorted by date.</BodyMuted>
 					</CardBody>
 				</Card>
 			</Pressable>

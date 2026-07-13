@@ -21,19 +21,19 @@ type ExamListItem = {
 	createdAt: string | Date;
 };
 
-const MONTHS_FR = [
-	"Janvier",
-	"Février",
-	"Mars",
-	"Avril",
-	"Mai",
-	"Juin",
-	"Juillet",
-	"Août",
-	"Septembre",
-	"Octobre",
-	"Novembre",
-	"Décembre",
+const MONTHS = [
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December",
 ];
 
 function examMoment(exam: ExamListItem) {
@@ -51,8 +51,8 @@ function groupExams(exams: ExamListItem[]) {
 		const date = examMoment(exam);
 		const key = date ? `${date.getFullYear()}-${date.getMonth()}` : "unknown";
 		const label = date
-			? `${MONTHS_FR[date.getMonth()]} ${date.getFullYear()}`
-			: "Date inconnue";
+			? `${MONTHS[date.getMonth()]} ${date.getFullYear()}`
+			: "Unknown date";
 		if (!index.has(key)) {
 			index.set(key, groups.length);
 			groups.push({ key, label, items: [] });
@@ -87,7 +87,7 @@ export default function ExamsListScreen() {
 							className="h-9 w-9 items-center justify-center rounded-full"
 							style={pressableFeedback()}
 							accessibilityRole="button"
-							accessibilityLabel="Ajouter un examen"
+							accessibilityLabel="Add an exam"
 						>
 							<Ionicons name="add" size={22} color={accent} />
 						</Pressable>
@@ -99,7 +99,7 @@ export default function ExamsListScreen() {
 				<Input
 					value={search}
 					onChangeText={setSearch}
-					placeholder="Rechercher (intitulé, conclusion, médecin)"
+					placeholder="Search (title, conclusion, doctor)"
 				/>
 			</View>
 
@@ -135,11 +135,11 @@ export default function ExamsListScreen() {
 			) : (
 				<View className="mt-10 items-center gap-2">
 					<Ionicons name="document-text-outline" size={36} color={accent} />
-					<BodyStrong>Aucun examen</BodyStrong>
+					<BodyStrong>No exams</BodyStrong>
 					<Body className="text-muted text-center">
 						{search.trim()
-							? "Aucun résultat pour cette recherche."
-							: "Scannez un compte rendu ou ajoutez un examen manuellement."}
+							? "No results for this search."
+							: "Scan a report or add an exam manually."}
 					</Body>
 				</View>
 			)}

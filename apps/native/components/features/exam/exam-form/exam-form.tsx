@@ -26,7 +26,7 @@ export function ExamForm({
 	initial,
 	onSubmit,
 	isSaving,
-	submitLabel = "Enregistrer",
+	submitLabel = "Save",
 	error,
 	onDelete,
 	isDeleting,
@@ -41,7 +41,7 @@ export function ExamForm({
 
 	const handleSubmit = () => {
 		if (!title.trim()) {
-			setLocalError("Le titre est requis.");
+			setLocalError("Title is required.");
 			return;
 		}
 		setLocalError(null);
@@ -56,26 +56,26 @@ export function ExamForm({
 	return (
 		<View className="gap-4">
 			<TextField>
-				<Label>Intitulé</Label>
+				<Label>Title</Label>
 				<Input
 					value={title}
 					onChangeText={setTitle}
-					placeholder="Prise de sang, IRM genou…"
+					placeholder="Blood test, knee MRI…"
 				/>
 			</TextField>
 
 			<View className="gap-2">
-				<Caption>Date de l'examen</Caption>
+				<Caption>Exam date</Caption>
 				<DatePicker
-					label="Date de l'examen"
-					helperText="Touchez pour choisir"
+					label="Exam date"
+					helperText="Tap to choose"
 					value={examDate}
 					onChange={setExamDate}
 				/>
 			</View>
 
 			<TextField>
-				<Label>Médecin</Label>
+				<Label>Doctor</Label>
 				<Input value={doctor} onChangeText={setDoctor} placeholder="Dr. …" />
 			</TextField>
 
@@ -84,7 +84,7 @@ export function ExamForm({
 				<Input
 					value={conclusion}
 					onChangeText={setConclusion}
-					placeholder="Conclusion courte"
+					placeholder="Short conclusion"
 					multiline
 				/>
 			</TextField>
@@ -109,7 +109,7 @@ export function ExamForm({
 					className="border-danger/40 mt-1"
 				>
 					<Button.Label className="text-danger">
-						{isDeleting ? "Suppression…" : "Supprimer l'examen"}
+						{isDeleting ? "Deleting…" : "Delete exam"}
 					</Button.Label>
 				</Button>
 			) : null}

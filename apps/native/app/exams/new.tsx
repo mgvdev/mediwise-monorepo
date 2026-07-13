@@ -18,7 +18,7 @@ export default function NewExamScreen() {
 				router.back();
 			},
 			onError: (mutationError) => {
-				setError(mutationError.message || "Impossible d'enregistrer l'examen.");
+				setError(mutationError.message || "Couldn't save the exam.");
 			},
 		}),
 	);
@@ -33,7 +33,7 @@ export default function NewExamScreen() {
 			<ExamForm
 				onSubmit={handleSubmit}
 				isSaving={saveMutation.isPending}
-				submitLabel="Ajouter l'examen"
+				submitLabel="Add exam"
 				error={error}
 			/>
 		</Container>
