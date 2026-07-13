@@ -40,6 +40,9 @@ function StackScreens() {
 			<Stack.Screen name="prescriptions" />
 			<Stack.Screen name="exams" />
 			<Stack.Screen name="reminders" />
+			<Stack.Screen name="tracking" />
+			<Stack.Screen name="calendar" />
+			<Stack.Screen name="practitioners" />
 			<Stack.Screen name="modal" options={{ presentation: "modal" }} />
 		</Stack>
 	);
