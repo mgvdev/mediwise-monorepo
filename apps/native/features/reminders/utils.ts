@@ -2,12 +2,18 @@ import { INTAKE_MOMENTS } from "@/components/features/prescription/prescription-
 
 import type { ScheduleEntry } from "./notification-service";
 
-const MOMENT_LABELS = new Map<string, string>(
-	INTAKE_MOMENTS.map((m) => [m.value, m.label]),
-);
+// English labels for the reminders feature. The shared INTAKE_MOMENTS labels
+// are French (used by the prescriptions UI); reminders stay in English.
+const MOMENT_LABELS: Record<string, string> = {
+	morning: "Morning",
+	noon: "Noon",
+	evening: "Evening",
+	bedtime: "Bedtime",
+	with_meal: "With meal",
+};
 
 export function formatMomentLabel(value: string) {
-	return MOMENT_LABELS.get(value) ?? value;
+	return MOMENT_LABELS[value] ?? value;
 }
 
 export const ALL_MOMENTS = INTAKE_MOMENTS.map((m) => m.value);
