@@ -38,13 +38,7 @@ export async function cancelAppointmentNotifications() {
 	);
 }
 
-/**
- * Reconcile OS notifications with the given schedule: cancel ours and
- * re-schedule from scratch. One one-shot DATE trigger per appointment.
- */
-export async function syncAppointmentNotifications(
-	schedule: AppointmentScheduleEntry[],
-) {
+async function runSync(schedule: AppointmentScheduleEntry[]) {
 	await ensureAndroidChannel();
 	await cancelAppointmentNotifications();
 
@@ -69,4 +63,23 @@ export async function syncAppointmentNotifications(
 			},
 		});
 	}
+}
+
+let pendingSync: Promise<void> = Promise.resolve();
+
+/**
+ * Reconcile OS notifications with the given schedule: cancel ours and
+ * re-schedule from scratch. One one-shot DATE trigger per appointment.
+ *
+ * Serialized behind a module-level promise chain: this is a read-modify-write
+ * over the shared OS notification queue (list all -> cancel ours ->
+ * re-schedule), so overlapping callers (schedule-changed effect and the
+ * AppState-foreground effect) must not interleave or they can duplicate
+ * notifications.
+ */
+export function syncAppointmentNotifications(
+	schedule: AppointmentScheduleEntry[],
+) {
+	pendingSync = pendingSync.then(() => runSync(schedule)).catch(() => {});
+	return pendingSync;
 }
