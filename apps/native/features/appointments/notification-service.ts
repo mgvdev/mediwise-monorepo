@@ -80,6 +80,12 @@ let pendingSync: Promise<void> = Promise.resolve();
 export function syncAppointmentNotifications(
 	schedule: AppointmentScheduleEntry[],
 ) {
-	pendingSync = pendingSync.then(() => runSync(schedule)).catch(() => {});
+	// The catch is required: a rejection would poison the chain and stop every
+	// later sync. Log so a scheduling failure still leaves a trace.
+	pendingSync = pendingSync
+		.then(() => runSync(schedule))
+		.catch((error) => {
+			console.warn("Couldn't sync appointment notifications:", error);
+		});
 	return pendingSync;
 }
