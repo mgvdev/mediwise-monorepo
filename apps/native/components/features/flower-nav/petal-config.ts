@@ -68,7 +68,7 @@ export const PETALS: Petal[] = [
 		icon: "pulse-outline",
 		color: "#E6B549",
 		tint: "#F1CE7C",
-		route: "/tracking",
+		route: "/health/overview",
 		angle: 288,
 	},
 ];

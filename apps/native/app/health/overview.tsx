@@ -2,13 +2,18 @@ import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
 import { Stack, router } from "expo-router";
 import { useThemeColor } from "heroui-native";
+import { useState } from "react";
 import { Pressable, View } from "react-native";
 
 import { Card, CardBody, CardHeader, CardTitle } from "@/components/base/card";
 import { Body, BodyStrong, Caption } from "@/components/base/typography";
 import { MedicalSummaryCard } from "@/components/features/medical-summary";
+import {
+	RecapBuilderModal,
+	type RecapSection,
+} from "@/components/features/recap/recap-builder-button";
 import { Container } from "@/components/layout/container";
-import { VerticalStack } from "@/components/layout/stack";
+import { HorizontalStack, VerticalStack } from "@/components/layout/stack";
 import { pressableFeedback } from "@/components/utils";
 import { trpc } from "@/utils/trpc";
 
@@ -19,6 +24,34 @@ import {
 } from "./health-schema";
 
 type FieldValue = string | string[] | null | undefined;
+
+const RECAP_SECTIONS: RecapSection[] = [
+	{
+		id: "personnal_information",
+		label: "Personal information",
+		description: "Basics about you",
+	},
+	{
+		id: "prescriptions",
+		label: "Prescriptions",
+		description: "Current medications and dosage",
+	},
+	{
+		id: "allergies",
+		label: "Allergies",
+		description: "Known drug or food allergies",
+	},
+	{
+		id: "conditions",
+		label: "Conditions",
+		description: "Ongoing medical conditions",
+	},
+	{
+		id: "tests",
+		label: "Recent tests",
+		description: "Latest lab results or scans",
+	},
+];
 
 const formatChoiceLabel = (value: string) => {
 	const cleaned = value.replace(/_/g, " ");
@@ -68,6 +101,10 @@ const formatFieldValue = (
 
 export default function HealthOverviewScreen() {
 	const accent = useThemeColor("accent");
+	const [recapOpen, setRecapOpen] = useState(false);
+	const [recapSelectedIds, setRecapSelectedIds] = useState(
+		RECAP_SECTIONS.map((section) => section.id),
+	);
 	const healthQuery = useQuery({
 		...trpc.healthData.get.queryOptions(),
 	});
@@ -87,15 +124,30 @@ export default function HealthOverviewScreen() {
 				options={{
 					title: "Medical record",
 					headerRight: () => (
-						<Pressable
-							onPress={() => router.push("/health")}
-							className="h-9 w-9 items-center justify-center rounded-full"
-							style={pressableFeedback()}
-							accessibilityRole="button"
-							accessibilityLabel="Edit medical record"
-						>
-							<Ionicons name="create-outline" size={20} color={accent} />
-						</Pressable>
+						<HorizontalStack className="gap-1">
+							<Pressable
+								onPress={() => setRecapOpen(true)}
+								className="h-9 w-9 items-center justify-center rounded-full"
+								style={pressableFeedback()}
+								accessibilityRole="button"
+								accessibilityLabel="Share recap"
+							>
+								<Ionicons
+									name="share-social-outline"
+									size={20}
+									color={accent}
+								/>
+							</Pressable>
+							<Pressable
+								onPress={() => router.push("/health")}
+								className="h-9 w-9 items-center justify-center rounded-full"
+								style={pressableFeedback()}
+								accessibilityRole="button"
+								accessibilityLabel="Edit medical record"
+							>
+								<Ionicons name="create-outline" size={20} color={accent} />
+							</Pressable>
+						</HorizontalStack>
 					),
 				}}
 			/>
@@ -141,6 +193,13 @@ export default function HealthOverviewScreen() {
 					);
 				})}
 			</VerticalStack>
+			<RecapBuilderModal
+				open={recapOpen}
+				onClose={() => setRecapOpen(false)}
+				sections={RECAP_SECTIONS}
+				selectedIds={recapSelectedIds}
+				onSelectedIdsChange={setRecapSelectedIds}
+			/>
 		</Container>
 	);
 }

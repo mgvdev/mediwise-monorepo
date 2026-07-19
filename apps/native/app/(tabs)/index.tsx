@@ -1,4 +1,7 @@
-import { useWindowDimensions, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { useThemeColor } from "heroui-native";
+import { Pressable, useWindowDimensions, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { SoftHealthBackground } from "@/components/base/backgrounds";
@@ -22,14 +25,33 @@ export default function Home() {
 	const insets = useSafeAreaInsets();
 	const flowerSize = Math.min(width - 24, 380);
 
+	const mutedColor = useThemeColor("muted");
+
 	const { data: session } = authClient.useSession();
 	const firstName = session?.user?.name?.trim().split(/\s+/)[0];
 	const greeting = firstName ? `Hello, ${firstName}` : "Hello";
+	const initial = (firstName ?? session?.user?.email ?? "")
+		.trim()
+		.charAt(0)
+		.toUpperCase();
 
 	return (
 		<View className="bg-background flex-1">
 			<SoftHealthBackground heightRatio={1} />
 			<FlowerBackground />
+			<Pressable
+				onPress={() => router.push("/profile")}
+				accessibilityRole="button"
+				accessibilityLabel="Profile"
+				className="border-panel-border/70 absolute z-10 h-10 w-10 items-center justify-center rounded-full border bg-white/60"
+				style={{ top: insets.top + 8, right: 20 }}
+			>
+				{initial ? (
+					<Caption className="text-muted font-semibold">{initial}</Caption>
+				) : (
+					<Ionicons name="person-outline" size={18} color={mutedColor} />
+				)}
+			</Pressable>
 			<View
 				className="flex-1 px-6"
 				style={{
