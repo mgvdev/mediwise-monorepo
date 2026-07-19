@@ -1,3 +1,4 @@
+export * from "./appointments";
 export * from "./auth/otp";
 export * from "./health-data/service";
 export * from "./practitioners";
