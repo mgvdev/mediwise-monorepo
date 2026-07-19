@@ -13,6 +13,22 @@ export default function PractitionersLayout() {
 					headerLeft: () => <HeaderBack />,
 				}}
 			/>
+			<Stack.Screen
+				name="new"
+				options={{
+					headerShown: true,
+					title: "New practitioner",
+					headerLeft: () => <HeaderBack />,
+				}}
+			/>
+			<Stack.Screen
+				name="[id]"
+				options={{
+					headerShown: true,
+					title: "Practitioner",
+					headerLeft: () => <HeaderBack />,
+				}}
+			/>
 		</Stack>
 	);
 }
