@@ -1,4 +1,5 @@
 import { buildPractitionerSuggestions } from "@mediwise-monorepo/domain";
+import { renamePractitionerOnAppointments } from "@mediwise-monorepo/infrastructure/appointments";
 import {
 	createPractitioner,
 	deletePractitioner as deletePractitionerRepo,
@@ -95,6 +96,12 @@ export async function savePractitioner(params: {
 				message: "Practitioner not found.",
 			});
 		}
+		const name = [fields.firstName, fields.lastName].filter(Boolean).join(" ");
+		await renamePractitionerOnAppointments({
+			practitionerId: updated._id,
+			userId: params.user.id,
+			name,
+		});
 		return { id: updated._id };
 	}
 

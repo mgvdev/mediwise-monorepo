@@ -92,3 +92,19 @@ export async function detachPractitionerFromAppointments(input: {
 	);
 	return res.modifiedCount;
 }
+
+/**
+ * Propagate a practitioner rename to the denormalized `practitionerName` on
+ * their appointments, so the appointment list and notifications stay in sync.
+ */
+export async function renamePractitionerOnAppointments(input: {
+	practitionerId: string;
+	userId: string;
+	name: string;
+}) {
+	const res = await Appointment.updateMany(
+		{ practitionerId: input.practitionerId, userId: input.userId },
+		{ $set: { practitionerName: input.name, updatedAt: new Date() } },
+	);
+	return res.modifiedCount;
+}
