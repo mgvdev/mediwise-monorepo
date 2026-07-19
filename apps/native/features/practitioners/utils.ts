@@ -43,7 +43,7 @@ export function groupBySpecialty(items: PractitionerListItem[]) {
 		if (position !== undefined) groups[position]?.items.push(item);
 	}
 
-	const order = new Map(
+	const order = new Map<string, number>(
 		SPECIALTIES.map((specialty, position) => [specialty.key, position]),
 	);
 	return groups.sort((a, b) => {
