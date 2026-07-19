@@ -15,6 +15,11 @@ import { TRPCError } from "@trpc/server";
 
 import type { AppointmentSaveInput } from "../dto";
 
+// iOS caps an app at 64 pending local notifications; the pre-existing
+// medication reminders already claim a share of that budget, so keep the
+// appointment schedule to its soonest entries only.
+const MAX_SCHEDULE_ENTRIES = 20;
+
 type SessionUser = {
 	id: string;
 	tenantId?: string | null;
@@ -91,6 +96,21 @@ export async function saveAppointment(params: {
 		practitionerName = [practitioner.firstName, practitioner.lastName]
 			.filter(Boolean)
 			.join(" ");
+	} else if (params.input.id) {
+		// No practitioner given on an update: keep the existing snapshot instead
+		// of wiping it, since the practitioner may have been deleted already
+		// (see detachPractitionerFromAppointments) while the name should live on.
+		const existing = await getAppointmentById({
+			id: params.input.id,
+			userId: params.user.id,
+		});
+		if (!existing) {
+			throw new TRPCError({
+				code: "NOT_FOUND",
+				message: "Appointment not found.",
+			});
+		}
+		practitionerName = existing.practitionerName ?? null;
 	}
 
 	const fields: AppointmentFields = {
@@ -146,7 +166,7 @@ export async function deleteAppointment(params: {
 /** Flat notification schedule the native client schedules verbatim. */
 export async function getAppointmentSchedule(params: { userId: string }) {
 	const appointments = await listAppointmentsByUser({ userId: params.userId });
-	return buildAppointmentSchedule(
+	const schedule = buildAppointmentSchedule(
 		appointments.map((appointment) => ({
 			id: appointment._id,
 			startAt: appointment.startAt,
@@ -157,4 +177,5 @@ export async function getAppointmentSchedule(params: { userId: string }) {
 		})),
 		new Date(),
 	);
+	return schedule.slice(0, MAX_SCHEDULE_ENTRIES);
 }
