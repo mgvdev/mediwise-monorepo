@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 
 import { Exam, Practitioner, PrescriptionUnified } from "@mediwise-monorepo/db";
 
+import { detachPractitionerFromAppointments } from "../appointments/repository";
 import type {
 	DocumentDoctorName,
 	PractitionerDoc,
@@ -98,7 +99,12 @@ export async function deletePractitioner(input: {
 		_id: input.id,
 		userId: input.userId,
 	});
-	return res.deletedCount > 0;
+	if (res.deletedCount === 0) return false;
+	await detachPractitionerFromAppointments({
+		practitionerId: input.id,
+		userId: input.userId,
+	});
+	return true;
 }
 
 /**

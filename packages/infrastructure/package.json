@@ -5,6 +5,12 @@
 		".": {
 			"default": "./src/index.ts"
 		},
+		"./appointments": {
+			"default": "./src/appointments/index.ts"
+		},
+		"./appointments/*": {
+			"default": "./src/appointments/*.ts"
+		},
 		"./exams": {
 			"default": "./src/exams/index.ts"
 		},
