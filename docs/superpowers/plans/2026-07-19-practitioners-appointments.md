@@ -911,7 +911,13 @@ describe("buildAppointmentSchedule", () => {
 		expect(inAnHour?.title).toBe("Appointment in 1 hour");
 
 		const [inAWeek] = buildAppointmentSchedule(
-			[appointment({ id: "c", reminderOffsetMinutes: 10080 })],
+			[
+				appointment({
+					id: "c",
+					startAt: new Date("2026-08-02T09:00:00.000Z"),
+					reminderOffsetMinutes: 10080,
+				}),
+			],
 			NOW,
 		);
 		expect(inAWeek?.title).toBe("Appointment in 1 week");
@@ -1068,8 +1074,9 @@ git commit -m "feat(domain): appointment reminder schedule"
 ```ts
 import { z } from "zod";
 
-export const practitionerFieldsInput = z
+export const practitionerSaveInput = z
 	.object({
+		id: z.string().optional().nullable(),
 		firstName: z.string().optional().nullable(),
 		lastName: z.string().min(1),
 		specialty: z.string().min(1),
@@ -1078,6 +1085,8 @@ export const practitionerFieldsInput = z
 		email: z.string().optional().nullable(),
 		address: z.string().optional().nullable(),
 		notes: z.string().optional().nullable(),
+		// Only honoured on create; an update never changes the source.
+		source: z.enum(["manual", "document"]).optional().nullable(),
 	})
 	.refine(
 		(value) =>
@@ -1088,19 +1097,7 @@ export const practitionerFieldsInput = z
 		},
 	);
 
-export const practitionerSaveInput = z.object({
-	id: z.string().optional().nullable(),
-	firstName: z.string().optional().nullable(),
-	lastName: z.string().min(1),
-	specialty: z.string().min(1),
-	specialtyOther: z.string().optional().nullable(),
-	phone: z.string().optional().nullable(),
-	email: z.string().optional().nullable(),
-	address: z.string().optional().nullable(),
-	notes: z.string().optional().nullable(),
-	// Only honoured on create; an update never changes the source.
-	source: z.enum(["manual", "document"]).optional().nullable(),
-});
+export type PractitionerSaveInput = z.infer<typeof practitionerSaveInput>;
 
 export const practitionerListInput = z.object({
 	search: z.string().optional().nullable(),
@@ -1111,7 +1108,7 @@ export const practitionerIdInput = z.object({
 });
 ```
 
-Note: `practitionerFieldsInput` is the shared shape used for typing; `practitionerSaveInput` repeats the fields because a zod `.refine()` result cannot be `.extend()`ed. The same `specialtyOther` rule is enforced in the service layer (Step 2).
+The `specialtyOther`-required rule lives here only; the service layer trusts the validated input.
 
 - [ ] **Step 2: Write the service layer**
 
@@ -1130,9 +1127,10 @@ import {
 import type {
 	PractitionerDoc,
 	PractitionerFields,
-	PractitionerSource,
 } from "@mediwise-monorepo/infrastructure/practitioners";
 import { TRPCError } from "@trpc/server";
+
+import type { PractitionerSaveInput } from "../dto";
 
 type SessionUser = {
 	id: string;
@@ -1189,29 +1187,8 @@ export async function getPractitioner(params: { userId: string; id: string }) {
 
 export async function savePractitioner(params: {
 	user: SessionUser;
-	input: {
-		id?: string | null;
-		firstName?: string | null;
-		lastName: string;
-		specialty: string;
-		specialtyOther?: string | null;
-		phone?: string | null;
-		email?: string | null;
-		address?: string | null;
-		notes?: string | null;
-		source?: PractitionerSource | null;
-	};
+	input: PractitionerSaveInput;
 }) {
-	if (
-		params.input.specialty === "other" &&
-		!params.input.specialtyOther?.trim()
-	) {
-		throw new TRPCError({
-			code: "BAD_REQUEST",
-			message: "Describe the specialty.",
-		});
-	}
-
 	const fields: PractitionerFields = {
 		firstName: params.input.firstName?.trim() || null,
 		lastName: params.input.lastName.trim(),
@@ -1390,6 +1367,8 @@ export const appointmentListInput = z.object({
 export const appointmentIdInput = z.object({
 	id: z.string().min(1),
 });
+
+export type AppointmentSaveInput = z.infer<typeof appointmentSaveInput>;
 ```
 
 - [ ] **Step 2: Write the service layer**
@@ -1411,6 +1390,8 @@ import type {
 } from "@mediwise-monorepo/infrastructure/appointments";
 import { getPractitionerById } from "@mediwise-monorepo/infrastructure/practitioners";
 import { TRPCError } from "@trpc/server";
+
+import type { AppointmentSaveInput } from "../dto";
 
 type SessionUser = {
 	id: string;
@@ -1461,15 +1442,7 @@ export async function getAppointment(params: { userId: string; id: string }) {
 
 export async function saveAppointment(params: {
 	user: SessionUser;
-	input: {
-		id?: string | null;
-		practitionerId?: string | null;
-		startAt: string;
-		reason?: string | null;
-		location?: string | null;
-		notes?: string | null;
-		reminderOffsetMinutes?: number | null;
-	};
+	input: AppointmentSaveInput;
 }) {
 	const startAt = new Date(params.input.startAt);
 	if (Number.isNaN(startAt.getTime())) {

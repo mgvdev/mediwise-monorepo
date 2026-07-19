@@ -9,6 +9,8 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 
 import { AuthGate } from "@/components/features/auth/auth-gate";
 import { AppThemeProvider } from "@/contexts/app-theme-context";
+import { AppointmentSync } from "@/features/appointments/appointment-sync";
+import { useAppointmentNotificationObserver } from "@/features/appointments/use-appointments";
 import { ReminderSync } from "@/features/reminders/reminder-sync";
 import { useReminderNotificationObserver } from "@/features/reminders/use-reminders";
 import { queryClient } from "@/utils/trpc";
@@ -21,9 +23,11 @@ const isStorybookEnabled = process.env.EXPO_PUBLIC_STORYBOOK === "1";
 
 function StackLayout() {
 	useReminderNotificationObserver();
+	useAppointmentNotificationObserver();
 	return (
 		<>
 			<ReminderSync />
+			<AppointmentSync />
 			<StackScreens />
 		</>
 	);

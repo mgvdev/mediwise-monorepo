@@ -1,5 +1,7 @@
+export * from "./appointments";
 export * from "./auth/otp";
 export * from "./health-data/service";
+export * from "./practitioners";
 export * from "./prescriptions";
 export * from "./reminders";
 export * from "./tenant/domains";

@@ -18,8 +18,8 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 | 6.4  | Modification ordonnance (add/edit/delete) | 🟡   |
 | 6.5  | Scan de document                          | 🟡   |
 | 6.6  | Liste examens / comptes rendus            | ✅   |
-| 6.7  | Rendez-vous médicaux                      | ❌   |
-| 6.8  | Annuaire professionnels de santé          | ❌   |
+| 6.7  | Rendez-vous médicaux                      | 🟡   |
+| 6.8  | Annuaire professionnels de santé          | 🟡   |
 | 6.9  | Calendrier de suivi personnalisé          | ❌   |
 | 6.10 | Rappels de prise                          | ❌   |
 | —    | Onboarding                                | ✅   |
@@ -139,24 +139,34 @@ Stack : Expo Router (RN) · tRPC · MongoDB (Mongoose) · Better Auth (OTP) · H
 
 **Accès** : carte « Examens & comptes rendus » dans l'onglet Documents → `/exams`.
 
-## 6.7 Rendez-vous médicaux — ❌
+## 6.7 Rendez-vous médicaux — 🟡
 
-**À faire** (rien n'existe)
+**Fait**
 
-- [ ] Modèle data RDV (pro, spécialité, date, heure, lieu, notes, rappel)
-- [ ] Liste RDV groupée par année
-- [ ] Ajouter / modifier / supprimer RDV
-- [ ] Rappel + fréquence notification
-- [ ] Création auto du pro dans l'annuaire si absent (dépend 6.8)
+- Modèle data RDV : `packages/db/src/models/appointments.model.ts` (praticien, date+heure, lieu, motif, notes, rappel)
+- Liste chronologique groupée par mois + passés repliés : `apps/native/app/calendar/index.tsx`
+- Ajouter / modifier / supprimer : `apps/native/app/calendar/{new,[id]}.tsx`
+- Rappel push par RDV (aucun / 1h / 1 jour / 1 semaine avant) : `apps/native/features/appointments/`
+- Création du RDV depuis la fiche praticien (6.8)
 
-## 6.8 Annuaire professionnels de santé — ❌
+**À faire**
 
-**À faire** (rien n'existe)
+- [ ] Vue calendrier mensuelle (voir 6.9)
+- [ ] Liste groupée par année (aujourd'hui : par mois)
 
-- [ ] Modèle data pro (nom, prénom, profession, spécialité, tél, adresse, email, notes)
-- [ ] Liste groupée par spécialité
-- [ ] CRUD fiche pro
-- [ ] Association pro ↔ RDV (6.7) et pro ↔ examen (6.6)
+## 6.8 Annuaire professionnels de santé — 🟡
+
+**Fait**
+
+- Modèle data pro : `packages/db/src/models/practitioners.model.ts` (nom, prénom, spécialité, tél, adresse, email, notes)
+- Liste groupée par spécialité + recherche : `apps/native/app/practitioners/index.tsx`
+- CRUD fiche pro : `apps/native/app/practitioners/{new,[id]}.tsx`
+- Suggestions « Found in your documents » depuis `exam.doctor` et `prescription_unified.data.prescriberName`, à valider par l'utilisateur
+- Association pro ↔ RDV (6.7)
+
+**À faire**
+
+- [ ] Association pro ↔ examen (6.6)
 
 ## 6.9 Calendrier de suivi personnalisé — ❌
 

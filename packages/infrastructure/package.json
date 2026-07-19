@@ -5,6 +5,12 @@
 		".": {
 			"default": "./src/index.ts"
 		},
+		"./appointments": {
+			"default": "./src/appointments/index.ts"
+		},
+		"./appointments/*": {
+			"default": "./src/appointments/*.ts"
+		},
 		"./exams": {
 			"default": "./src/exams/index.ts"
 		},
@@ -28,6 +34,12 @@
 		},
 		"./prescriptions/*": {
 			"default": "./src/prescriptions/*.ts"
+		},
+		"./practitioners": {
+			"default": "./src/practitioners/index.ts"
+		},
+		"./practitioners/*": {
+			"default": "./src/practitioners/*.ts"
 		},
 		"./reminders": {
 			"default": "./src/reminders/index.ts"
