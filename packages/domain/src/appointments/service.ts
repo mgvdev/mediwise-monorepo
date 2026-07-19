@@ -2,9 +2,6 @@
 // schedule the native client hands straight to expo-notifications. No IO here —
 // the tRPC service layer fetches the appointments (see api/routers/appointments).
 
-/** One day before the appointment, the default offered in the form. */
-export const DEFAULT_REMINDER_OFFSET_MINUTES = 1440;
-
 export type ScheduleAppointment = {
 	id: string;
 	startAt: Date;

@@ -1,10 +1,6 @@
 import { describe, expect, it } from "bun:test";
 
-import {
-	buildAppointmentSchedule,
-	DEFAULT_REMINDER_OFFSET_MINUTES,
-	type ScheduleAppointment,
-} from "./service";
+import { buildAppointmentSchedule, type ScheduleAppointment } from "./service";
 
 const NOW = new Date("2026-07-19T10:00:00.000Z");
 
@@ -16,7 +12,7 @@ function appointment(
 		practitionerName: "Dr. Jane Doe",
 		reason: null,
 		location: null,
-		reminderOffsetMinutes: DEFAULT_REMINDER_OFFSET_MINUTES,
+		reminderOffsetMinutes: 1440,
 		...overrides,
 	};
 }
