@@ -29,6 +29,12 @@
 		"./prescriptions/*": {
 			"default": "./src/prescriptions/*.ts"
 		},
+		"./practitioners": {
+			"default": "./src/practitioners/index.ts"
+		},
+		"./practitioners/*": {
+			"default": "./src/practitioners/*.ts"
+		},
 		"./reminders": {
 			"default": "./src/reminders/index.ts"
 		},
