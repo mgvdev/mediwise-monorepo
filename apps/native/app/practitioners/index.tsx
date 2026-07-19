@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
 import { router, Stack } from "expo-router";
-import { Input, useThemeColor } from "heroui-native";
+import { Input, Spinner, useThemeColor } from "heroui-native";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
 
@@ -103,7 +103,11 @@ export default function PractitionersScreen() {
 					</View>
 				) : null}
 
-				{practitioners.length ? (
+				{practitionersQuery.isPending ? (
+					<View className="mt-10 items-center">
+						<Spinner />
+					</View>
+				) : practitioners.length ? (
 					groups.map((group) => (
 						<View key={group.key} className="gap-3">
 							<Caption>{group.label}</Caption>

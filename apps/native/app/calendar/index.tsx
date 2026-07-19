@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
 import { router, Stack } from "expo-router";
-import { useThemeColor } from "heroui-native";
+import { Spinner, useThemeColor } from "heroui-native";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
 
@@ -47,7 +47,11 @@ export default function CalendarScreen() {
 			/>
 
 			<VerticalStack className="gap-6">
-				{upcoming.length ? (
+				{appointmentsQuery.isPending ? (
+					<View className="mt-10 items-center">
+						<Spinner />
+					</View>
+				) : upcoming.length ? (
 					upcomingGroups.map((group) => (
 						<View key={group.key} className="gap-3">
 							<Caption>{group.label}</Caption>
