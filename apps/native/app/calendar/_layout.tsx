@@ -9,7 +9,23 @@ export default function CalendarLayout() {
 				name="index"
 				options={{
 					headerShown: true,
-					title: "Calendar",
+					title: "Appointments",
+					headerLeft: () => <HeaderBack />,
+				}}
+			/>
+			<Stack.Screen
+				name="new"
+				options={{
+					headerShown: true,
+					title: "New appointment",
+					headerLeft: () => <HeaderBack />,
+				}}
+			/>
+			<Stack.Screen
+				name="[id]"
+				options={{
+					headerShown: true,
+					title: "Appointment",
 					headerLeft: () => <HeaderBack />,
 				}}
 			/>
