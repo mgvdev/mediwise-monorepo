@@ -911,7 +911,13 @@ describe("buildAppointmentSchedule", () => {
 		expect(inAnHour?.title).toBe("Appointment in 1 hour");
 
 		const [inAWeek] = buildAppointmentSchedule(
-			[appointment({ id: "c", reminderOffsetMinutes: 10080 })],
+			[
+				appointment({
+					id: "c",
+					startAt: new Date("2026-08-02T09:00:00.000Z"),
+					reminderOffsetMinutes: 10080,
+				}),
+			],
 			NOW,
 		);
 		expect(inAWeek?.title).toBe("Appointment in 1 week");
